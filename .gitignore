@@ -1,0 +1,4 @@
+*.pyc
+.ipynb_checkpoints/
+mkdocs/site/
+mkdocs/docs/chemicals/

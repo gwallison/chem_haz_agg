@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block footer %}
+  {{ super() }}
+
+  <div class="md-footer-meta md-typeset" style="background-color: transparent;">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright" style="text-align: center;">
+
+        <div style="display: inline-flex; justify-content: center; align-items: center; gap: 15px;">
+        
+          <a href="https://open-ff.org/" target="_blank" rel="noopener noreferrer">
+            <img src="https://storage.googleapis.com/open-ff-common/openFF_logo.png" alt="Open-FF Logo" style="height: 80px;">
+          </a>
+        
+          <span>
+            This is a project of <a href="https://open-ff.org/" target="_blank" rel="noopener noreferrer" style="color: #4051b5;">Open-FF</a>, sponsored by <a href="https://www.fractracker.org/" target="_blank" rel="noopener noreferrer" style="color: #4051b5;">The FracTracker Alliance</a>.
+          </span>
+        
+          <a href="https://www.fractracker.org/" target="_blank" rel="noopener noreferrer">
+            <img src="https://storage.googleapis.com/open-ff-common/2025_FT_logo_icon.png" alt="FracTracker Alliance Logo" style="height: 70px;">
+          </a>
+        
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

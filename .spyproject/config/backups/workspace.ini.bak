@@ -1,0 +1,12 @@
+[workspace]
+restore_data_on_startup = True
+save_data_on_exit = True
+save_history = True
+save_non_project_files = False
+project_type = 'empty-project-type'
+recent_files = ['src\\04_generation\\build_site.py', 'src\\04_generation\\page_generators.py', 'src\\04_generation\\chem_page_header.py', 'src\\04_generation\\common.py', 'src\\01_collection\\construct_Compounds_of_Concern.py', 'src\\02_processing\\extract_iris_data.py']
+
+[main]
+version = 0.2.0
+recent_files = []
+

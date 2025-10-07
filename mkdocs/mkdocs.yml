@@ -1,0 +1,42 @@
+site_name: Chemical Hazard Catalog
+
+theme:
+  name: material
+  custom_dir: overrides
+  features:
+    - content.tabs.link
+    - navigation.sections
+    - navigation.instant
+  icon:
+    annotation: material/help-circle
+    
+use_directory_urls: false
+
+site_url: https://storage.googleapis.com/open-ff-chem-profiles
+
+
+nav:
+  - 'Chemical Index': 'index.md'
+  - 'About the Project': 'about.md'
+  - 'Understanding the "Tier" system and graphic': 'tier_explainer.md'
+
+
+markdown_extensions:
+  - tables
+  - attr_list  # This line is required for custom attributes
+  - md_in_html
+  - admonition
+  - pymdownx.details
+  - pymdownx.emoji:  # <-- Colon is required here
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+      
+extra_javascript:
+  - https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js
+  - javascripts/tablesort.js
+  - javascripts/tablesort.number.js  
+  - javascripts/tablesort.date.js  
+  
