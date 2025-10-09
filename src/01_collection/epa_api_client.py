@@ -82,7 +82,7 @@ def get_chemical_details(dtxsid: str = 'DTXSID7020182'):
         return None
     endpoint = f"/chemical/detail/search/by-dtxsid/{dtxsid}"
     headers = {'accept': 'application/json', 'x-api-key': api_key}
-    print(f"Querying API for DTXSID: {dtxsid}...")
+    print(f"\nQuerying API for DTXSID: {dtxsid}...")
     return _make_request('GET', endpoint, headers=headers)
 
 

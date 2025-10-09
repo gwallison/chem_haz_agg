@@ -28,6 +28,9 @@ GHS_DATA_PQ = os.path.join(PROCESSED_DATA, 'consolidated_GHS.parquet')
 CHEMINFO_DATA_PQ = os.path.join(PROCESSED_DATA, 'cheminfo_hazard_summary.parquet')
 ECHA_TEXT_DIR = os.path.join(RAW_DATA, 'by_casrn') # Directory for ECHA summary texts
 
+COMPTOX_CASRN_DTXSID_MASTER = os.path.join(RAW_DATA,'comp_tox_casrn_dtxsid_master.csv')
+EPA_CHEM_MASTER = os.path.join(PROCESSED_DATA,'epa_chem_master.parquet')
+
 # --- Output Paths ---
 HTML_TABLE_OUT = os.path.join(DOCS_DIR, 'assets', 'tables', 'my_table.html')
 CHEMICAL_MD_OUT_DIR = os.path.join(DOCS_DIR, 'chemicals')
