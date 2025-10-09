@@ -4,7 +4,7 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
-recent_files = ['src\\04_generation\\build_site.py', 'src\\04_generation\\page_generators.py', 'src\\04_generation\\chem_page_header.py', 'src\\04_generation\\common.py', 'src\\01_collection\\construct_Compounds_of_Concern.py', 'src\\02_processing\\extract_iris_data.py']
+recent_files = ['src\\04_generation\\build_site.py', 'src\\01_collection\\test_epa_api.py', 'src\\01_collection\\epa_api_client.py', 'src\\01_collection\\epa_test.py']
 
 [main]
 version = 0.2.0

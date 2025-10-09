@@ -2,3 +2,5 @@
 .ipynb_checkpoints/
 mkdocs/site/
 mkdocs/docs/chemicals/
+data/01_raw
+data/02_intermediate
