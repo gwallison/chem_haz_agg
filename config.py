@@ -26,7 +26,7 @@ FF_WORKING_DATA = os.path.join(FF_REPO_DIR,'working_df.parquet')
 TIERS_DATA_PQ = os.path.join(PROCESSED_DATA, 'final_tier_classifications.parquet')
 GHS_DATA_PQ = os.path.join(PROCESSED_DATA, 'consolidated_GHS.parquet')
 CHEMINFO_DATA_PQ = os.path.join(PROCESSED_DATA, 'cheminfo_hazard_summary.parquet')
-ECHA_TEXT_DIR = os.path.join(RAW_DATA, 'by_casrn') # Directory for ECHA summary texts
+RAW_CAS_DIR = os.path.join(RAW_DATA, 'by_casrn') # Directory for cas specific files, like scifinder
 
 COMPTOX_CASRN_DTXSID_MASTER = os.path.join(RAW_DATA,'comp_tox_casrn_dtxsid_master.csv')
 EPA_CHEM_MASTER = os.path.join(PROCESSED_DATA,'epa_chem_master.parquet')

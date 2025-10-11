@@ -103,31 +103,3 @@ def add_from_FracFocus(file_path: str | Path) -> int:
         casrn_column='bgCAS'  # Specify the non-default column name
     )
 
-# --- Example of how to use ALL functions ---
-# if __name__ == '__main__':
-#     # 1. Add initial data
-#     print("--- Adding initial data ---")
-#     add_casrns(new_casrns=['50-00-0', '71-43-2', '108-88-3'], source='Initial_Seed_List')
-#     print("-" * 35)
-
-#     # 2. Test FracFocus addition (now uses the refactored function)
-#     print("--- Testing FracFocus addition ---")
-#     dummy_ff_path = Path('data/dummy_fracfocus.parquet')
-#     dummy_ff_data = pd.DataFrame({'bgCAS': ['108-88-3', '75-01-4', '999-99-9']})
-#     dummy_ff_data.to_parquet(dummy_ff_path, index=False)
-#     print(f"Created dummy FracFocus file at '{dummy_ff_path}'")
-#     add_from_FracFocus(dummy_ff_path)
-#     print("-" * 35)
-
-#     # 3. Test generic file addition (using the default 'CASRN' column)
-#     print("--- Testing generic file addition with default column ---")
-#     dummy_generic_path = Path('data/dummy_generic_list.parquet')
-#     dummy_generic_data = pd.DataFrame({'CASRN': ['71-43-2', '123-45-6']})
-#     dummy_generic_data.to_parquet(dummy_generic_path, index=False)
-#     print(f"Created dummy generic file at '{dummy_generic_path}'")
-#     add_casrns_from_file(dummy_generic_path, source_name='Project_Y_List') # No column name needed
-    
-#     # Verify the final state of the master list
-#     final_df = pd.read_parquet(MASTER_FILE_PATH)
-#     print("\n--- Final Master List ---")
-#     print(final_df)
