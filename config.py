@@ -17,6 +17,8 @@ DATA_DIR = os.path.join(PROJECT_ROOT, 'data')
 RAW_DATA = os.path.join(DATA_DIR,'01_raw')
 PROCESSED_DATA = os.path.join(DATA_DIR,'03_processed')
 
+MASTER_CAS_LIST = os.path.join(PROCESSED_DATA,'master_cas_list.parquet')
+
 FF_REPO_DIR = r"G:\My Drive\production\repos\openFF_data_2025_09_07 - with watershed"
 FF_WORKING_DATA = os.path.join(FF_REPO_DIR,'working_df.parquet')
 

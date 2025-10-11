@@ -1,5 +1,6 @@
 *.pyc
 .ipynb_checkpoints/
+.spyproject/
 mkdocs/site/
 mkdocs/docs/chemicals/
 data/01_raw

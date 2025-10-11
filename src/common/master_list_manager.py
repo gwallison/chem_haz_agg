@@ -2,24 +2,22 @@ import pandas as pd
 from pathlib import Path
 import datetime
 import os
+import config
 
 # Define the path to the master file.
-MASTER_FILE_DIR = r"C:/MyDocs/integrated/chem_profiles/data/03_processed"
-MASTER_FILE_FN = os.path.join(MASTER_FILE_DIR,'master_cas_list.parquet')
-MASTER_FILE_PATH = Path(MASTER_FILE_FN)
+# MASTER_FILE_DIR = r"C:/MyDocs/integrated/chem_profiles/data/03_processed"
+# MASTER_FILE_FN = os.path.join(MASTER_FILE_DIR,'master_cas_list.parquet')
+# MASTER_FILE_PATH = Path(MASTER_FILE_FN)
+
+MASTER_FILE_FN = config.MASTER_CAS_LIST
 MASTER_COLUMNS = ['CASRN', 'orig_source', 'date_added']
 
 def get_master_df():
-    return pd.read_parquet(MASTER_FILE_PATH)
+    return pd.read_parquet(MASTER_FILE_FN)
 
 def add_casrns(new_casrns: list[str], source: str) -> int:
     """Adds new CASRNs to the master Parquet file, avoiding duplicates."""
-    MASTER_FILE_PATH.parent.mkdir(parents=True, exist_ok=True)
-    if MASTER_FILE_PATH.exists():
-        master_df = pd.read_parquet(MASTER_FILE_PATH)
-    else:
-        master_df = pd.DataFrame(columns=MASTER_COLUMNS)
-        print("Master file not found. A new one will be created.")
+    master_df = get_master_df()
 
     existing_casrns = set(master_df['CASRN'])
     unique_new_casrns = [cas for cas in new_casrns if cas not in existing_casrns]
@@ -39,22 +37,19 @@ def add_casrns(new_casrns: list[str], source: str) -> int:
     else:
         updated_df = pd.concat([master_df, new_records_df], ignore_index=True)
 
-    updated_df.to_parquet(MASTER_FILE_PATH, index=False, engine='pyarrow')
+    updated_df.to_parquet(MASTER_FILE_FN, index=False, engine='pyarrow')
     print(f"✅ Successfully added {len(unique_new_casrns)} new records from source '{source}'.")
     return len(unique_new_casrns)
 
 def casrn_exists(casrn: str) -> bool:
     """Checks if a single CASRN exists in the master list."""
-    if not MASTER_FILE_PATH.exists():
-        return False
-    master_df = pd.read_parquet(MASTER_FILE_PATH)
+    ## possible refactor: don't fetch whole file, use parquet filter for CASRN
+    master_df = pd.read_parquet(MASTER_FILE_FN)
     return casrn in master_df['CASRN'].values
 
 def casrns_exist(casrns_to_check: list[str]) -> dict:
     """Checks a list of CASRNs against the master list and sorts them."""
-    if not MASTER_FILE_PATH.exists():
-        return {'existing': [], 'missing': casrns_to_check}
-    master_df = pd.read_parquet(MASTER_FILE_PATH)
+    master_df = pd.read_parquet(MASTER_FILE_FN)
     existing_casrns_set = set(master_df['CASRN'])
     found = [cas for cas in casrns_to_check if cas in existing_casrns_set]
     missing = [cas for cas in casrns_to_check if cas not in existing_casrns_set]
