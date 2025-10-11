@@ -47,6 +47,7 @@ def get_chem_frame_with_filenames():
     lst = os.listdir(datadir)
     caslst = []
     fnlst = []
+    datelst = []
     missing = []
 
     for casdir in lst:
@@ -66,12 +67,16 @@ def get_chem_frame_with_filenames():
             check_dic[datestr] = fn
             
         if len(check_dic)>0:
-            most_recent_fn = check_dic[max(check_dic.keys())]        
+            mdatestr = max(check_dic.keys())
+            most_recent_fn = check_dic[mdatestr]        
             caslst.append(tentcas)
             fnlst.append(os.path.join(datadir,casdir,most_recent_fn))
+            datelst.append(mdatestr)
         else:
             missing.append(cas)
-    return pd.DataFrame({'CASRN':caslst,'filename':fnlst}), missing
+    return pd.DataFrame({'CASRN':caslst,
+                         'filename':fnlst,
+                        'date_collected':datelst}), missing
     
 
 def get_list_already_done(outdir=outdir):
@@ -626,10 +631,12 @@ def make_full_SciFinder_output_set(outdir=outdir):
     ncomp = []
     comp1 = []
     comp2 = []
+    date_col = []
     
     for i,row in chemdf.iterrows():
         print(f'{i}  {row.CASRN}')
         casl.append(row.CASRN)
+        date_col.append(row.date_collected)
         soup = sfs.get_soup(row.filename)
         namel.append(sfs.get_substance_name(soup))
         mole.append(sfs.get_molecular_formula(soup))
@@ -643,7 +650,8 @@ def make_full_SciFinder_output_set(outdir=outdir):
     outdf = pd.DataFrame({'CASRN':casl,'sf_name':namel,'mole_form':mole,
                           'subnotes':subn,'subs_class':subscl,
                           'poly_class':poly,'numref':ref,'num_comp':ncomp,
-                          'comp1':comp1,'comp2':comp2})
+                          'comp1':comp1,'comp2':comp2,
+                          'date_collected':date_col})
     outdf.to_parquet(os.path.join(outdir,'scifinder_df.parquet'))
         
 def add_to_SciFinder_output_set(chemlst=[],outdir=outdir,
@@ -678,10 +686,12 @@ def add_to_SciFinder_output_set(chemlst=[],outdir=outdir,
     ncomp = []
     comp1 = []
     comp2 = []
+    date_col = []
     
     for i,row in chemdf.iterrows():
         print(f'{i}  {row.CASRN}')
         casl.append(row.CASRN)
+        date_col.append(row.date_collected)
         soup = sfs.get_soup(row.filename)
         namel.append(sfs.get_substance_name(soup))
         mole.append(sfs.get_molecular_formula(soup))
@@ -695,7 +705,8 @@ def add_to_SciFinder_output_set(chemlst=[],outdir=outdir,
     outdf = pd.DataFrame({'CASRN':casl,'sf_name':namel,'mole_form':mole,
                           'subnotes':subn,'subs_class':subscl,
                           'poly_class':poly,'numref':ref,'num_comp':ncomp,
-                          'comp1':comp1,'comp2':comp2})
+                          'comp1':comp1,'comp2':comp2,
+                          'date_collected':date_col})
     origdf = pd.read_parquet(os.path.join(outdir,'scifinder_df.parquet'))
 
     if overwrite: # drop original
