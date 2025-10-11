@@ -31,7 +31,7 @@ from io import StringIO
 from bs4 import BeautifulSoup
 import requests
 import SciFinder_support as sfs
-# import common.master_list_manager as mlm
+import master_list_manager as mlm
 import config
 
 
@@ -52,13 +52,13 @@ def get_chem_frame_with_filenames():
     for casdir in lst:
         cas = casdir # the dir name is the casrn
         filelst = os.listdir(os.path.join(datadir,casdir))
-        print(cas,end=' ')
+        # print(cas,end=' ')
         # first scan for most recent
         check_dic = {}
         for fn in filelst:
             if not 'SciFinder_collected' in fn:
                 continue
-            print(fn)
+            # print(fn)
             tentcas = fn.split('_')[0]
             if tentcas != cas:
                 print(f'Filename cas doenst match directory! {casdir} : {fn}')
@@ -613,8 +613,9 @@ def check_all_for_download_errors(lib=outdir):
             print('Files deleted.  Run scrape_to_local_library() with returned list')
     return errorlst
 
-def make_full_SciFinder_output_set(lib=outdir):
+def make_full_SciFinder_output_set(outdir=outdir):
     chemdf,_ = get_chem_frame_with_filenames()
+    
     casl = []
     namel = []
     mole = []
@@ -639,12 +640,77 @@ def make_full_SciFinder_output_set(lib=outdir):
         ncomp.append(sfs.get_number_of_components(soup))
         comp1.append(sfs.get_sub_component_substance_rn(soup))
         comp2.append(sfs.get_component_casrn_list(soup))
-    outdf = pd.DataFrame({'bgCAS':casl,'sf_name':namel,'mole_form':mole,
+    outdf = pd.DataFrame({'CASRN':casl,'sf_name':namel,'mole_form':mole,
                           'subnotes':subn,'subs_class':subscl,
                           'poly_class':poly,'numref':ref,'num_comp':ncomp,
                           'comp1':comp1,'comp2':comp2})
-    outdf.to_parquet(os.path.join(lib,'scifinder_df.parquet'))
+    outdf.to_parquet(os.path.join(outdir,'scifinder_df.parquet'))
         
+def add_to_SciFinder_output_set(chemlst=[],outdir=outdir,
+                                overwrite=True):
+    
+    chemdf,_ = get_chem_frame_with_filenames()
+    
+    # determine if we have html for all in chemlist,
+    #   exit if not
+    set1 = set(chemlst)
+    set2 = set(chemdf.CASRN.tolist())
+    only_in_1 = set1.difference(set2)
+    if len(only_in_1)>0:
+        print('=' * 50)
+        print('These CASRN dont have SciFinder HTML:')
+        print(only_in_1)
+        print('=' * 50)
+        return
+    
+    # filter chemdf
+    chemdf = chemdf[chemdf.CASRN.isin(chemlst)]
+    
+    
+    print(f'adding data from {len(chemdf)} cas')
+    casl = []
+    namel = []
+    mole = []
+    subn = []
+    subscl = []
+    poly = []
+    ref = []
+    ncomp = []
+    comp1 = []
+    comp2 = []
+    
+    for i,row in chemdf.iterrows():
+        print(f'{i}  {row.CASRN}')
+        casl.append(row.CASRN)
+        soup = sfs.get_soup(row.filename)
+        namel.append(sfs.get_substance_name(soup))
+        mole.append(sfs.get_molecular_formula(soup))
+        subn.append(sfs.get_substance_notes(soup))
+        subscl.append(sfs.get_substance_classes(soup))
+        poly.append(sfs.get_polymer_class_terms(soup))
+        ref.append(sfs.get_number_of_references(soup))
+        ncomp.append(sfs.get_number_of_components(soup))
+        comp1.append(sfs.get_sub_component_substance_rn(soup))
+        comp2.append(sfs.get_component_casrn_list(soup))
+    outdf = pd.DataFrame({'CASRN':casl,'sf_name':namel,'mole_form':mole,
+                          'subnotes':subn,'subs_class':subscl,
+                          'poly_class':poly,'numref':ref,'num_comp':ncomp,
+                          'comp1':comp1,'comp2':comp2})
+    origdf = pd.read_parquet(os.path.join(outdir,'scifinder_df.parquet'))
+
+    if overwrite: # drop original
+        c = origdf.CASRN.isin(chemlst)
+        if c.sum()>0:
+            print(f'Overwriting: {origdf[c].CASRN.tolist()}')
+            concatdf = pd.concat([origdf[~c],outdf])
+    else:  #only include those not in original
+        origcas = origdf.CASRN.tolist()
+        c = outdf.CASRN.isin(origcas)
+        if c.sum()>0:
+            print(f'Already in origin: {outdf[c].CASRN.tolist()}')
+            concatdf = pd.concat([origdf,outdf[~c]])
+                
+    concatdf.to_parquet(os.path.join(outdir,'scifinder_df.parquet'))
             
 if __name__ == '__main__':
     testcas = ['55845-06-2','57-11-4','1332-58-7','1338-41-6','10025-69-1',
@@ -656,10 +722,11 @@ if __name__ == '__main__':
     # missing = verify_all_components_are_local()
 
     # scrape_to_local_library(['191-30-0'])
-    
+    add_to_SciFinder_output_set(chemlst=['50-00-0'],overwrite=True)    
+
     # make_full_SciFinder_output_set()
-    outdf,missing = get_chem_frame_with_filenames()
-    print(outdf.head(), missing)
+    # outdf,missing = get_chem_frame_with_filenames()
+    # print(outdf.head(), missing)
 
     # lst = get_list_already_done()
     # complst = build_components_list(lst)
