@@ -15,6 +15,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 DOCS_DIR = os.path.join(PROJECT_ROOT,'mkdocs', 'docs')
 DATA_DIR = os.path.join(PROJECT_ROOT, 'data')
 RAW_DATA = os.path.join(DATA_DIR,'01_raw')
+INTERMED_DATA = os.path.join(DATA_DIR,'02_intermediate')
 PROCESSED_DATA = os.path.join(DATA_DIR,'03_processed')
 
 MASTER_CAS_LIST = os.path.join(PROCESSED_DATA,'master_cas_list.parquet')

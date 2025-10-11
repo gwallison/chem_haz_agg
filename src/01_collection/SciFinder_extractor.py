@@ -3,9 +3,16 @@
 Created on Thu Nov 21 12:24:06 2024
 
 @author: Gary
+
+This version of the SciFinder extractor is for the ChemHaz project
+Fetches are based on the master cas list or a small list only.
+The two major functions of this set of routines:
+    1) Collect an expanded HTML page for a particular chemical
+    2) Scrape those individual pages to produce a single data frame of all
+        the variables of interest.
 """
-import sys
-sys.path.insert(0,'c:/MyDocs/integrated/') # adjust to your setup
+# import sys
+# sys.path.insert(0,'c:/MyDocs/integrated/') # adjust to your setup
 
 from selenium import webdriver 
 from selenium.webdriver.common.by import By
@@ -24,27 +31,47 @@ from io import StringIO
 from bs4 import BeautifulSoup
 import requests
 import SciFinder_support as sfs
-import common.master_list_manager as mlm
+# import common.master_list_manager as mlm
 import config
 
 
-outdir= r"G:\My Drive\webshare\scrape_data\SciFinder_chem_pages"
+outdir= config.PROCESSED_DATA
 
-def get_chem_frame_with_filenames(lib=outdir):
+def get_chem_frame_with_filenames():
+    """This returns a frame with all cas/fn for all the most recent
+    scifinder html files.  In addition, the routine returns a list
+    of existing cas directories without a SciFinder html file."""
+
+    datadir = config.RAW_CAS_DIR
     
-    lst = os.listdir(lib)
+    lst = os.listdir(datadir)
     caslst = []
     fnlst = []
-    for fn in lst:
-        tentcas = fn.split('_')[0]
-        if tentcas.count('-')==2:
+    missing = []
+
+    for casdir in lst:
+        cas = casdir # the dir name is the casrn
+        filelst = os.listdir(os.path.join(datadir,casdir))
+        print(cas,end=' ')
+        # first scan for most recent
+        check_dic = {}
+        for fn in filelst:
+            if not 'SciFinder_collected' in fn:
+                continue
+            print(fn)
+            tentcas = fn.split('_')[0]
+            if tentcas != cas:
+                print(f'Filename cas doenst match directory! {casdir} : {fn}')
+            datestr = fn.split('_')[3].split('.')[0]
+            check_dic[datestr] = fn
+            
+        if len(check_dic)>0:
+            most_recent_fn = check_dic[max(check_dic.keys())]        
             caslst.append(tentcas)
-            fnlst.append(os.path.join(lib,fn))
+            fnlst.append(os.path.join(datadir,casdir,most_recent_fn))
         else:
-            # print(f'rejecting {fn}')
-            pass
-    
-    return pd.DataFrame({'CASRN':caslst,'filename':fnlst})
+            missing.append(cas)
+    return pd.DataFrame({'CASRN':caslst,'filename':fnlst}), missing
     
 
 def get_list_already_done(outdir=outdir):
@@ -56,17 +83,17 @@ def get_list_already_done(outdir=outdir):
             caslst.append(tentcas)
     return caslst
 
-def get_chemlist():
-    done_lst = get_list_already_done(outdir)
-    t = pd.read_parquet(cas_source)
+# def get_chemlist(cas_source):
+#     done_lst = get_list_already_done(outdir)
+#     t = pd.read_parquet(cas_source)
 
 
-    t = t[t.bgCAS.str[0].isin(['0','1','2','3','4','5','6','7','8','9'])]
-    t = t[~t.bgCAS.isin(done_lst)]
-    t = t.sort_values('bgCAS')
-    return t.bgCAS.tolist()
+#     t = t[t.bgCAS.str[0].isin(['0','1','2','3','4','5','6','7','8','9'])]
+#     t = t[~t.bgCAS.isin(done_lst)]
+#     t = t.sort_values('bgCAS')
+#     return t.bgCAS.tolist()
 
-def save_data(cas,text):
+def save_html_page(cas,text):
     nowstr = str(datetime.datetime.now())
     nowstr = nowstr.split(' ')[0]
     rootout = os.path.join(config.RAW_CAS_DIR,cas)
@@ -303,34 +330,34 @@ def perform_advanced_search(driver, search_string):
 #   except Exception as e:
 #     print(f"An error occurred: {e}")
     
-def expand_all_sections(driver):
-    """
-    I don't think this works, at least on all pages
+# def expand_all_sections(driver):
+#     """
+#     I don't think this works, at least on all pages
     
-    Expands all collapsible sections on the webpage, handling 
-    potential 'element click intercepted' errors.
+#     Expands all collapsible sections on the webpage, handling 
+#     potential 'element click intercepted' errors.
 
-    Args:
-      driver: The Selenium webdriver instance.
-    """
-    try:
-        # Find all the collapse buttons
-        collapse_buttons = driver.find_elements(By.CLASS_NAME, "accordion-toggle")
+#     Args:
+#       driver: The Selenium webdriver instance.
+#     """
+#     try:
+#         # Find all the collapse buttons
+#         collapse_buttons = driver.find_elements(By.CLASS_NAME, "accordion-toggle")
 
-        for button in collapse_buttons:
-            try:
-                # First attempt: regular click
-                button.click()
-            except:
-                # If intercepted, try scrolling into view and clicking again
-                driver.execute_script("arguments[0].scrollIntoView();", button)
-                time.sleep(1)
-                button.click()
-            time.sleep(2)
-            # Add some wait time for all sections to expand (adjust as needed)
+#         for button in collapse_buttons:
+#             try:
+#                 # First attempt: regular click
+#                 button.click()
+#             except:
+#                 # If intercepted, try scrolling into view and clicking again
+#                 driver.execute_script("arguments[0].scrollIntoView();", button)
+#                 time.sleep(1)
+#                 button.click()
+#             time.sleep(2)
+#             # Add some wait time for all sections to expand (adjust as needed)
 
-    except Exception as e:
-        print(f"An error occurred: {e}")
+#     except Exception as e:
+#         print(f"An error occurred: {e}")
         
 def click_first_expand_all(driver):
   """Clicks the first "Expand All" button on the page, if present.
@@ -449,14 +476,6 @@ def scrape_to_local_library(chemlist=[]):
     # does a full scrape for caslst (unless already scraped)
     # if for some reason, the process dies, it can be rerun with the same list
     
-    driver = start_selenium_session()
-    # Add a check to ensure login was successful before proceeding
-    if driver is None:
-        print("Login failed. Halting script.")
-        return
-
-    # === The navigation block that was here has been REMOVED ===
-    
     alldone = get_list_already_done()
     worklist = []
     for cas in chemlist:
@@ -464,6 +483,13 @@ def scrape_to_local_library(chemlist=[]):
             worklist.append(cas)
     if len(worklist)==0:
         print('Everything on your list is already in the local library!')
+        return []
+
+    driver = start_selenium_session()
+    # Add a check to ensure login was successful before proceeding
+    if driver is None:
+        print("Login failed. Halting script.")
+        return
         
     try:
         for i,cas_from_list in enumerate(worklist):
@@ -491,28 +517,28 @@ def scrape_to_local_library(chemlist=[]):
             click_regulatory_view_all(driver)
             click_GHS_view_all(driver)
             
-            # save_data(cas, driver.page_source)
+            # save_html_page(cas, driver.page_source)
             
             rendered_html = driver.execute_script("return document.documentElement.outerHTML;")
-            save_data(cas, rendered_html)
+            save_html_page(cas, rendered_html)
             
     except (WebDriverException, TimeoutException)  as e:
         print(f"Disconnection or Timeout error: {e}")
         driver.quit()        
         
     
-def get_new_cas_in_build(work_dir=r"C:\MyDocs\integrated\openFF\build\sandbox\work_dir"):
-    newdf = pd.read_parquet(os.path.join(work_dir,'new_cas_added.parquet'))
-    if len(newdf)>0:
-        chemlist = newdf.CASNumber.tolist()
-        scrape_to_local_library(chemlist)
-        return chemlist
-    else:
-        return []
+# def get_new_cas_in_build(work_dir=r"C:\MyDocs\integrated\openFF\build\sandbox\work_dir"):
+#     newdf = pd.read_parquet(os.path.join(work_dir,'new_cas_added.parquet'))
+#     if len(newdf)>0:
+#         chemlist = newdf.CASNumber.tolist()
+#         scrape_to_local_library(chemlist)
+#         return chemlist
+#     else:
+#         return []
     
 def update_from_master_list(bySource=''):
     masterdf = mlm.get_master_df()
-    if len(bySource)>0:
+    if bySource!='':
         c = masterdf.orig_source==bySource
     else:
         c = masterdf.orig_source==masterdf.orig_source # True
@@ -528,7 +554,7 @@ def build_components_list(chemlist=[],libdf=None):
     # return a list of all SciFInder components listed for items on chemlist
     
     if libdf==None:
-        libdf = get_chem_frame_with_filenames()        
+        libdf, _ = get_chem_frame_with_filenames()        
     complist = []    
     if len(chemlist)>0:
         print(f'getting components from {len(chemlist)} files: ',end='')
@@ -543,17 +569,17 @@ def build_components_list(chemlist=[],libdf=None):
         
     return complist
 
-def add_all_new_for_builder():
-    # finds and adds new cas to library, detects new components and adds any new ones
+# def add_all_new_for_builder():
+#     # finds and adds new cas to library, detects new components and adds any new ones
     
-    chemlist = get_new_cas_in_build()
-    complist = build_components_list(chemlist)
-    # now add the component to the local library too
-    scrape_to_local_library(complist)
+#     chemlist = get_new_cas_in_build()
+#     complist = build_components_list(chemlist)
+#     # now add the component to the local library too
+#     scrape_to_local_library(complist)
         
     
 def verify_all_components_are_local(lib=outdir):
-    chemdf = get_chem_frame_with_filenames(lib)
+    chemdf, _ = get_chem_frame_with_filenames(lib)
     allcas = chemdf.CASRN.tolist()
     missing = set()
     for i,row in chemdf.iterrows():
@@ -567,7 +593,7 @@ def verify_all_components_are_local(lib=outdir):
     return missing
 
 def check_all_for_download_errors(lib=outdir):
-    chemdf = get_chem_frame_with_filenames(lib)
+    chemdf, _ = get_chem_frame_with_filenames(lib)
     errorlst = []
     errorfn = []
     for i,row in chemdf.iterrows():
@@ -588,7 +614,7 @@ def check_all_for_download_errors(lib=outdir):
     return errorlst
 
 def make_full_SciFinder_output_set(lib=outdir):
-    chemdf = get_chem_frame_with_filenames(lib)
+    chemdf,_ = get_chem_frame_with_filenames()
     casl = []
     namel = []
     mole = []
@@ -629,10 +655,11 @@ if __name__ == '__main__':
     # errorlst = check_all_for_download_errors()
     # missing = verify_all_components_are_local()
 
-    scrape_to_local_library(['191-30-0'])
+    # scrape_to_local_library(['191-30-0'])
     
     # make_full_SciFinder_output_set()
-
+    outdf,missing = get_chem_frame_with_filenames()
+    print(outdf.head(), missing)
 
     # lst = get_list_already_done()
     # complst = build_components_list(lst)
