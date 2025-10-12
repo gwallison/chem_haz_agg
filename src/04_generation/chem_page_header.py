@@ -16,9 +16,20 @@ def get_chem_page_header(cas,ing_name,lists_of_concern):
     s = '<div class="grid cards" markdown> \n\n'
     
     s+= f'-   **{ing_name}**\n\n'
-    s+= f'    CASRN: {cas}'
-    # s+= '    ---\n\n'
     s+= f'    {chem_img}\n\n'
+    s+= f'    <center>CASRN: **{cas}**</center>\n\n'
+    # get EH classification
+    try:
+        s+= f'    Classification:<br>'
+        s+= f'    {repodic["eh_Class_L1"]}<br>'
+        s+= f'    ({repodic["eh_Class_L2"]})\n\n'
+    except:
+        pass
+    # s+= '    ---\n\n'
+    
+    s+= f'-   **Group Membership**\n\n'
+    s+=  '    (no repo data found for this chem)\n\n' 
+
     
     s+= f'-   **Tier Profile**\n\n'
     # s+= f'    CASRN: {cas}'
@@ -47,15 +58,13 @@ def get_chem_page_header(cas,ing_name,lists_of_concern):
         s+= '     (No SciFinder data compiled)\n\n'
     
         
-    s+= f'-   **EH Classification**\n\n'
-    try:
-        s+= f'    {repodic["eh_Class_L1"]}\n\n'
-        s+= f'    ({repodic["eh_Class_L2"]})\n\n'
-    except:
-        s+='     (no repo data found for this chem)\n\n'        
+    # s+= f'-   **EH Classification**\n\n'
+    # try:
+    #     s+= f'    {repodic["eh_Class_L1"]}\n\n'
+    #     s+= f'    ({repodic["eh_Class_L2"]})\n\n'
+    # except:
+    #     s+='     (no repo data found for this chem)\n\n'        
 
-    s+= f'-   **Group Membership**\n\n'
-    s+=  '    (no repo data found for this chem)\n\n' 
     
     s+= '-   **Toxicological Profiles**\n\n'
     new_tab = '{: target="_blank" rel="noopener" }'

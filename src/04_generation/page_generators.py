@@ -52,7 +52,7 @@ def _has_showable_codes(hcodes):
 
 def _get_echa_text(cas):
     try:
-        cas_dir = os.path.join(config.ECHA_TEXT_DIR, cas)
+        cas_dir = os.path.join(config.RAW_CAS_DIR, cas)
         print(cas_dir)
         for fn in os.listdir(cas_dir):
             if "ECHA_Info_hazard_su" in fn:
