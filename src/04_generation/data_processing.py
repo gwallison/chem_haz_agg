@@ -28,6 +28,9 @@ def load_and_prepare_data():
     tiers['CMR_level'] = 'CMR' + tiers.CMR_Tier.str[-1]
     tiers['ENV_level'] = 'ENV' + tiers.ENV_Tier.str[-1]
     tiers['EDC_level'] = 'EDC' + tiers.EDC_Tier.str[-1]
+    tiers['IHL_level'] = 'IHL' + tiers.IHL_Tier.str[-1]
+    tiers['ORL_level'] = 'ORL' + tiers.ORL_Tier.str[-1]
+    tiers['SKN_level'] = 'SKN' + tiers.SKN_Tier.str[-1]
     
     # Aggregate data by CAS number
     chem_summary = df.groupby('bgCAS', as_index=False)['epa_pref_name'].first()
@@ -35,7 +38,7 @@ def load_and_prepare_data():
     
     # Create text for the searchable tier column
     def alttxt(row):
-        return f'{row.CMR_level} {row.ENV_level} {row.EDC_level}'
+        return f'{row.CMR_level} {row.ENV_level} {row.EDC_level} {row.IHL_level} {row.ORL_level} {row.SKN_level}'
     chem_summary['alttxt'] = chem_summary.apply(alttxt, axis=1)
     
     print("Data loading and preparation complete.")

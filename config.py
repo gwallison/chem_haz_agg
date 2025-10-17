@@ -36,11 +36,64 @@ EPA_CHEM_MASTER = os.path.join(PROCESSED_DATA,'epa_chem_master.parquet')
 
 # --- Output Paths ---
 HTML_TABLE_OUT = os.path.join(DOCS_DIR, 'assets', 'tables', 'my_table.html')
+# markdown chemical files
 CHEMICAL_MD_OUT_DIR = os.path.join(DOCS_DIR, 'chemicals')
+
+# GHS output files
+PUBCHEM_OUTPUT_PATH = os.path.join(INTERMED_DATA,'pubchem_ghs_hazards.parquet')
+CHEMINFO_HAZARD_OUTPUT_PATH = os.path.join(INTERMED_DATA,'chem_infor_safety_data.parquet')
+CHEMINFO_HAZARD_SUMMARY_PATH = os.path.join(INTERMED_DATA,'cheminfo_hazard_summary.parquet')
+ECHA_HARM_OUTPUT_PATH= os.path.join(INTERMED_DATA,'echa_harmonized_ghs_hazards.parquet')
+ECHA_INDUS_OUTPUT_PATH= os.path.join(INTERMED_DATA,'echa_industrial_ghs_hazards.parquet')
+AUS_OUTPUT_PATH =os.path.join(INTERMED_DATA,'australia_ghs_hazards.parquet')
+JAPAN_OUTPUT_PATH = os.path.join(INTERMED_DATA,'japan_ghs_hazards.parquet')
+
+GHS_CONSOLIDATED_DATA_PATH = os.path.join(INTERMED_DATA,'consolidated_GHS.parquet')
+
+TIER_1_CLASSIFICATION_OUTPUT_PATH = os.path.join(INTERMED_DATA, 
+                                                 'Tier_1_hazard_classifications.parquet')
+TIER_2_CLASSIFICATION_OUTPUT_PATH = os.path.join(INTERMED_DATA, 
+                                                 'Tier_2_hazard_classifications.parquet')
+
+FINAL_TIERED_OUTPUT_PATH = os.path.join(PROCESSED_DATA,
+                                  'final_tier_classifications.parquet')
+
+
 
 # --- Web URLs ---
 GHS_CODES_URL = 'https://pubchem.ncbi.nlm.nih.gov/ghs/'
-TIER_IMAGE_URL = 'https://storage.googleapis.com/open-ff-browser/images/ChemHazTier/{cas_num}.png'
+# TIER_IMAGE_URL = 'https://storage.googleapis.com/open-ff-browser/images/ChemHazTier/{cas_num}.png'
+TIER_IMAGE_URL = '../images/{cas_num}.svg'
+# --- Hazard Details ----
+HAZARD_MAP = {
+    'CMR': {'1':['H350', 'H351', 'H340', 'H341', 'H360', 'H361', 'H362'
+            'H350i','H360F','H360D','H360FD','H360Fd','H360Df','H361f',
+            'H361d','H361fd'],
+            '2': []},
+    'ENV': {'1':['H400', 'H401','H410','H411'],
+            '2':['H402','H412','H413','H420','H421']},
+    'EDC': {'1':['H380', 'H381','H430','H431','H440', 'H441','H450','H451'],
+            '2': []},
+    'IHL': {'1':['H330','H331','H334'],
+            '2':['H332','H333','H335','H336']},
+    'ORL': {'1':['H301','H302'],
+            '2':['H303']},
+    'SKN': {'1':['H310','H311','H314','H318'],
+            '2':['H312','H313','H315','H316','H317','H319','H320']},
+    'OGN': {'1':[],
+            '2':[]},
+}
+
+CHEMINFO_CATEGORY_MAP = {
+    'CMR': ['Carcinogenicity', 'Genotoxicity_Mutagenicity', 'Reproductive', 'Developmental'],
+    'ENV': ['Chronic_Aquatic_Toxicity', 'Acute_Aquatic_Toxicity'],
+    'Carcinogen': ['Carcinogenicity'],
+    'EDC': ['Endocrine_Disruption'],
+    'IHL': ['Inhalation'],
+    'ORL': ['Oral'],
+    'SKN': ['Dermal','Skin_Irritation','Eye_Irritation'],
+}
+
 
 # --- Table Settings ---
 ITABLES_SETTINGS = {

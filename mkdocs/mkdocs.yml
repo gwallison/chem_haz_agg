@@ -39,4 +39,5 @@ extra_javascript:
   - javascripts/tablesort.js
   - javascripts/tablesort.number.js  
   - javascripts/tablesort.date.js  
+  - javascripts/tooltip.js
   

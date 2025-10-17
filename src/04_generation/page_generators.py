@@ -14,6 +14,7 @@ import config # Import the configuration
 import data_processing as dp
 import chem_page_header as cph
 import List_of_lists_section as lols
+import make_graphics
 
 from itables import init_notebook_mode
 init_notebook_mode(all_interactive=True, connected=True)
@@ -26,22 +27,47 @@ opt.allow_html = True
 
 # --- Helper functions for markdown generation ---
 
-def _add_tier_icon(hcode, icon=':red_square:'):
-    if hcode in ['H350', 'H350i', 'H351', 'H340', 'H341', 'H360', 'H360FD','H361', 'H361d','H362']:
-        return f' {icon} (CMR)'
-    if hcode in ['H410', 'H411']:
-        return f' {icon} (ENV)'
-    # Add other EDC codes if necessary
+def _add_GHS_icon(hcode):
+    # take the first match
+    for cl in config.HAZARD_MAP.keys():
+        for lv in ['1','2']:
+            if hcode in config.HAZARD_MAP[cl][lv]:
+                if lv == '1':
+                    return f" {':red_square:'} ({cl}) "
+                return f" {':orange_square:'} ({cl}) "
+    return ""
+
+def _add_ECHA_indus_icon(hcode):
+    # only return orange square
+    for cl in config.HAZARD_MAP.keys():
+        for lv in ['1','2']:
+            if hcode in config.HAZARD_MAP[cl][lv]:
+                return f" {':orange_square:'} ({cl}) "
     return ""
 
 def _add_ci_icon(civar,icon=':orange_square:'):
-    if civar in ['Carcinogenicity','Genotoxicity_Mutagenicity','Reproductive','Developmental']:
-        return f' {icon} (CMR)'
-    if civar in ['Acute_Aquatic_Toxicity','Chronic_Aquatic_Toxicity']:
-        return f' {icon} (ENV)'
-    if civar in ['Endocrine_Disruption']:
-        return f' {icon} (EDC)'
+    # only return orange square
+    for cl in config.CHEMINFO_CATEGORY_MAP.keys():
+       if civar in config.CHEMINFO_CATEGORY_MAP[cl]:
+                return f" {icon} ({cl}) "
     return ""
+
+# def _add_tier_icon(hcode, icon=':red_square:'):
+#     if hcode in ['H350', 'H350i', 'H351', 'H340', 'H341', 'H360', 'H360FD','H361', 'H361d','H362']:
+#         return f' {icon} (CMR)'
+#     if hcode in ['H410', 'H411']:
+#         return f' {icon} (ENV)'
+#     # Add other EDC codes if necessary
+#     return ""
+
+# def _add_ci_icon(civar,icon=':orange_square:'):
+#     if civar in ['Carcinogenicity','Genotoxicity_Mutagenicity','Reproductive','Developmental']:
+#         return f' {icon} (CMR)'
+#     if civar in ['Acute_Aquatic_Toxicity','Chronic_Aquatic_Toxicity']:
+#         return f' {icon} (ENV)'
+#     if civar in ['Endocrine_Disruption']:
+#         return f' {icon} (EDC)'
+#     return ""
 
 def _has_showable_codes(hcodes):
     try:
@@ -82,7 +108,7 @@ def _add_echa_summary(cas):
     return admonition_type, echatitle, echa_text
     
 
-def _get_tier_1_text(t,ghs_dict):
+def _get_authoritative_indicators_text(t,ghs_dict):
     content = ''
     if len(t)>0:
         for j,jrow in t.iterrows():
@@ -102,7 +128,7 @@ def _get_tier_1_text(t,ghs_dict):
                 if not code[1] in ['3','4']: # show only Health end Env hazards
                     continue
                 try:
-                    content += f'        * {code}{_add_tier_icon(code)}: {ghs_dict[code]}\n'
+                    content += f'        * {_add_GHS_icon(code)}{code}: {ghs_dict[code]}\n'
                 except:
                     content += f'        * <<{code}>> : unknown code\n'
     if content != '':
@@ -110,7 +136,7 @@ def _get_tier_1_text(t,ghs_dict):
     return '   **No data**\n\n'
     
 
-def _get_tier_2_text(t,cas,ghs_dict,cidf):
+def _get_other_indicators_text(t,cas,ghs_dict,cidf):
     content = ''
     if len(t)>0:
         for j,jrow in t.iterrows():
@@ -129,25 +155,27 @@ def _get_tier_2_text(t,cas,ghs_dict,cidf):
                     continue
                 if not code[1] in ['3','4']: # show only Health end Env hazards
                     continue
-                try:
-                    content += f'        * {code}{_add_tier_icon(code,icon=':orange_square:')}: {ghs_dict[code]}\n'
-                except:
-                    content += f'    * <<{code}>> : unknown code\n'
+                # try:
+                content += f'        * {_add_ECHA_indus_icon(code)}{code}: {ghs_dict[code]}\n'
+                # except:
+                #     content += f'    * <<{code}>> : unknown code\n'
 
     # now add the ChemInformatics V and H codes
     citmp = cidf[cidf.CASRN==cas].copy().drop(['CASRN','Name','DTXSID'],axis=1).reset_index(drop=True)
     citmp = citmp.fillna('ND')
     if len(citmp)==1:
-        filtered_df = citmp.loc[:, citmp.iloc[0].isin(['H', 'VH'])]
+        filtered_df = citmp.loc[:, citmp.iloc[0].isin(['H', 'VH', 'M'])]
         out = filtered_df.T.reset_index()
         out.columns = ['civar','cilevel']
         if len(out)>0:
-            out.cilevel = out.cilevel.str.replace('VH','very high')
-            out.cilevel = out.cilevel.str.replace('H','high')
+            out.cilevel = out.cilevel.str.replace('VH','**very high**')
+            out.cilevel = out.cilevel.str.replace('H','**high**')
+            out.cilevel = out.cilevel.str.replace('M','moderate')
             if len(out)>0:
                 content += '    === "ChemInformatics"\n'
+                out = out.sort_values('cilevel')
                 for j,jrow in out.iterrows():
-                    content += f'        * {jrow.civar}{_add_ci_icon(jrow.civar,icon=':orange_square:')}: {jrow.cilevel}\n'
+                    content += f'        * {_add_ci_icon(jrow.civar,icon=":orange_square:")}{jrow.civar}: {jrow.cilevel}\n'
     if content != '':
         return  '??? "Expand for details"\n\n' + content 
     return '   **No data**\n\n'
@@ -157,14 +185,14 @@ def _get_tier_3_text(t,cas,cidf):
     citmp = cidf[cidf.CASRN==cas].copy().drop(['CASRN','Name','DTXSID'],axis=1).reset_index(drop=True)
     citmp = citmp.fillna('ND')
     if len(citmp)==1:
-        filtered_df = citmp.loc[:, citmp.iloc[0].isin(['L', 'M'])]
+        filtered_df = citmp.loc[:, citmp.iloc[0].isin(['L'])]
         out = filtered_df.T.reset_index()
         out.columns = ['civar','cilevel']
         if len(out)>0:
             out.cilevel = out.cilevel.str.replace('L','low')
-            out.cilevel = out.cilevel.str.replace('M','moderate')
             if len(out)>0:
                 content += '    === "ChemInformatics"\n'
+                out = out.sort_values('cilevel')
                 for j,jrow in out.iterrows():
                     content += f'        * {jrow.civar}{_add_ci_icon(jrow.civar,icon=':green_square:')}: {jrow.cilevel}\n'
     if content != '':
@@ -224,8 +252,10 @@ def create_chemical_pages(chem_df, ghs_df):
     os.makedirs(config.CHEMICAL_MD_OUT_DIR, exist_ok=True)
     
     num_pages = len(chem_df)
-    for i, row in chem_df.iterrows():
+    for i, row in chem_df[:5].iterrows():
         cas = row.bgCAS
+        print('.',end='')
+        # make_graphics.create_tier_graphic()
         
         # Start building markdown content
         content = f'# {row.epa_pref_name}\n\n'
@@ -235,22 +265,15 @@ def create_chemical_pages(chem_df, ghs_df):
         content += cph.get_chem_page_header(cas, ing_name=row.epa_pref_name,
                                             lists_of_concern=llcc)
         
-        # # simple list of lists of concern
-        # llcc = lists_of_lists.get_list_of_concerns(cas)
-        # if len(llcc)>0:
-        #     content += f'On lists of concern: {llcc}\n\n'
-        # else:
-        #     content += 'On **no** lists of concern\n\n'
-            
-        # # # grid of lists of concern
-        # content += lists_of_lists.get_concerns_grid(cas)
+
+        ## end Summary Header  ##
         
         # ECHA summary   
         admonition_type, echatitle, echa_text = _add_echa_summary(cas)         
         content += f'??? {admonition_type} "{echatitle}"\n\n    {echa_text}\n\n'
 
         # Tier summary image
-        content += '## Tier summary\n'
+        content += '## Tier data summary\n'
         content += f'![tier graphic summary]({config.TIER_IMAGE_URL.format(cas_num=cas)})\n\n'
         
         # Tier 1 & 2 Details
@@ -263,16 +286,16 @@ def create_chemical_pages(chem_df, ghs_df):
         t = t[(t.GHS_H_Codes.str[0].isin(['H','E'])) & t.has_showable_codes]
 
         # Example for Tier 1
-        content += '### Tier 1: Authoritative indicators of hazards\n\n'
-        content += _get_tier_1_text(t, ghs_dict)
+        content += '### Authoritative indicators of hazards (GHS)\n\n'
+        content += _get_authoritative_indicators_text(t, ghs_dict)
         
         # Example for Tier 2
-        content += '### Tier 2: Other indications of high hazards\n\n'
-        content += _get_tier_2_text(t, cas, ghs_dict, ci_df)
+        content += '### Other indications of hazards\n\n'
+        content += _get_other_indicators_text(t, cas, ghs_dict, ci_df)
 
 
         # Example for Tier 3
-        content += '### Tier 3: Positive indications of low hazard\n\n'
+        content += '### Affirmative data showing low concern\n\n'
         content += _get_tier_3_text(t, cas, ci_df)
 
         # Write the file
