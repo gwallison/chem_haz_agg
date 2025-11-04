@@ -18,7 +18,7 @@
     - :orange_square: *Orange* (Level 2 - **Treat as a Hazard**): while not yet classified in GHS systems, this material
     has been found by research to be hazardous.
     
-    - :green_square: *Green* (Level 3 - **Low Hazard**): research has indicated that this material is likely a 
+    - :blue_square: *Blue* (Level 3 - **Low Hazard**): research has indicated that this material is likely a 
     a low or moderate hazard.
     
     - :grey_question: *Gray* (Level 4 - **Unknown Hazard**): Many chemicals on this list are poorly studied or poorly defined.

@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import os
 import pandas as pd
+from config import FINAL_TIERED_OUTPUT_PATH
 
 # --- Reusable Color Map ---
 TIER_COLOR_MAP = {
@@ -16,7 +17,8 @@ def create_tier_graphic(
     data: dict,
     label_positions: list[tuple[str, int, int]] = None,
     filename: str = 'tier_graphic.svg', 
-    output_dir: str = r"C:/MyDocs/integrated/chem_profiles/mkdocs/docs/assets/images"
+    # output_dir: str = r"C:/MyDocs/integrated/chem_profiles/mkdocs/docs/assets/images"
+    output_dir: str = r"C:/MyDocs/integrated/chem_profiles/mkdocs/docs/images"
 ):
     """
     Generates a graphic with squares based on input data and explicitly defined positions.
@@ -95,29 +97,31 @@ if __name__ == '__main__':
     # Example 1: Custom positions matching your attached figure
     print("--- Generating graphic with specific custom positions ---")
     custom_positions = [
-        ('CMR', 0, 1), # Label A in Top Row, Column 0 (first column)
-        ('EDC', 0, 2), # Label C in Top Row, Column 3 (fourth column)
-        ('ENV', 0, 3), # Label G in Bottom Row, Column 2
-        ('IHL', 1, 1), # Label A in Top Row, Column 0 (first column)
-        ('ORL', 1, 2), # Label C in Top Row, Column 3 (fourth column)
-        ('SKN', 1, 3), # Label G in Bottom Row, Column 2
+        ('CMR', 1, 0), # Label A in Top Row, Column 0 (first column)
+        ('EDC', 1, 1), # Label C in Top Row, Column 3 (fourth column)
+        ('ENV', 1, 3), # Label G in Bottom Row, Column 2
+        ('IHL', 0, 0), # Label A in Top Row, Column 0 (first column)
+        ('ORL', 0, 1), # Label C in Top Row, Column 3 (fourth column)
+        ('SKN', 0, 2), # Label G in Bottom Row, Column 2
+        ('OGN', 0, 3), # Label G in Bottom Row, Column 2
     ]
     
-    tierfn = r"C:\MyDocs\integrated\chem_profiles_old\code\data\final_tier_classifications.parquet"
-    tierdf = pd.read_parquet(tierfn)
+    # tierfn = r"C:\MyDocs\integrated\chem_profiles_old\code\data\final_tier_classifications.parquet"
+    tierdf = pd.read_parquet(FINAL_TIERED_OUTPUT_PATH)
     tierdf['CMR'] = tierdf.CMR_Tier.str[-1].astype('int')
     tierdf['EDC'] = tierdf.EDC_Tier.str[-1].astype('int')
     tierdf['ENV'] = tierdf.ENV_Tier.str[-1].astype('int')
-    tierdf['IHL'] = tierdf.ENV_Tier.str[-1].astype('int')
-    tierdf['ORL'] = tierdf.ENV_Tier.str[-1].astype('int')
-    tierdf['SKN'] = tierdf.ENV_Tier.str[-1].astype('int')
+    tierdf['IHL'] = tierdf.IHL_Tier.str[-1].astype('int')
+    tierdf['ORL'] = tierdf.ORL_Tier.str[-1].astype('int')
+    tierdf['SKN'] = tierdf.SKN_Tier.str[-1].astype('int')
+    tierdf['OGN'] = tierdf.OGN_Tier.str[-1].astype('int')
     # tierdf = tierdf.replace('Tier ','')
     # print(tierdf.head())
     for i,row in tierdf.iterrows():
         print(row)
-        tierval = min([row.CMR,row.ENV,row.EDC,row.IHL,row.ORL,row.SKN])
+        tierval = min([row.CMR,row.ENV,row.EDC,row.IHL,row.ORL,row.SKN,row.OGN])
         if tierval == 3:
-            if max([row.CMR,row.ENV,row.EDC,row.IHL,row.ORL,row.SKN])==4:
+            if max([row.CMR,row.ENV,row.EDC,row.IHL,row.ORL,row.SKN,row.OGN])==4:
                 tierval = 4
         graphic_data = {'Tier': tierval,
                         'CMR': row.CMR,
@@ -125,7 +129,8 @@ if __name__ == '__main__':
                         'EDC': row.EDC,
                         'IHL': row.IHL,
                         'ORL': row.ORL,
-                        'SKN': row.SKN
+                        'SKN': row.SKN,
+                        'OGN': row.OGN,
                         }
     
     

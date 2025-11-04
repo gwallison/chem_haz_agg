@@ -12,30 +12,107 @@ import time
 import json
 from pathlib import Path
 import re
+import os
+from requests.exceptions import HTTPError, RequestException, JSONDecodeError # <-- Import more specific exceptions
 
 # Import the master file path from your manager module.
-from master_list_manager import MASTER_FILE_PATH
+# from master_list_manager import MASTER_FILE_PATH
+from config import MASTER_CAS_LIST, PUBCHEM_OUTPUT_PATH
 
-# Define paths for the primary data output and the debug file
-PUBCHEM_OUTPUT_PATH = MASTER_FILE_PATH.parent / 'pubchem_ghs_hazards.parquet'
-DEBUG_OUTPUT_PATH = MASTER_FILE_PATH.parent / 'debug_output.json'
 
+def make_polite_request(url, session, max_retries=3, initial_sleep=5, verbose=False):
+    """
+    Makes a 'polite' request that handles 503/429 throttling errors
+    by using exponential backoff.
+    """
+    retries = 0
+    while retries < max_retries:
+        try:
+            response = session.get(url, timeout=15)
+            # Raise an error for bad status codes (like 503 or 429)
+            response.raise_for_status() 
+            
+            # If successful, return the JSON data
+            return response.json() 
+
+        except HTTPError as e:
+            # Check if this is a throttling error
+            if e.response.status_code in [503, 429]:
+                retries += 1
+                sleep_time = initial_sleep * (2 ** retries) # Exponential backoff
+                
+                if verbose:
+                    print(f"\n  - Received {e.response.status_code}. Throttled. "
+                          f"Waiting {sleep_time}s before retry {retries}/{max_retries}...")
+                else:
+                    print('W', end='')
+                
+                time.sleep(sleep_time)
+            else:
+                # It's a different HTTP error (e.g., 404 Not Found), so don't retry.
+                if verbose: print(f"  - HTTP Error (non-retryable): {e}")
+                else: print('E', end='')
+                return None # Fail the request
+                
+        except (RequestException, JSONDecodeError) as e:
+            # General connection error or bad JSON
+            if verbose: print(f"  - Request/JSON Error: {e}")
+            else: print('X', end='')
+            return None # Fail the request
+    
+    if verbose: print(f"  - Max retries exceeded for {url}")
+    return None # Failed after all retries
+
+import pubchempy as pcp
+
+def get_cid_with_pubchempy(casrn):
+    """
+    Fetches CID using the pubchempy library.
+    It handles rate limiting automatically.
+    """
+    try:
+        # 'cas' is the namespace for CASRN
+        compounds = pcp.get_compounds(casrn, 'cas')
+        if compounds:
+            # Return the first compound's CID
+            return compounds[0].cid
+        else:
+            return None
+    except Exception as e:
+        # Handles various lookup errors
+        print(f"Error looking up {casrn}: {e}")
+        return None
+
+
+# def get_cid_from_cas(cas_rn, session, verbose=False):
+#     """Queries PubChem to get the Compound ID (CID) for a given CAS RN."""
+#     base_url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/{}/cids/JSON"
+#     request_url = base_url.format(cas_rn)
+#     try:
+#         response = session.get(request_url, timeout=10)
+#         response.raise_for_status()
+#         data = response.json()
+#         if "IdentifierList" in data and "CID" in data["IdentifierList"]:
+#             return data["IdentifierList"]["CID"][0]
+#         return None
+#     except (requests.exceptions.RequestException, json.JSONDecodeError) as e:
+#         if verbose: print(f"  - Error fetching CID for {cas_rn}: {e}")
+#         else: print('_', end='')
+#         return None
 
 def get_cid_from_cas(cas_rn, session, verbose=False):
     """Queries PubChem to get the Compound ID (CID) for a given CAS RN."""
     base_url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/{}/cids/JSON"
     request_url = base_url.format(cas_rn)
-    try:
-        response = session.get(request_url, timeout=10)
-        response.raise_for_status()
-        data = response.json()
-        if "IdentifierList" in data and "CID" in data["IdentifierList"]:
-            return data["IdentifierList"]["CID"][0]
-        return None
-    except (requests.exceptions.RequestException, json.JSONDecodeError) as e:
-        if verbose: print(f"  - Error fetching CID for {cas_rn}: {e}")
-        else: print('_', end='')
-        return None
+    
+    data = make_polite_request(request_url, session, verbose=verbose)
+    
+    if data and "IdentifierList" in data and "CID" in data["IdentifierList"]:
+        return data["IdentifierList"]["CID"][0]
+        
+    if verbose: print(f"  - No CID found for {cas_rn}")
+    else: print('_', end='')
+    return None
 
 def find_ghs_data_recursively(sections):
     """
@@ -92,6 +169,7 @@ def find_ghs_data_recursively(sections):
 
     return found_data
 
+
 def get_ghs_data_from_cid(cid, session, verbose=False):
     """
     Queries PubChem's GHS section for a given CID and extracts H-codes,
@@ -99,10 +177,10 @@ def get_ghs_data_from_cid(cid, session, verbose=False):
     """
     base_url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/{}/JSON/?heading=GHS+Classification"
     request_url = base_url.format(cid)
-    try:
-        response = session.get(request_url, timeout=15)
-        response.raise_for_status()
-        data = response.json()
+
+    data = make_polite_request(request_url, session, verbose=verbose)
+
+    if data:
         root_sections = data.get("Record", {}).get("Section", [])
         ghs_data = find_ghs_data_recursively(root_sections)
         return {
@@ -111,10 +189,10 @@ def get_ghs_data_from_cid(cid, session, verbose=False):
             "signals": sorted(list(ghs_data["signals"])),
             "p_codes": sorted(list(ghs_data["p_codes"]))
         }
-    except (requests.exceptions.RequestException, json.JSONDecodeError) as e:
-        if verbose: print(f"  - Error fetching GHS for CID {cid}: {e}")
-        else: print('-', end='')
-        return {"h_codes": [], "pictograms": [], "signals": [], "p_codes": []}
+    
+    if verbose: print(f"  - Error fetching GHS for CID {cid}")
+    else: print('-', end='')
+    return {"h_codes": [], "pictograms": [], "signals": [], "p_codes": []}
 
 def run_pubchem_update(verbose: bool = False):
     """
@@ -122,17 +200,17 @@ def run_pubchem_update(verbose: bool = False):
     """
     print('--- Starting PubChem GHS code update ---')
 
-    print(f"Reading master list from: {MASTER_FILE_PATH}")
-    if not MASTER_FILE_PATH.exists():
+    print(f"Reading master list from: {MASTER_CAS_LIST}")
+    if not os.path.exists(MASTER_CAS_LIST):
         print(f"❌ Error: Master list not found.")
         return
-    master_df = pd.read_parquet(MASTER_FILE_PATH)
+    master_df = pd.read_parquet(MASTER_CAS_LIST)
     master_cas_list = master_df['CASRN'].astype(str).str.strip().unique().tolist()
 
     print(f"Checking for existing PubChem data at: {PUBCHEM_OUTPUT_PATH}")
     existing_df = pd.DataFrame()
 
-    if PUBCHEM_OUTPUT_PATH.exists():
+    if os.path.exists(PUBCHEM_OUTPUT_PATH):
         try:
             existing_df = pd.read_parquet(PUBCHEM_OUTPUT_PATH)
         except Exception as e:
@@ -157,6 +235,10 @@ def run_pubchem_update(verbose: bool = False):
         cas_to_reprocess.update(existing_df[existing_df[col].isin(missing_data_values)]['CASRN'].tolist())
     
     cas_to_process = sorted(list(set(new_cas_list).union(cas_to_reprocess)))
+    
+    #####
+    cas_to_process = ['110224-99-2']
+    ######
     
     df_to_keep = existing_df[~existing_df['CASRN'].isin(cas_to_process)].copy()
 
@@ -184,12 +266,12 @@ def run_pubchem_update(verbose: bool = False):
             if verbose: print(f"\nProcessing ({index}/{total_to_process}): {cas_rn}")
             else: print(':', end='')
             
-            time.sleep(0.5)
+            # time.sleep(0.5)
             cid = get_cid_from_cas(cas_rn, session, verbose)
             
             result = {}
             if cid:
-                time.sleep(0.25)
+                # time.sleep(0.25)
                 ghs_data = get_ghs_data_from_cid(cid, session, verbose)
                 result = {
                     'CASRN': cas_rn, 'PubChem_CID': cid, 
@@ -217,45 +299,20 @@ def run_pubchem_update(verbose: bool = False):
                 final_df.to_parquet(PUBCHEM_OUTPUT_PATH, index=False)
                 newly_processed_batch = []
 
+
+            # OPTIONAL: You can add a single, small, static sleep here 
+            # at the *end* of the loop, just to be a good citizen.
+            # This is independent of the reactive throttling, which is
+            # now your primary defense.
+            time.sleep(0.2) # e.g., to stay under 5 requests/sec
+            
     print(f"\n✅ Processing complete. All results saved to '{PUBCHEM_OUTPUT_PATH}'")
 
-def debug_single_cas(cas_to_debug):
-    """Fetches full GHS JSON for a single CAS and saves it for inspection."""
-    print(f"\n--- Starting Debug Mode for CAS: {cas_to_debug} ---")
-    with requests.Session() as session:
-        cid = get_cid_from_cas(cas_to_debug, session, verbose=True)
-        if not cid:
-            print("Could not find CID. Aborting debug.")
-            return
-        
-        base_url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/{}/JSON/?heading=GHS+Classification"
-        request_url = base_url.format(cid)
-        print(f"Fetching data from: {request_url}")
-        
-        try:
-            response = session.get(request_url, timeout=15)
-            response.raise_for_status()
-            data = response.json()
-            
-            with open(DEBUG_OUTPUT_PATH, 'w', encoding='utf-8') as f:
-                json.dump(data, f, indent=4)
-            print(f"\nSUCCESS: Raw JSON response saved to '{DEBUG_OUTPUT_PATH}'")
-            
-            print("\nAttempting to parse the saved data...")
-            ghs_data = find_ghs_data_recursively(data.get("Record", {}).get("Section", []))
-            if any(ghs_data.values()):
-                print(f"SUCCESS: Found H-Codes: {sorted(list(ghs_data['h_codes']))}")
-                print(f"SUCCESS: Found Pictograms: {sorted(list(ghs_data['pictograms']))}")
-                print(f"SUCCESS: Found Signals: {sorted(list(ghs_data['signals']))}")
-                print(f"SUCCESS: Found P-Codes: {sorted(list(ghs_data['p_codes']))}")
-            else:
-                print("FAILURE: Parsing logic failed to find any GHS data.")
-        except (requests.exceptions.RequestException, json.JSONDecodeError) as e:
-            print(f"An error occurred during debug: {e}")
 
 
 # --- Main Execution ---
 if __name__ == "__main__":
-    # run_pubchem_update(verbose=False)
-    debug_single_cas('100545-50-4') 
+    run_pubchem_update(verbose=True)
+    # debug_single_cas('100545-50-4')
+    # print(get_cid_with_pubchempy('50-00-0'))
 

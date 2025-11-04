@@ -77,15 +77,38 @@ def get_chem_frame_with_filenames():
     return pd.DataFrame({'CASRN':caslst,
                          'filename':fnlst,
                         'date_collected':datelst}), missing
+
+def make_output_directories(cas_list=[]):
+    """
+    ...if they don't exist already
+
+    Parameters
+    ----------
+    cas_list : TYPE, optional
+        DESCRIPTION. The default is [].
+
+    Returns
+    -------
+    None.
+
+    """
+    root = config.RAW_CAS_DIR
+    for cas in cas_list:
+        dirpath = os.path.join(root,cas)
+        if not os.path.exists(dirpath):
+            os.mkdir(dirpath)
+            print(f'  created dir for {cas}')
     
 
-def get_list_already_done(outdir=outdir):
-    lst = os.listdir(outdir)
-    caslst = []
-    for fn in lst:
-        tentcas = fn.split('_')[0]
-        if tentcas.count('-')==2:
-            caslst.append(tentcas)
+def get_list_already_done():  #(outdir=outdir):
+    chemdf,_ = get_chem_frame_with_filenames()
+    caslst = chemdf.CASRN.tolist()    
+    # lst = os.listdir(outdir)
+    # caslst = []
+    # for fn in lst:
+    #     tentcas = fn.split('_')[0]
+    #     if tentcas.count('-')==2:
+    #         caslst.append(tentcas)
     return caslst
 
 # def get_chemlist(cas_source):
@@ -478,6 +501,22 @@ def show_syns(driver):
 
 
 def scrape_to_local_library(chemlist=[]):
+    """
+    Main routine to fetch HTLM page from SciFinder for list
+    of chemicals.  At the end, it also adds the target data to
+    the scifinder summary for the newly downloaded cas.
+
+    Parameters
+    ----------
+    chemlist : TYPE, optional
+        DESCRIPTION. The default is [].
+
+    Returns
+    -------
+    list
+        DESCRIPTION.
+
+    """
     # does a full scrape for caslst (unless already scraped)
     # if for some reason, the process dies, it can be rerun with the same list
     
@@ -489,6 +528,7 @@ def scrape_to_local_library(chemlist=[]):
     if len(worklist)==0:
         print('Everything on your list is already in the local library!')
         return []
+    make_output_directories(worklist)
 
     driver = start_selenium_session()
     # Add a check to ensure login was successful before proceeding
@@ -497,8 +537,10 @@ def scrape_to_local_library(chemlist=[]):
         return
         
     try:
+        outcaslst = []
         for i,cas_from_list in enumerate(worklist):
             cas = cas_from_list.strip()
+  
             
             print(f'\n\n**** {i+1} of {len(worklist)}:  {cas} ****\n')
             perform_advanced_search(driver,cas)
@@ -526,23 +568,19 @@ def scrape_to_local_library(chemlist=[]):
             
             rendered_html = driver.execute_script("return document.documentElement.outerHTML;")
             save_html_page(cas, rendered_html)
+            outcaslst.append(cas)
             
     except (WebDriverException, TimeoutException)  as e:
         print(f"Disconnection or Timeout error: {e}")
-        driver.quit()        
+        driver.quit()       
         
-    
-# def get_new_cas_in_build(work_dir=r"C:\MyDocs\integrated\openFF\build\sandbox\work_dir"):
-#     newdf = pd.read_parquet(os.path.join(work_dir,'new_cas_added.parquet'))
-#     if len(newdf)>0:
-#         chemlist = newdf.CASNumber.tolist()
-#         scrape_to_local_library(chemlist)
-#         return chemlist
-#     else:
-#         return []
+    add_to_SciFinder_output_set(outcaslst)
+        
     
 def update_from_master_list(bySource=''):
     masterdf = mlm.get_master_df()
+
+
     if bySource!='':
         c = masterdf.orig_source==bySource
     else:
@@ -582,23 +620,62 @@ def build_components_list(chemlist=[],libdf=None):
 #     # now add the component to the local library too
 #     scrape_to_local_library(complist)
         
+def get_row_components(row):
+    return list(row.comp1) + list(row.comp2)
+
+def fetch_list_of_all_components():
+    scifi_sum = pd.read_parquet(config.SCIFINDER_OUTPUT_PATH)
+    bigset = set()
+    for i,row in scifi_sum[:50].iterrows():
+        comps = get_row_components(row)
+        for item in comps:
+            bigset.add(item)
+        # print(comps,bigset)
+    return list(bigset)
+
+def verify_all_components_are_local():
+    allcomp = fetch_list_of_all_components()
     
-def verify_all_components_are_local(lib=outdir):
-    chemdf, _ = get_chem_frame_with_filenames(lib)
+    chemdf, _ = get_chem_frame_with_filenames()
     allcas = chemdf.CASRN.tolist()
-    missing = set()
-    for i,row in chemdf.iterrows():
-        complist = build_components_list([row.CASRN])
-        print(f'{row.CASRN}: {complist}')
-        for cas in complist:
-            if not cas in allcas:
-                missing.add(cas)
-                print(f'missing {cas} from {row.CASRN}')
-                
+    missing = []
+    for cas in allcomp:
+        if not cas in allcas:
+            missing.append(cas)
+    if len(missing)>0:
+        print(f'Some components {len(missing)} are missing. Add missing to master_cas_list.')
+    else:
+        print('All components in Scifinder df are local')
     return missing
 
-def check_all_for_download_errors(lib=outdir):
-    chemdf, _ = get_chem_frame_with_filenames(lib)
+    # missing = set()
+    # for i,row in chemdf.iterrows():
+    #     complist = build_components_list([row.CASRN])
+    #     print(f'{row.CASRN}: {complist}')
+    #     for cas in complist:
+    #         if not cas in allcas:
+    #             missing.add(cas)
+    #             print(f'missing {cas} from {row.CASRN}')
+                
+    # return missing
+
+# def verify_all_components_are_local():
+#     chemdf, _ = get_chem_frame_with_filenames()
+#     allcas = chemdf.CASRN.tolist()
+#     missing = set()
+#     for i,row in chemdf.iterrows():
+#         complist = build_components_list([row.CASRN])
+#         print(f'{row.CASRN}: {complist}')
+#         for cas in complist:
+#             if not cas in allcas:
+#                 missing.add(cas)
+#                 print(f'missing {cas} from {row.CASRN}')
+                
+#     return missing
+
+
+def check_all_for_download_errors():
+    chemdf, _ = get_chem_frame_with_filenames()
     errorlst = []
     errorfn = []
     for i,row in chemdf.iterrows():
@@ -652,7 +729,7 @@ def make_full_SciFinder_output_set(outdir=outdir):
                           'poly_class':poly,'numref':ref,'num_comp':ncomp,
                           'comp1':comp1,'comp2':comp2,
                           'date_collected':date_col})
-    outdf.to_parquet(os.path.join(outdir,'scifinder_df.parquet'))
+    outdf.to_parquet(config.SCIFINDER_OUTPUT_PATH)
         
 def add_to_SciFinder_output_set(chemlst=[],outdir=outdir,
                                 overwrite=True):
@@ -707,7 +784,7 @@ def add_to_SciFinder_output_set(chemlst=[],outdir=outdir,
                           'poly_class':poly,'numref':ref,'num_comp':ncomp,
                           'comp1':comp1,'comp2':comp2,
                           'date_collected':date_col})
-    origdf = pd.read_parquet(os.path.join(outdir,'scifinder_df.parquet'))
+    origdf = pd.read_parquet(config.SCIFINDER_OUTPUT_PATH)
 
     if overwrite: # drop original
         c = origdf.CASRN.isin(chemlst)
@@ -721,21 +798,19 @@ def add_to_SciFinder_output_set(chemlst=[],outdir=outdir,
             print(f'Already in origin: {outdf[c].CASRN.tolist()}')
             concatdf = pd.concat([origdf,outdf[~c]])
                 
-    concatdf.to_parquet(os.path.join(outdir,'scifinder_df.parquet'))
+    concatdf.to_parquet(config.SCIFINDER_OUTPUT_PATH)
             
 if __name__ == '__main__':
-    testcas = ['55845-06-2','57-11-4','1332-58-7','1338-41-6','10025-69-1',
-               '11138-66-2']
-
-    # update_from_master_list(bySource='')
-    # add_all_new_for_builder()
+    update_from_master_list(bySource='')
     # errorlst = check_all_for_download_errors()
     # missing = verify_all_components_are_local()
+    # make_full_SciFinder_output_set()
+
+
 
     # scrape_to_local_library(['191-30-0'])
-    add_to_SciFinder_output_set(chemlst=['50-00-0'],overwrite=True)    
+    # add_to_SciFinder_output_set(chemlst=['50-00-0'],overwrite=True)    
 
-    # make_full_SciFinder_output_set()
     # outdf,missing = get_chem_frame_with_filenames()
     # print(outdf.head(), missing)
 
@@ -748,4 +823,4 @@ if __name__ == '__main__':
     # c = t.CASRN.str[0]!='N'
     # caslst = t[c].CASRN.unique().tolist()
     # scrape_to_local_library(caslst)
-
+    # fetch_list_of_all_components()

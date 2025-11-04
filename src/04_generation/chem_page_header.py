@@ -8,8 +8,23 @@ import common
 import os
 import re
 import xml.etree.ElementTree as ET
+import config
 
-imgdir = r"C:/MyDocs/integrated/chem_profiles/mkdocs/docs/assets/images"
+# imgdir = r"C:/MyDocs/integrated/chem_profiles/mkdocs/docs/images"
+# imgdir = config.TIER_IMAGE_DIR
+# --- MODIFICATION: Build a robust path ---
+
+# Get the absolute path of the current script file
+# (ex: .../project_root/src/04_generation/chem_page_header.py)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Go up two levels to get to the project root
+# (from 04_generation -> src -> project_root)
+PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..'))
+
+# Now, build the correct, absolute path to the images directory
+imgdir = os.path.join(PROJECT_ROOT, 'mkdocs', 'docs', 'images')
+# --- END MODIFICATION ---
 
 def getTierImg_with_tooltips(cas, tooltip_data):
     """
@@ -30,6 +45,14 @@ def getTierImg_with_tooltips(cas, tooltip_data):
         # Parse the entire SVG file into an XML tree structure
         tree = ET.parse(imgfn)
         root = tree.getroot()
+
+        # Make the SVG scalable so it fills its container
+        if 'width' in root.attrib:
+            del root.attrib['width']  # Remove fixed width
+        if 'height' in root.attrib:
+            del root.attrib['height'] # Remove fixed height
+        
+        root.set('width', '100%') # Set width to 100% of its container
 
         # Loop through the tooltip data
         for element_id, text in tooltip_data.items():
@@ -52,20 +75,88 @@ def getTierImg_with_tooltips(cas, tooltip_data):
     except ET.ParseError as e:
         return f"<p>Error parsing SVG file for {cas}: {e}</p>"
 
-    # Embed the complete, modified SVG string into the final HTML
-    outtxt = f"""<div class="svg-container">{svg_content}</div>
-<div id="tooltip"></div>"""
-    
+#     # Embed the complete, modified SVG string into the final HTML
+#     outtxt = f"""<div class="svg-container">{svg_content}</div>
+# <div id="tooltip"></div>"""
+
+    # Set the width to 400px. This will double the height from ~75px to 150px.
+    outtxt = f"""<div class="svg-container" style="width: 400px;">{svg_content}</div>
+<div id="tooltip"></div>"""    
+
     return outtxt
 
 def get_chem_page_header(cas,ing_name,lists_of_concern):
-    
-    chem_img = common.getMoleculeImg(cas,size=150)
-    haz_img = common.getHazChemImg(cas,size=400)
+    import evidence_generator as eg
+    chem_img = common.getMoleculeImg(cas,size=200)
+    # haz_img = common.getHazChemImg(cas,size=400)
     scifi, repodic = common.getChemStructureInfo(cas)
-    # print(chem_st)
     
-    s = '<div class="grid cards 1" markdown> \n\n'
+    s = ''    
+    # 1. Get the evidence data AND the final tier data
+    evidence_data, final_tiers = eg.get_evidence_for_casrn(cas)
+    
+    # 2. Define mappings for SVG IDs and full names
+    svg_id_map = {
+        'CMR': 'cmr_box',
+        'EDC': 'edc_box',
+        'ENV': 'env_box',
+        'IHL': 'ihl_box',
+        'ORL': 'orl_box',
+        'SKN': 'skn_box',
+        'OGN': 'ogn_box'
+        # Add 'OGN': 'ogn_box' if you have it
+    }
+    
+    hazard_full_names = {
+        'CMR': 'Carcinogenic, Mutagenic, or Reproductive Toxicity',
+        'EDC': 'Endocrine Disruption',
+        'ENV': 'Environmental Hazard',
+        'IHL': 'Inhalation Hazard',
+        'ORL': 'Oral Hazard',
+        'SKN': 'Dermal/Eye Hazard',
+        'OGN': 'Organ Hazard' 
+    }
+
+    # 3. Build the final tooltip dictionary
+    trunc_ing = '???'
+    if ing_name != None:
+        trunc_ing = ing_name
+    if len(trunc_ing)>30:
+        trunc_ing = trunc_ing[:30]+'... '
+    tooltip_data_for_svg = {
+        'overall_tier_box': f"The <b>overall tier profile </b> for {trunc_ing} is based on its most severe hazard class."
+    } 
+
+    # Loop through all possible hazard categories
+    for hazard_key, element_id in svg_id_map.items():
+        
+        # Get the full name and final tier
+        full_name = hazard_full_names.get(hazard_key, f"{hazard_key} Hazard")
+        final_tier = final_tiers.get(hazard_key, "Tier 4") # Default to Tier 4 if not found
+        
+        # Create the title string
+        title_str = f"<b>{full_name}: {final_tier}</b>"
+
+        # Check if we have evidence for this category
+        if 'error' not in evidence_data and hazard_key in evidence_data:
+            # We have evidence. Join it with <br>
+            evidence_text = '<br>'.join(evidence_data[hazard_key])
+            # Combine title and evidence
+            tooltip_data_for_svg[element_id] = f"{title_str}<br>{evidence_text}"
+        else:
+            # No evidence found for this category (e.g., Tier 4)
+            # Just show the title and a "no data" message
+            tooltip_data_for_svg[element_id] = f"{title_str}<br>No indicators found for this tier."
+            
+    # --- MODIFICATION END ---
+    
+    tiertxt = getTierImg_with_tooltips(cas, tooltip_data_for_svg)
+    s += '## Tier Profile\n\n'
+    s += '*Tap or hover over each box for more detail.*\n\n'
+    s += f'{tiertxt}\n\n'    
+
+    
+    s += '<div class="grid cards 1" markdown> \n\n'
     
     s+= f'-   **{ing_name}**\n\n'
     s+= f'    {chem_img}\n\n'
@@ -136,21 +227,7 @@ def get_chem_page_header(cas,ing_name,lists_of_concern):
 
     s += '</div>\n\n'  # <-- CLOSE the grid cards div here.
 
-    tooltip_data_for_this_chem = {
-        'overall_tier_box': f"The overall rating for {ing_name} is based on its most severe hazard classification.",
-        'cmr_box': "CMR Hazard: Text explaining the Carcinogenic, Mutagenic, or Reproductive toxicity goes here.",
-        'edc_box': "EDC Hazard: Text explaining the Endocrine Disrupting Chemical concerns goes here.",
-        'env_box': "ENV Hazard: Text about Environmental hazards goes here.",
-        'ihl_box': "IHL Hazard: Text about Inhalation hazards goes here.",
-        'orl_box': "ORL Hazard: Text about Oral hazards goes here.",
-        'skn_box': "SKN Hazard: Text about Dermal and Eye hazards goes here.",
-        
-    }
-    tiertxt = getTierImg_with_tooltips(cas, tooltip_data_for_this_chem)
-    s += '## Tier Profile\n\n'
-    s += f'{tiertxt}\n\n'    
-
-
-
+    # --- MODIFICATION START ---
     
+
     return s

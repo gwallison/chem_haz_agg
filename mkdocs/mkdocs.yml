@@ -9,6 +9,7 @@ theme:
     - navigation.instant
   icon:
     annotation: material/help-circle
+  favicon: img/favicon.ico  # Path is relative to the 'docs' directory
     
 use_directory_urls: false
 

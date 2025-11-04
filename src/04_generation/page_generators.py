@@ -14,7 +14,7 @@ import config # Import the configuration
 import data_processing as dp
 import chem_page_header as cph
 import List_of_lists_section as lols
-import make_graphics
+# import make_graphics
 
 from itables import init_notebook_mode
 init_notebook_mode(all_interactive=True, connected=True)
@@ -194,7 +194,7 @@ def _get_tier_3_text(t,cas,cidf):
                 content += '    === "ChemInformatics"\n'
                 out = out.sort_values('cilevel')
                 for j,jrow in out.iterrows():
-                    content += f'        * {jrow.civar}{_add_ci_icon(jrow.civar,icon=':green_square:')}: {jrow.cilevel}\n'
+                    content += f'        * {jrow.civar}{_add_ci_icon(jrow.civar,icon=':blue_square:')}: {jrow.cilevel}\n'
     if content != '':
         return  '??? "Expand for details"\n\n' + content 
     return '   **No data**\n\n'
@@ -208,9 +208,15 @@ def create_summary_table(df):
     # Prepare dataframe for the table
     table_df = df.copy()
     table_df['CASRN'] = table_df['bgCAS'].apply(lambda x: f'<a href="../../chemicals/{x}.html" target="_top">{x}</a>')
+    # table_df['tier_analysis'] = table_df['bgCAS'].apply(
+    #     lambda x: f'<img src="{config.TIER_IMAGE_URL.format(cas_num=x)}" alt="Tier summary" width="150">'
+    # )
+
+    # Use a 2-level relative path for the table in docs/assets/tables/
     table_df['tier_analysis'] = table_df['bgCAS'].apply(
-        lambda x: f'<img src="{config.TIER_IMAGE_URL.format(cas_num=x)}" alt="Tier summary" width="150">'
+            lambda x: f'<img src="../../images/{x}.svg" alt="Tier summary" width="150">'
     )
+
     table_df = table_df.rename(
         columns={'epa_pref_name': 'name', 'alttxt': 'tier search'}
     )
@@ -252,7 +258,7 @@ def create_chemical_pages(chem_df, ghs_df):
     os.makedirs(config.CHEMICAL_MD_OUT_DIR, exist_ok=True)
     
     num_pages = len(chem_df)
-    for i, row in chem_df[:5].iterrows():
+    for i, row in chem_df.iterrows():
         cas = row.bgCAS
         print('.',end='')
         # make_graphics.create_tier_graphic()
@@ -273,8 +279,8 @@ def create_chemical_pages(chem_df, ghs_df):
         content += f'??? {admonition_type} "{echatitle}"\n\n    {echa_text}\n\n'
 
         # Tier summary image
-        content += '## Tier data summary\n'
-        content += f'![tier graphic summary]({config.TIER_IMAGE_URL.format(cas_num=cas)})\n\n'
+        content += '## Data for tier generation\n'
+        # content += f'![tier graphic summary]({config.TIER_IMAGE_URL.format(cas_num=cas)})\n\n'
         
         # Tier 1 & 2 Details
         # (Logic from your notebook is complex and preserved here)
@@ -285,11 +291,11 @@ def create_chemical_pages(chem_df, ghs_df):
         t['has_showable_codes'] = t.GHS_H_Codes.map(lambda x: _has_showable_codes(x))
         t = t[(t.GHS_H_Codes.str[0].isin(['H','E'])) & t.has_showable_codes]
 
-        # Example for Tier 1
+        # Example for Authoritative
         content += '### Authoritative indicators of hazards (GHS)\n\n'
         content += _get_authoritative_indicators_text(t, ghs_dict)
         
-        # Example for Tier 2
+        # Example for Still hazardous
         content += '### Other indications of hazards\n\n'
         content += _get_other_indicators_text(t, cas, ghs_dict, ci_df)
 

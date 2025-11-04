@@ -20,8 +20,13 @@ PROCESSED_DATA = os.path.join(DATA_DIR,'03_processed')
 
 MASTER_CAS_LIST = os.path.join(PROCESSED_DATA,'master_cas_list.parquet')
 
-FF_REPO_DIR = r"G:\My Drive\production\repos\openFF_data_2025_09_07 - with watershed"
+FF_REPO_DIR = r"G:\My Drive\production\repos\openFF_data_2025_10_07"
 FF_WORKING_DATA = os.path.join(FF_REPO_DIR,'working_df.parquet')
+
+
+# ---  RAW files ---
+TSCA_RAW_CSV = os.path.join(RAW_DATA,'TSCAINV_052024.csv')
+
 
 # --- Input Data Paths ---
 # This assumes your data files are in the 'data/' directory
@@ -29,10 +34,15 @@ FF_WORKING_DATA = os.path.join(FF_REPO_DIR,'working_df.parquet')
 TIERS_DATA_PQ = os.path.join(PROCESSED_DATA, 'final_tier_classifications.parquet')
 GHS_DATA_PQ = os.path.join(PROCESSED_DATA, 'consolidated_GHS.parquet')
 CHEMINFO_DATA_PQ = os.path.join(PROCESSED_DATA, 'cheminfo_hazard_summary.parquet')
+
 RAW_CAS_DIR = os.path.join(RAW_DATA, 'by_casrn') # Directory for cas specific files, like scifinder
+ECHA_PAGES = os.path.join(RAW_DATA,'echa_pages')
+ECHA_SUBSTANCE_LINKS = os.path.join(INTERMED_DATA,'echa_substance_links.parquet')
+
 
 COMPTOX_CASRN_DTXSID_MASTER = os.path.join(RAW_DATA,'comp_tox_casrn_dtxsid_master.csv')
 EPA_CHEM_MASTER = os.path.join(PROCESSED_DATA,'epa_chem_master.parquet')
+SCIFINDER_OUTPUT_PATH = os.path.join(PROCESSED_DATA,'scifinder_df.parquet')
 
 # --- Output Paths ---
 HTML_TABLE_OUT = os.path.join(DOCS_DIR, 'assets', 'tables', 'my_table.html')
@@ -50,20 +60,24 @@ JAPAN_OUTPUT_PATH = os.path.join(INTERMED_DATA,'japan_ghs_hazards.parquet')
 
 GHS_CONSOLIDATED_DATA_PATH = os.path.join(INTERMED_DATA,'consolidated_GHS.parquet')
 
-TIER_1_CLASSIFICATION_OUTPUT_PATH = os.path.join(INTERMED_DATA, 
-                                                 'Tier_1_hazard_classifications.parquet')
+GHS_CLASSIFICATION_OUTPUT_PATH = os.path.join(INTERMED_DATA, 
+                                                 'GHS_hazard_classifications.parquet')
 TIER_2_CLASSIFICATION_OUTPUT_PATH = os.path.join(INTERMED_DATA, 
                                                  'Tier_2_hazard_classifications.parquet')
 
 FINAL_TIERED_OUTPUT_PATH = os.path.join(PROCESSED_DATA,
                                   'final_tier_classifications.parquet')
+GHS_EVIDENCE_PATH = os.path.join(PROCESSED_DATA, 'ghs_evidence_log.parquet')
 
-
+MASTER_EVIDENCE_LOG_PATH = os.path.join(PROCESSED_DATA,'master_evidence_log.parquet')
 
 # --- Web URLs ---
 GHS_CODES_URL = 'https://pubchem.ncbi.nlm.nih.gov/ghs/'
-# TIER_IMAGE_URL = 'https://storage.googleapis.com/open-ff-browser/images/ChemHazTier/{cas_num}.png'
+
+# This is the path for the PYTHON SCRIPT to FIND and READ the SVGs
+TIER_IMAGE_DIR = '../mkdocs/docs/images'
 TIER_IMAGE_URL = '../images/{cas_num}.svg'
+
 # --- Hazard Details ----
 HAZARD_MAP = {
     'CMR': {'1':['H350', 'H351', 'H340', 'H341', 'H360', 'H361', 'H362'
@@ -74,24 +88,28 @@ HAZARD_MAP = {
             '2':['H402','H412','H413','H420','H421']},
     'EDC': {'1':['H380', 'H381','H430','H431','H440', 'H441','H450','H451'],
             '2': []},
-    'IHL': {'1':['H330','H331','H334'],
+    'IHL': {'1':['H330','H331','H334','H300+H330','H310+H330','H300+H310+H330',
+                 'H301+H311','H311+H331','H301+H311+H331','H304','H305'],
             '2':['H332','H333','H335','H336']},
-    'ORL': {'1':['H301','H302'],
+    'ORL': {'1':['H301','H302','H300+H310','H300+H330','H300+H310+H330',
+                 'H301+H311','H301+H311','H301+H311+H331','H304','H305'],
             '2':['H303']},
-    'SKN': {'1':['H310','H311','H314','H318'],
+    'SKN': {'1':['H310','H311','H314','H318','H300+H310','H310+H330',
+                 'H300+H310+H330','H301+H311','H311+H331','H301+H311+H331'],
             '2':['H312','H313','H315','H316','H317','H319','H320']},
-    'OGN': {'1':[],
+    'OGN': {'1':['H370','H371','H372','H373'],
             '2':[]},
 }
 
 CHEMINFO_CATEGORY_MAP = {
     'CMR': ['Carcinogenicity', 'Genotoxicity_Mutagenicity', 'Reproductive', 'Developmental'],
     'ENV': ['Chronic_Aquatic_Toxicity', 'Acute_Aquatic_Toxicity'],
-    'Carcinogen': ['Carcinogenicity'],
+    # 'Carcinogen': ['Carcinogenicity'],
     'EDC': ['Endocrine_Disruption'],
     'IHL': ['Inhalation'],
     'ORL': ['Oral'],
-    'SKN': ['Dermal','Skin_Irritation','Eye_Irritation'],
+    'SKN': ['Dermal','Skin_Irritation','Eye_Irritation','Skin_Sentization'],
+    'OGN': []
 }
 
 

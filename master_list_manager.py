@@ -5,9 +5,6 @@ import os
 import config
 
 # Define the path to the master file.
-# MASTER_FILE_DIR = r"C:/MyDocs/integrated/chem_profiles/data/03_processed"
-# MASTER_FILE_FN = os.path.join(MASTER_FILE_DIR,'master_cas_list.parquet')
-# MASTER_FILE_PATH = Path(MASTER_FILE_FN)
 
 MASTER_FILE_FN = config.MASTER_CAS_LIST
 MASTER_COLUMNS = ['CASRN', 'orig_source', 'date_added']
@@ -98,3 +95,39 @@ def add_from_FracFocus(file_path: str | Path) -> int:
         casrn_column='bgCAS'  # Specify the non-default column name
     )
 
+def print_summary():
+    df = get_master_df()
+    print('\n'+'='*10, ' MASTER CHEM LIST  Summary ','='*10)
+    print(f'   Number of chemicals: {len(df)}')
+    df = df.sort_values('date_added',ascending=False)
+    print(f'   Most recent addition: {(df.iloc[0].date_added).date()}')
+    print(f'   Most recent source: {(df.iloc[0].orig_source)}')
+    print('='*49)
+    
+def add_from_build_nb():
+    """
+    This looks to the build_nb new cas file and attempts to add 
+    these to the master chem list
+
+    Returns
+    -------
+    None.
+
+    """
+    print('*** New cas to Master Chem List? ***')
+    new_cas_in_FF_build = r"C:\MyDocs\integrated\openFF\build\sandbox\work_dir\new_cas_added.parquet"
+    add_casrns_from_file(new_cas_in_FF_build,
+                         'FracFocus',
+                         'CASNumber')
+    print_summary()
+
+
+if __name__ == '__main__':
+    new_in_ECMC = r"C:\Users\Gary\Downloads\ECMC_summary_dashboard (1).csv"
+    tmpdf = pd.read_csv(new_in_ECMC)
+    tmpfn = r"C:\MyDocs\integrated\gwa_local\tmp\ecmc_new_chem.parquet"
+    tmpdf.to_parquet(tmpfn)
+    add_casrns_from_file(tmpfn,
+                         'ECMC disclosures',
+                         'CAS Number')
+    print_summary()

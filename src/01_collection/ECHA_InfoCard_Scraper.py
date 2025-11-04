@@ -3,8 +3,9 @@ from bs4 import BeautifulSoup
 import os
 import re
 import pandas as pd
+import config
 
-OUTPUT_DIR = r"C:\MyDocs\integrated\chem_profiles\sources\collected_resources\by_casrn"
+OUTPUT_DIR = config.RAW_CAS_DIR
 
 def fetch_page(url):
     """
@@ -124,8 +125,7 @@ def save_hazard_summary(casrn, sub_id, hazard_text, base_dir=OUTPUT_DIR):
 
 if __name__ == '__main__':
     
-    fn = r"C:\MyDocs\integrated\chem_profiles\code\data\master_cas_list.parquet"
-    mastercas = pd.read_parquet(fn)
+    mastercas = pd.read_parquet(config.MASTER_CAS_LIST)
     full_cas_list = mastercas.CASRN.tolist()
     work_cas_list = []
     
@@ -149,8 +149,9 @@ if __name__ == '__main__':
     for i,cas in enumerate(work_cas_list):
         print(f'Working on {cas}: {i} of {len(work_cas_list)}')
         # get substance id to generate url
-        ECHAPAGES_DIR = r"C:\MyDocs\integrated\chem_profiles\code\echa_pages"
-        resfn = os.path.join(ECHAPAGES_DIR,f'{cas}_search_res.csv')
+        # ECHAPAGES_DIR = r"C:\MyDocs\integrated\chem_profiles\code\echa_pages"
+        resfn = os.path.join(config.ECHA_PAGES,f'{cas}_search_res.csv')
+        print(resfn)
         if not os.path.exists(resfn):
             print(f'No search results for {cas}')
             continue
@@ -189,44 +190,3 @@ if __name__ == '__main__':
                     
         
             
-    
-    
-    
-    
-    # # --- Example 1: A substance with the hazard section ---
-    # print("--- Processing Formaldehyde (CAS 50-00-0) ---")
-    # formaldehyde_cas = '50-00-0'
-    # formaldehyde_url = f'https://echa.europa.eu/substance-information/-/substanceinfo/100.000.002'
-    
-    # # Step 1: Fetch the webpage
-    # page_html = fetch_page(formaldehyde_url)
-    
-    # if page_html:
-    #     # Step 2: Extract the information
-    #     hazard_data = extract_hazard_info(page_html)
-        
-    #     if hazard_data:
-    #         print(hazard_data)
-    #         # Step 3: Save the data to a file
-    #         save_hazard_summary(formaldehyde_cas, hazard_data)
-    #     else:
-    #         print("Hazard classification & labelling section not found on the page.")
-
-    # print("\n" + "="*50 + "\n")
-
-    # # --- Example 2: A substance that may not have the section (for testing) ---
-    # print("--- Processing Water (CAS 7732-18-5) ---")
-    # water_cas = '7732-18-5'
-    # water_url = f'https://echa.europa.eu/substance-information/-/substanceinfo/100.028.349'
-    
-    # page_html = fetch_page(water_url)
-
-    # if page_html:
-    #     hazard_data = extract_hazard_info(page_html)
-        
-    #     if hazard_data:
-    #         print(hazard_data)
-    #         save_hazard_summary(water_cas, hazard_data)
-    #     else:
-    #         print("Hazard classification & labelling section not found on the page.")
-
