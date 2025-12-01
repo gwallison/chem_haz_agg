@@ -52,9 +52,11 @@ def _generate_ghs_evidence_log(ghsdf: pd.DataFrame, hazard_map: dict) -> pd.Data
                 exploded1['value_type'] = 'hcode'
                 exploded1['associated_tier'] = 'Tier 1' 
                 exploded1['hazard_category'] = category
+                exploded1['hazard_category_raw'] = None
                 all_evidence.append(
                     exploded1[['CASRN', 'data_source', 'value_type', 
-                             'associated_tier', 'actual_value', 'hazard_category']]
+                             'associated_tier', 'actual_value', 
+                             'hazard_category', 'hazard_category_raw']]
                 )
 
         # --- Process Tier 2 Codes ---
@@ -79,9 +81,11 @@ def _generate_ghs_evidence_log(ghsdf: pd.DataFrame, hazard_map: dict) -> pd.Data
                 exploded2['value_type'] = 'hcode'
                 exploded2['associated_tier'] = 'Tier 2'
                 exploded2['hazard_category'] = category
+                exploded2['hazard_category_raw'] = None
                 all_evidence.append(
                     exploded2[['CASRN', 'data_source', 'value_type', 
-                             'associated_tier', 'actual_value', 'hazard_category']]
+                             'associated_tier', 'actual_value',
+                             'hazard_category', 'hazard_category_raw']]
                 )
 
     if not all_evidence:

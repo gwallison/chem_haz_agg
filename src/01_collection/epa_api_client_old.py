@@ -6,7 +6,8 @@ import argparse
 # A list of potential base URLs for the API.
 # The script will try them in order until one succeeds.
 API_HOSTS = [
-    "https://comptox.epa.gov/ctx-api"  # <-- FIXED: This is now a valid string
+    "https://comptox.epa.gov/ctx-api",
+    "https://api-ccte.epa.gov"
 ]
 
 def _make_request(method: str, endpoint: str, stream: bool = False, **kwargs):
@@ -84,57 +85,40 @@ def get_chemical_details(dtxsid: str = 'DTXSID7020182'):
     print(f"\nQuerying API for DTXSID: {dtxsid}...")
     return _make_request('GET', endpoint, headers=headers)
 
-
-# def get_dtxsid_by_casrn(casrn: str):
-#     """
-#     Fetches chemical details from the EPA CompTox API for a given CASRN.
-#     This uses the /chemical/detail/search/by-casrn endpoint,
-#     mirroring the known-working dtxsid endpoint.
-#     """
-#     api_key = os.environ.get("EPA_API_KEY")
-#     if not api_key:
-#         print("Error: EPA_API_KEY environment variable not set.")
-#         return None
-    
-#     # <-- UPDATED to new hypothesis
-#     endpoint = f"/chemical/detail/search/by-casrn/{casrn}"
-    
-#     headers = {'accept': 'application/json', 'x-api-key': api_key}
-#     # Keep this query quiet to avoid flooding the console
-#     # print(f"\nQuerying API for CASRN: {casrn}...")
-#     return _make_request('GET', endpoint, headers=headers)
+def get_dtxsid_by_casrn(casrn: str):
+    """
+    Fetches chemical details from the EPA CompTox API for a given CASRN.
+    Note: This often returns a list, as one CASRN can map to multiple DTXSIDs.
+    """
+    api_key = os.environ.get("EPA_API_KEY")
+    if not api_key:
+        print("Error: EPA_API_KEY environment variable not set.")
+        return None
+    endpoint = f"/chemical/search/by-casrn/{casrn}"
+    headers = {'accept': 'application/json', 'x-api-key': api_key}
+    # Keep this query quiet to avoid flooding the console
+    # print(f"\nQuerying API for CASRN: {casrn}...")
+    return _make_request('GET', endpoint, headers=headers)
 
 
-# def get_dtxsids_by_casrns(casrns: list[str]):
-#     """
-#     Finds DTXSIDs for a given list of CASRN numbers
-#     using the new /chemical/search/list batch endpoint.
-#     (NOTE: THIS ENDPOINT IS NOT WORKING, DO NOT USE)
-#     """
-#     api_key = os.environ.get("EPA_API_KEY")
-#     if not api_key:
-#         print("Error: EPA_API_KEY environment variable not set.")
-#         return None
-        
-#     # <-- This is the endpoint that keeps failing with 404
-#     endpoint = "/chemical/search/list"
-    
-#     headers = {
-#         'accept': 'application/json',
-#         'Content-Type': 'application/json',
-#         'x-api-key': api_key
-#     }
-    
-#     # <-- This is the new, correct payload structure for this endpoint
-#     payload = {"identifiers": casrns, "searchBy": "CASRN"}
-    
-#     # Only show the first 3 CASRNs to keep the log clean
-#     casrn_preview = ', '.join(casrns[:3])
-#     if len(casrns) > 3:
-#         casrn_preview += ", ..."
-#     print(f"Querying new batch endpoint for {len(casrns)} CASRNs: {casrn_preview}")
-    
-#     return _make_request('POST', endpoint, headers=headers, data=json.dumps(payload))
+
+def get_dtxsids_by_casrns(casrns: list[str]):
+    """
+    Finds DTXSIDs for a given list of CASRN numbers.
+    """
+    api_key = os.environ.get("EPA_API_KEY")
+    if not api_key:
+        print("Error: EPA_API_KEY environment variable not set.")
+        return None
+    endpoint = "/chemical/batch"
+    headers = {
+        'accept': 'application/json',
+        'Content-Type': 'application/json',
+        'x-api-key': api_key
+    }
+    payload = {"search_by": "casrn", "identifiers": casrns}
+    print(f"Querying API for CASRNs: {', '.join(casrns)}...")
+    return _make_request('POST', endpoint, headers=headers, data=json.dumps(payload))
 
 
 def get_all_chemicals_count():
@@ -164,71 +148,70 @@ def get_all_chemicals_count():
     return None
 
 
-# def create_casrn_dtxsid_map():
-#     """
-#     Builds a dictionary mapping CASRNs to a list of DTXSIDs by fetching
-#     all chemicals from the API using pagination. This handles one-to-many
-#     relationships between CASRNs and DTXSIDs.
+def create_casrn_dtxsid_map():
+    """
+    Builds a dictionary mapping CASRNs to a list of DTXSIDs by fetching
+    all chemicals from the API using pagination. This handles one-to-many
+    relationships between CASRNs and DTXSIDs.
     
-#     Returns:
-#         A dictionary where keys are CASRNs and values are lists of DTXSIDs,
-#         or None on error.
-#     """
-#     api_key = os.environ.get("EPA_API_KEY")
-#     if not api_key:
-#         print("Error: EPA_API_KEY environment variable not set.")
-#         return None
+    Returns:
+        A dictionary where keys are CASRNs and values are lists of DTXSIDs,
+        or None on error.
+    """
+    api_key = os.environ.get("EPA_API_KEY")
+    if not api_key:
+        print("Error: EPA_API_KEY environment variable not set.")
+        return None
     
-#     endpoint = "/chemical/all"
-#     headers = {'accept': 'application/json', 'x-api-key': api_key}
+    endpoint = "/chemical/all"
+    headers = {'accept': 'application/json', 'x-api-key': api_key}
     
-#     casrn_map = {}
-#     offset = 1
-#     page_num = 1
+    casrn_map = {}
+    offset = 1
+    page_num = 1
     
-#     while True:
-#         print(f"Fetching page {page_num} (offset {offset})... ", end="", flush=True)
-#         params = {'next': offset,
-#                   'projection': 'all-ids'}
-#         response_data = _make_request('GET', endpoint, headers=headers, params=params)
+    while True:
+        print(f"Fetching page {page_num} (offset {offset})... ", end="", flush=True)
+        params = {'next': offset,
+                  'projection': 'all-ids'}
+        response_data = _make_request('GET', endpoint, headers=headers, params=params)
 
-#         chemicals_list = None
-#         if isinstance(response_data, dict):
-#             for value in response_data.values():
-#                 if isinstance(value, list):
-#                     chemicals_list = value
-#                     break
+        chemicals_list = None
+        if isinstance(response_data, dict):
+            for value in response_data.values():
+                if isinstance(value, list):
+                    chemicals_list = value
+                    break
         
-#         if not chemicals_list:
-#             print("Finished processing.")
-#             break
+        if not chemicals_list:
+            print("Finished processing.")
+            break
             
-#         for chemical in chemicals_list:
-#             casrn = chemical.get('casrn')
-#             dtxsid = chemical.get('dtxsid')
-#             if casrn and dtxsid:
-#                 if casrn not in casrn_map:
-#                     # <-- THIS IS THE CORRECTED LINE
-#                     casrn_map[casrn] = []
-#                 if dtxsid not in casrn_map[casrn]:
-#                     casrn_map[casrn].append(dtxsid)
+        for chemical in chemicals_list:
+            casrn = chemical.get('casrn')
+            dtxsid = chemical.get('dtxsid')
+            if casrn and dtxsid:
+                if casrn not in casrn_map:
+                    casrn_map[casrn] = []
+                if dtxsid not in casrn_map[casrn]:
+                    casrn_map[casrn].append(dtxsid)
         
-#         processed_count = len(chemicals_list)
-#         total_relationships = sum(len(ids) for ids in casrn_map.values())
-#         print(
-#             f"Processed {processed_count} chemicals. "
-#             f"Total unique CASRNs: {len(casrn_map)}, "
-#             f"Total relationships: {total_relationships}"
-#         )
+        processed_count = len(chemicals_list)
+        total_relationships = sum(len(ids) for ids in casrn_map.values())
+        print(
+            f"Processed {processed_count} chemicals. "
+            f"Total unique CASRNs: {len(casrn_map)}, "
+            f"Total relationships: {total_relationships}"
+        )
 
-#         if processed_count < 1000:
-#              print("Reached final page of results.")
-#              break
+        if processed_count < 1000:
+             print("Reached the final page of results.")
+             break
 
-#         offset += processed_count
-#         page_num += 1
+        offset += processed_count
+        page_num += 1
         
-#     return casrn_map
+    return casrn_map
 
 
 def inspect_api_pages(num_pages=3):
@@ -336,3 +319,4 @@ if __name__ == "__main__":
             
     elif args.command == "inspect-pages":
         inspect_api_pages(args.num_pages)
+

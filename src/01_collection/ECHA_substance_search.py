@@ -216,7 +216,7 @@ if __name__ == "__main__":
     print(f"Successfully scraped data from {len(all_data)} tables.")
     
     if all_data:
-        print(f"Scraped a total of {len(all_data)} tables from {page_num} page(s) of tabs.")
+        print(f"Scraped a total of {len(all_data)} tables.")
         # Example: Print info from the first and last table scraped
         print("\nExample data from the first table:")
         print(f"Tab Info: {all_data[0]['tab_info']}")

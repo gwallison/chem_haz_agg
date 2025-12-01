@@ -121,6 +121,7 @@ def get_chem_page_header(cas,ing_name,lists_of_concern):
     trunc_ing = '???'
     if ing_name != None:
         trunc_ing = ing_name
+    trunc_ing = str(trunc_ing)
     if len(trunc_ing)>30:
         trunc_ing = trunc_ing[:30]+'... '
     tooltip_data_for_svg = {
@@ -149,6 +150,11 @@ def get_chem_page_header(cas,ing_name,lists_of_concern):
             tooltip_data_for_svg[element_id] = f"{title_str}<br>No indicators found for this tier."
             
     # --- MODIFICATION END ---
+    
+    s+= '??? note "Quick Navigation & Search"\n'
+    s+= '    If you are looking for a different chemical, please use the **Chemical Index** page to filter and search the complete catalog. (Using the "Search" bar above instead of the index may cause the profile|hover function to not work.)\n\n'
+
+    s+= '    [**Go to Chemical Index**](../index.md)\n\n'
     
     tiertxt = getTierImg_with_tooltips(cas, tooltip_data_for_svg)
     s += '## Tier Profile\n\n'

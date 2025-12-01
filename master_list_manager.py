@@ -2,15 +2,22 @@ import pandas as pd
 from pathlib import Path
 import datetime
 import os
+import numpy as np
 import config
 
 # Define the path to the master file.
 
 MASTER_FILE_FN = config.MASTER_CAS_LIST
-MASTER_COLUMNS = ['CASRN', 'orig_source', 'date_added']
+MASTER_COLUMNS = ['CASRN', 'orig_source', 'date_added','DTXSID','ec_numbers']
 
 def get_master_df():
     return pd.read_parquet(MASTER_FILE_FN)
+
+def save_master_df(df):
+    """ saves master and a simple csv for COMPTOX purposes"""
+    df.to_parquet(MASTER_FILE_FN)
+    df.to_csv(config.TEMP_CASRN_CSV)
+        
 
 def add_casrns(new_casrns: list[str], source: str) -> int:
     """Adds new CASRNs to the master Parquet file, avoiding duplicates."""
@@ -27,6 +34,7 @@ def add_casrns(new_casrns: list[str], source: str) -> int:
         'CASRN': unique_new_casrns,
         'orig_source': source,
         'date_added': pd.to_datetime(datetime.date.today())
+
     })
 
     if master_df.empty:
@@ -97,8 +105,10 @@ def add_from_FracFocus(file_path: str | Path) -> int:
 
 def print_summary():
     df = get_master_df()
-    print('\n'+'='*10, ' MASTER CHEM LIST  Summary ','='*10)
-    print(f'   Number of chemicals: {len(df)}')
+    print('\n'+'='*10, ' MASTER CHEM LIST  Summary ','='*10,'\n')
+    print(f'   Number of chemicals: {len(df):5}')
+    print(f'            Num DTXSID: {len(df[df.DTXSIDs.notna()]):5}')
+    print(f'            Num ec_ids: {len(df[df.ec_numbers.notna()]):5}\n')
     df = df.sort_values('date_added',ascending=False)
     print(f'   Most recent addition: {(df.iloc[0].date_added).date()}')
     print(f'   Most recent source: {(df.iloc[0].orig_source)}')
@@ -121,13 +131,86 @@ def add_from_build_nb():
                          'CASNumber')
     print_summary()
 
+def update_DTXSID():
+    """
+    Run this after fetching COMPTOX CASRN:DTXSID file.
+    
+    uses output of CompTox bulk summary EXCEL file to add
+    any new DTXSID numbers to existing.  Looks for most recent xlsx file
+    with appropriate prefix to use as source.
 
+
+    Returns
+    -------
+    Number of records updated
+
+    """
+    def update_row(master_row,DTXSID):
+        # import math
+        # print(master_row.CASRN, DTXSID)
+        if (pd.isna(DTXSID)):
+            return master_row.DTXSIDs, False # don't change anything
+
+        if isinstance(master_row.DTXSIDs, np.ndarray):
+            wlst = list(master_row.DTXSIDs)
+        else:
+            print(type(master_row.DTXSIDs))
+            wlst = []
+            
+        if not DTXSID in wlst:
+            wlst.append(DTXSID)
+            return wlst, True
+        return master_row.DTXSIDs, False # keeps the value
+            
+    dlst = os.listdir(config.RAW_DATA)
+    targets = []
+    # print(dlst)
+    for fn in dlst:
+        fnlst = fn.split('_')
+        # print(fn[-3:])
+        if (fn[-3:] == 'csv') & (fnlst[0]=='CCD-Batch-Search'):
+            # print(fn)
+            targets.append(fn)
+
+    targets.sort(reverse=True)
+    # print(f'targets: {targets}')
+    if len(targets)==0:
+        print('NO APPROPRIATE *CSV* COMPTOX FILE IN RAW!  NOT UPDATED!')
+        return 0
+    
+    ctdf = pd.read_csv(os.path.join(config.RAW_DATA,targets[0]))
+    c = ctdf.DTXSID.notna()
+    print(f'Using "{targets[0]}" as DTXSID source')
+    total = len(ctdf)
+    num = len(ctdf[c])
+    print(f'   - CASRN with DTXSID: {num:,};  without: {total-num:,}')
+    
+    updated = []
+    newdtxsid = []
+    df = get_master_df()
+    for i,row in df.iterrows():
+        cas = row.CASRN
+        epadtx = ctdf[ctdf.INPUT==cas].DTXSID.tolist()
+        if len(epadtx)>1:
+            print("MORE THAN ONE DTXSID! Need to change logic to capture!")
+        res = update_row(row, epadtx[0])
+        newdtxsid.append(res[0])
+        if res[1]: updated.append(cas)
+        
+    df.DTXSIDs = newdtxsid
+    
+    # print(df.head())
+    print(f' Updated: {len(updated)}')
+    save_master_df(df)
+    
 if __name__ == '__main__':
-    new_in_ECMC = r"C:\Users\Gary\Downloads\ECMC_summary_dashboard (1).csv"
-    tmpdf = pd.read_csv(new_in_ECMC)
-    tmpfn = r"C:\MyDocs\integrated\gwa_local\tmp\ecmc_new_chem.parquet"
-    tmpdf.to_parquet(tmpfn)
-    add_casrns_from_file(tmpfn,
-                         'ECMC disclosures',
-                         'CAS Number')
-    print_summary()
+
+    update_DTXSID()
+    # new_in_ECMC = r"C:\Users\Gary\Downloads\ECMC_summary_dashboard (1).csv"
+    # tmpdf = pd.read_csv(new_in_ECMC)
+    # tmpfn = r"C:\MyDocs\integrated\gwa_local\tmp\ecmc_new_chem.parquet"
+    # tmpdf.to_parquet(tmpfn)
+    # add_casrns_from_file(tmpfn,
+    #                      'ECMC disclosures',
+    #                      'CAS Number')
+    # print_summary()

@@ -13,10 +13,10 @@ pulls the link, chemical name, and CASRN out to a dataframe.
 import pandas as pd
 import openpyxl
 import os
-
+import config
 # --- Please update these variables if needed ---
-EXCEL_FILE_PATH = r"C:\MyDocs\integrated\chem_profiles\data\01_raw\simple_list_alpha.xlsx"
-SHEET_NAME = 'simple_list_alpha'
+#EXCEL_FILE_PATH = r"C:\MyDocs\integrated\chem_profiles\data\01_raw\simple_list_alpha.xlsx"
+SHEET_NAME = 'simple_list_alpha' 
 HYPERLINK_COLUMN_LETTER = 'B'           # The column letter containing the hyperlinks
 CHEMICAL_NAME_COLUMN_NAME = 'Chemical Name' # The exact column header for the chemical names
 CASRN_COLUMN_NAME = 'CASRN'             # The exact column header for the CASRNs
@@ -42,12 +42,12 @@ def extract_urls_by_row(file_path, sheet_name, column):
 
 if __name__ == "__main__":
     # Step 1: Extract the URLs with openpyxl
-    urls_by_row = extract_urls_by_row(EXCEL_FILE_PATH, SHEET_NAME, HYPERLINK_COLUMN_LETTER)
+    urls_by_row = extract_urls_by_row(config.IRIS_EXCEL_FILE_PATH, SHEET_NAME, HYPERLINK_COLUMN_LETTER)
 
     if urls_by_row:
         # Step 2: Read the Excel file with pandas to get all other data
         print("Reading Excel data with pandas...")
-        df = pd.read_excel(EXCEL_FILE_PATH, sheet_name=SHEET_NAME)
+        df = pd.read_excel(config.IRIS_EXCEL_FILE_PATH, sheet_name=SHEET_NAME)
         
         # Step 3: Map the URLs to the DataFrame
         # We add 2 to the DataFrame index to match the 1-based row number in Excel,
@@ -66,7 +66,7 @@ if __name__ == "__main__":
             print(final_df.head())
             
             # Step 5: Save the final DataFrame to a Parquet file
-            outdir = r'C:/MyDocs/integrated/chem_profiles/data/02_intermediate'
+            outdir = config.INTERMED_DATA
             # Updated output filename to be more descriptive
             output_parquet_path = os.path.join(outdir, 'iris_data.parquet')
             

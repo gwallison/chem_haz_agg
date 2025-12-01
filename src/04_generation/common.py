@@ -112,8 +112,8 @@ def getIRIS_info(cas):
 
 def get_Cmpd_of_Concern_info(cas):
 
-    fn = r"C:/MyDocs/integrated/chem_profiles/data/02_intermediate/Compounds_of_Concern.parquet"
-    t = pd.read_parquet(fn)
+    fn = r"C:/MyDocs/integrated/chem_profiles/data/02_intermediate/Compounds_of_Concern.csv"
+    t = pd.read_csv(fn)
     t = t[t.CASRN==cas]
     try:
         return  t['name'].tolist()[0]

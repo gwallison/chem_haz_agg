@@ -7,7 +7,7 @@ Created on Tue Sep  9 19:56:18 2025
 import pandas as pd
 import os
 
-from config import PUBCHEM_OUTPUT_PATH, CHEMINFO_OUTPUT_PATH
+from config import PUBCHEM_OUTPUT_PATH, CHEMINFO_GHS_OUTPUT_PATH
 from config import ECHA_HARM_OUTPUT_PATH, ECHA_INDUS_OUTPUT_PATH
 from config import AUS_OUTPUT_PATH, JAPAN_OUTPUT_PATH
 from config import GHS_CONSOLIDATED_DATA_PATH
@@ -18,7 +18,7 @@ def create_consolidated_GHS():
     pchem = pd.read_parquet(PUBCHEM_OUTPUT_PATH)
     pchem['source'] = 'PubChem'
     
-    chemi = pd.read_parquet(CHEMINFO_OUTPUT_PATH)
+    chemi = pd.read_parquet(CHEMINFO_GHS_OUTPUT_PATH)
     chemi['source'] = 'ChemInformatics'
     
     echa_harm = pd.read_parquet(ECHA_HARM_OUTPUT_PATH)
@@ -33,7 +33,12 @@ def create_consolidated_GHS():
     echa_indus = pd.read_parquet(ECHA_INDUS_OUTPUT_PATH)
     echa_indus['source'] = 'ECHA self-classified industry'
     
-    alldf = pd.concat([pchem,chemi,echa_harm,aus,japan,echa_indus])
+    alldf = pd.concat([pchem,
+                       chemi,
+                       echa_harm,
+                       aus,
+                       japan,
+                       echa_indus])
     alldf.to_parquet(GHS_CONSOLIDATED_DATA_PATH)
     return alldf
 

@@ -2,14 +2,15 @@ import os
 import pandas as pd
 import warnings
 import numpy as np # Added for the new function
+import config
 
 # --- 1. Standardized Project Paths ---
-from master_list_manager import MASTER_FILE_PATH
-CHEMINFO_REF_DIR = MASTER_FILE_PATH.parent / 'ChemInfo_ref_files'
-CHEMINFO_SDF_OUTPUT_PATH = MASTER_FILE_PATH.parent / 'cheminfo_sdf_summary.parquet'
-CHEMINFO_HAZARD_OUTPUT_PATH = MASTER_FILE_PATH.parent / 'cheminfo_hazard_summary.parquet'
+# from master_list_manager import MASTER_FILE_PATH
+CHEMINFO_REF_DIR = config.CHEMINFO_REF_DIR 
+CHEMINFO_SDF_OUTPUT_PATH = config.CHEMINFO_SDF_OUTPUT_PATH
+CHEMINFO_HAZARD_OUTPUT_PATH = config.CHEMINFO_HAZARD_OUTPUT_PATH
 # New path for the summarized hazard data
-# CHEMINFO_HAZARD_SUMMARY_PATH = MASTER_FILE_PATH.parent / 'cheminfo_hazard_summary_coded.parquet'
+CHEMINFO_HAZARD_SUMMARY_PATH = config.CHEMINFO_HAZARD_SUMMARY_PATH
 
 
 # --- 2. SDF (Structure-Data File) Processing (Unchanged) ---
@@ -182,12 +183,12 @@ if __name__ == '__main__':
         output_path=CHEMINFO_HAZARD_OUTPUT_PATH
     )
     # print(hazard_data.columns)
-    # # == STEP 2: If Step 1 was successful, create the hazard summary ==
-    # if hazard_data is not None:
-    #     summary = summarize_hazard_data(
-    #         hazard_df=hazard_data,
-    #         output_path=CHEMINFO_HAZARD_SUMMARY_PATH
-    #     )
-    #     if summary is not None:
-    #         print("\n--- Hazard Summary Preview ---")
-    #         print(summary.head())
+    # == STEP 2: If Step 1 was successful, create the hazard summary ==
+    if hazard_data is not None:
+        summary = summarize_hazard_data(
+            hazard_df=hazard_data,
+            output_path=CHEMINFO_HAZARD_SUMMARY_PATH
+        )
+        if summary is not None:
+            print("\n--- Hazard Summary Preview ---")
+            print(summary.head(10))

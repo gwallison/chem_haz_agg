@@ -39,9 +39,14 @@ RAW_CAS_DIR = os.path.join(RAW_DATA, 'by_casrn') # Directory for cas specific fi
 ECHA_PAGES = os.path.join(RAW_DATA,'echa_pages')
 ECHA_SUBSTANCE_LINKS = os.path.join(INTERMED_DATA,'echa_substance_links.parquet')
 
+NOT_USED_COMPTOX_CASRN_DTXSID_MASTER = os.path.join(RAW_DATA,'comp_tox_casrn_dtxsid_master.csv')
 
-COMPTOX_CASRN_DTXSID_MASTER = os.path.join(RAW_DATA,'comp_tox_casrn_dtxsid_master.csv')
+
+CHEMINFO_REF_DIR = os.path.join(RAW_DATA,'ChemInfo_ref_files')
 EPA_CHEM_MASTER = os.path.join(PROCESSED_DATA,'epa_chem_master.parquet')
+CASRN_DTXSID_MAP_OUTPUT = os.path.join(RAW_DATA,'epa_cas_dtxsid_map.parquet')
+TEMP_CASRN_CSV = os.path.join(RAW_DATA,'temp_casrn_list.csv')
+
 SCIFINDER_OUTPUT_PATH = os.path.join(PROCESSED_DATA,'scifinder_df.parquet')
 
 # --- Output Paths ---
@@ -51,11 +56,18 @@ CHEMICAL_MD_OUT_DIR = os.path.join(DOCS_DIR, 'chemicals')
 
 # GHS output files
 PUBCHEM_OUTPUT_PATH = os.path.join(INTERMED_DATA,'pubchem_ghs_hazards.parquet')
+CHEMINFO_GHS_OUTPUT_PATH = os.path.join(INTERMED_DATA,'cheminfo_ghs_hazards.parquet')
 CHEMINFO_HAZARD_OUTPUT_PATH = os.path.join(INTERMED_DATA,'chem_infor_safety_data.parquet')
 CHEMINFO_HAZARD_SUMMARY_PATH = os.path.join(INTERMED_DATA,'cheminfo_hazard_summary.parquet')
+CHEMINFO_SDF_OUTPUT_PATH = os.path.join(INTERMED_DATA,'cheminfo_sdf_summary.parquet')
+
 ECHA_HARM_OUTPUT_PATH= os.path.join(INTERMED_DATA,'echa_harmonized_ghs_hazards.parquet')
 ECHA_INDUS_OUTPUT_PATH= os.path.join(INTERMED_DATA,'echa_industrial_ghs_hazards.parquet')
+
+AUS_INPUT_XLSX = os.path.join(RAW_DATA,'HCResults.xlsx')
 AUS_OUTPUT_PATH =os.path.join(INTERMED_DATA,'australia_ghs_hazards.parquet')
+
+JAPAN_INPUT_XLSX = os.path.join(RAW_DATA,'list_nite_all_e.xlsx')
 JAPAN_OUTPUT_PATH = os.path.join(INTERMED_DATA,'japan_ghs_hazards.parquet')
 
 GHS_CONSOLIDATED_DATA_PATH = os.path.join(INTERMED_DATA,'consolidated_GHS.parquet')
@@ -70,6 +82,8 @@ FINAL_TIERED_OUTPUT_PATH = os.path.join(PROCESSED_DATA,
 GHS_EVIDENCE_PATH = os.path.join(PROCESSED_DATA, 'ghs_evidence_log.parquet')
 
 MASTER_EVIDENCE_LOG_PATH = os.path.join(PROCESSED_DATA,'master_evidence_log.parquet')
+
+IRIS_EXCEL_FILE_PATH = os.path.join(RAW_DATA,'simple_list_alpha.xlsx')
 
 # --- Web URLs ---
 GHS_CODES_URL = 'https://pubchem.ncbi.nlm.nih.gov/ghs/'
@@ -119,7 +133,8 @@ ITABLES_SETTINGS = {
         {"width": "75px", "targets": 0},
         {"width": "170px", "targets": 1},
         {"width": "160px", "targets": 2},
-        {"visible": False, "targets": 3}
+        {"width": "160px", "targets": 3},
+        {"visible": False, "targets": 4}
     ],
     "lengthMenu": [5, 10, 20, 50, 100],
     "pageLength": 5

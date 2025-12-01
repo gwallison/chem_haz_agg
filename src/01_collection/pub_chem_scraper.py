@@ -65,23 +65,23 @@ def make_polite_request(url, session, max_retries=3, initial_sleep=5, verbose=Fa
 
 import pubchempy as pcp
 
-def get_cid_with_pubchempy(casrn):
-    """
-    Fetches CID using the pubchempy library.
-    It handles rate limiting automatically.
-    """
-    try:
-        # 'cas' is the namespace for CASRN
-        compounds = pcp.get_compounds(casrn, 'cas')
-        if compounds:
-            # Return the first compound's CID
-            return compounds[0].cid
-        else:
-            return None
-    except Exception as e:
-        # Handles various lookup errors
-        print(f"Error looking up {casrn}: {e}")
-        return None
+# def get_cid_with_pubchempy(casrn):
+#     """
+#     Fetches CID using the pubchempy library.
+#     It handles rate limiting automatically.
+#     """
+#     try:
+#         # 'cas' is the namespace for CASRN
+#         compounds = pcp.get_compounds(casrn, 'cas')
+#         if compounds:
+#             # Return the first compound's CID
+#             return compounds[0].cid
+#         else:
+#             return None
+#     except Exception as e:
+#         # Handles various lookup errors
+#         print(f"Error looking up {casrn}: {e}")
+#         return None
 
 
 # def get_cid_from_cas(cas_rn, session, verbose=False):
@@ -177,7 +177,7 @@ def get_ghs_data_from_cid(cid, session, verbose=False):
     """
     base_url = "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/{}/JSON/?heading=GHS+Classification"
     request_url = base_url.format(cid)
-
+    print(request_url)
     data = make_polite_request(request_url, session, verbose=verbose)
 
     if data:
@@ -206,6 +206,8 @@ def run_pubchem_update(verbose: bool = False):
         return
     master_df = pd.read_parquet(MASTER_CAS_LIST)
     master_cas_list = master_df['CASRN'].astype(str).str.strip().unique().tolist()
+
+    # master_cas_list = ['111-42-2']
 
     print(f"Checking for existing PubChem data at: {PUBCHEM_OUTPUT_PATH}")
     existing_df = pd.DataFrame()
@@ -237,7 +239,7 @@ def run_pubchem_update(verbose: bool = False):
     cas_to_process = sorted(list(set(new_cas_list).union(cas_to_reprocess)))
     
     #####
-    cas_to_process = ['110224-99-2']
+    # cas_to_process = ['50-00-0']
     ######
     
     df_to_keep = existing_df[~existing_df['CASRN'].isin(cas_to_process)].copy()
@@ -313,6 +315,5 @@ def run_pubchem_update(verbose: bool = False):
 # --- Main Execution ---
 if __name__ == "__main__":
     run_pubchem_update(verbose=True)
-    # debug_single_cas('100545-50-4')
     # print(get_cid_with_pubchempy('50-00-0'))
 

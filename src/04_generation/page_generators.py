@@ -207,23 +207,20 @@ def create_summary_table(df):
     
     # Prepare dataframe for the table
     table_df = df.copy()
-    table_df['CASRN'] = table_df['bgCAS'].apply(lambda x: f'<a href="../../chemicals/{x}.html" target="_top">{x}</a>')
-    # table_df['tier_analysis'] = table_df['bgCAS'].apply(
-    #     lambda x: f'<img src="{config.TIER_IMAGE_URL.format(cas_num=x)}" alt="Tier summary" width="150">'
-    # )
-
+    table_df['CASRN'] = table_df['casrn'].apply(lambda x: f'<a href="../../chemicals/{x}.html" target="_top">{x}</a>')
+ 
     # Use a 2-level relative path for the table in docs/assets/tables/
-    table_df['tier_analysis'] = table_df['bgCAS'].apply(
+    table_df['tier_analysis'] = table_df['casrn'].apply(
             lambda x: f'<img src="../../images/{x}.svg" alt="Tier summary" width="150">'
     )
 
     table_df = table_df.rename(
-        columns={'epa_pref_name': 'name', 'alttxt': 'tier search'}
+        columns={'epa_pref_name': 'chem_name', 'alttxt': 'tier search'}
     )
     
     # Generate HTML
     html = itables.to_html_datatable(
-        table_df[['CASRN', 'name', 'tier_analysis', 'tier search']],
+        table_df[['CASRN', 'chem_name','orig_source', 'tier_analysis', 'tier search']],
         **config.ITABLES_SETTINGS
     )
     
@@ -248,7 +245,8 @@ def create_chemical_pages(chem_df, ghs_df):
     """Generates a markdown page for each chemical."""
     
     ghs_df = pd.read_parquet(config.GHS_DATA_PQ)
-    ci_df = pd.read_parquet(config.CHEMINFO_DATA_PQ)
+    # ci_df = pd.read_parquet(config.CHEMINFO_DATA_PQ)
+    ci_df = pd.read_parquet(config.CHEMINFO_HAZARD_OUTPUT_PATH)
     ghs_dict = dp.get_ghs_codes()
 
     
@@ -258,17 +256,18 @@ def create_chemical_pages(chem_df, ghs_df):
     os.makedirs(config.CHEMICAL_MD_OUT_DIR, exist_ok=True)
     
     num_pages = len(chem_df)
-    for i, row in chem_df.iterrows():
-        cas = row.bgCAS
+    for i, row in chem_df[:10].iterrows():
+        cas = row.casrn
         print('.',end='')
         # make_graphics.create_tier_graphic()
         
         # Start building markdown content
-        content = f'# {row.epa_pref_name}\n\n'
+        content = f'# {row.chem_name}\n\n'
         
         # Show Header
         llcc = lists_of_lists.get_list_of_concerns(cas)
-        content += cph.get_chem_page_header(cas, ing_name=row.epa_pref_name,
+        content += cph.get_chem_page_header(cas, 
+                                            ing_name=row.chem_name,
                                             lists_of_concern=llcc)
         
 

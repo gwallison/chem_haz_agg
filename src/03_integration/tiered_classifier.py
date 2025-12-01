@@ -8,7 +8,7 @@ from config import HAZARD_MAP
 from config import ECHA_INDUS_OUTPUT_PATH
 
 # --- MODIFICATION START: Updated config imports ---
-from config import CHEMINFO_HAZARD_SUMMARY_PATH 
+from config import CHEMINFO_HAZARD_OUTPUT_PATH 
 from config import FINAL_TIERED_OUTPUT_PATH 
 from config import CHEMINFO_CATEGORY_MAP 
 
@@ -37,7 +37,7 @@ def prepare_data_for_tiering():
         master_df = pd.read_parquet(MASTER_CAS_LIST)[['CASRN']]
         ghs_class_df = pd.read_parquet(GHS_CLASSIFICATION_OUTPUT_PATH)
         echa_df = pd.read_parquet(ECHA_INDUS_OUTPUT_PATH)[['CASRN', 'GHS_H_Codes']].fillna('')
-        cheminfo_raw_df = pd.read_parquet(CHEMINFO_HAZARD_SUMMARY_PATH)
+        cheminfo_raw_df = pd.read_parquet(CHEMINFO_HAZARD_OUTPUT_PATH)
         ghs_evidence_log = pd.read_parquet(GHS_EVIDENCE_PATH)
         all_evidence.append(ghs_evidence_log)
         
@@ -112,6 +112,11 @@ def prepare_data_for_tiering():
                 
                 df = df.merge(summary_df, on='CASRN', how='left')
                 df[f'cheminfo_{category}_summary'] = df[f'cheminfo_{category}_summary'].fillna('unk')
+                
+                # --- ADD THIS DEBUG LINE ---
+                print(f"    DEBUG: Summary counts for {category}:")
+                print(df[f'cheminfo_{category}_summary'].value_counts())
+                # --- END DEBUG LINE ---
         else:
             df[f'cheminfo_{category}_summary'] = 'unk'
           

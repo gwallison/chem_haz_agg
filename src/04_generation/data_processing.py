@@ -16,13 +16,17 @@ def load_and_prepare_data():
     # Load main fracfocus data
     # Note: I've assumed a filename for the main data. Adjust in config.py if needed.
     df = pd.read_parquet(
-        config.FF_WORKING_DATA,
-        columns=['bgCAS', 'epa_pref_name']
+        config.MASTER_CAS_LIST,
+        columns=['CASRN', 'orig_source']
     )
+    df = df.rename({'CASRN':'casrn'},axis=1)
+    epadf = pd.read_parquet(config.EPA_CHEM_MASTER)
+    epadf = epadf.rename({'preferredName':'chem_name'},axis=1)
+    df = df.merge(epadf[['casrn','chem_name']],on='casrn',how='left')
     
     # Load tier classifications
     tiers = pd.read_parquet(config.TIERS_DATA_PQ)
-    tiers = tiers.rename({'CASRN': 'bgCAS'}, axis=1)
+    tiers = tiers.rename({'CASRN': 'casrn'}, axis=1)
 
     # Create helper columns for tier searching
     tiers['CMR_level'] = 'CMR' + tiers.CMR_Tier.str[-1]
@@ -31,14 +35,16 @@ def load_and_prepare_data():
     tiers['IHL_level'] = 'IHL' + tiers.IHL_Tier.str[-1]
     tiers['ORL_level'] = 'ORL' + tiers.ORL_Tier.str[-1]
     tiers['SKN_level'] = 'SKN' + tiers.SKN_Tier.str[-1]
+    tiers['OGN_level'] = 'OGN' + tiers.OGN_Tier.str[-1]
     
     # Aggregate data by CAS number
-    chem_summary = df.groupby('bgCAS', as_index=False)['epa_pref_name'].first()
-    chem_summary = chem_summary.merge(tiers, on='bgCAS', how='left')
+    chem_summary = df.groupby('casrn', as_index=False)[['chem_name','orig_source']].first()
+    
+    chem_summary = chem_summary.merge(tiers, on='casrn', how='left')
     
     # Create text for the searchable tier column
     def alttxt(row):
-        return f'{row.CMR_level} {row.ENV_level} {row.EDC_level} {row.IHL_level} {row.ORL_level} {row.SKN_level}'
+        return f'{row.CMR_level} {row.ENV_level} {row.EDC_level} {row.IHL_level} {row.ORL_level} {row.SKN_level} {row.OGN_level}'
     chem_summary['alttxt'] = chem_summary.apply(alttxt, axis=1)
     
     print("Data loading and preparation complete.")
