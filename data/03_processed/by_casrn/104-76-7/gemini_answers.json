@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical exhibits several recognized hazards, with Tier 1 classifications for Carcinogenicity, Mutagenicity, and Reproductive toxicity (CMR), environmental hazards (ENV), dermal and eye hazards (SKN), and organ and systemic hazards (OGN) based on official GHS criteria. It also shows Tier 2 concerns for endocrine disruption (EDC) and inhalation hazards (IHL) based on an expanded scientific perspective. Oral hazards (ORL) are classified at Tier 3, indicating a demonstrated low to moderate hazard profile.",
+  "Q2": "This chemical is included on the Endocrine Disruption Exchange (TEDX) list, which identifies it as a potential endocrine disruptor based on evidence from scientific research.",
+  "Q3": "This chemical is very well characterized, boasting 19,000 literature references in SciFinder, significantly above the median for similar compounds. Its molecular formula (C8H18O) and classification as a 'Small Molecule' indicate a precisely defined substance, further supported by the complete absence of data-deficient (Tier 4) hazard classifications."
+}

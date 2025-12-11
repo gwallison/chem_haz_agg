@@ -14,6 +14,10 @@ import config # Import the configuration
 import data_processing as dp
 import chem_page_header as cph
 import List_of_lists_section as lols
+import Info_Service as ifs
+
+infosrv = ifs.Info_Service()
+
 # import make_graphics
 
 from itables import init_notebook_mode
@@ -52,29 +56,12 @@ def _add_ci_icon(civar,icon=':orange_square:'):
                 return f" {icon} ({cl}) "
     return ""
 
-# def _add_tier_icon(hcode, icon=':red_square:'):
-#     if hcode in ['H350', 'H350i', 'H351', 'H340', 'H341', 'H360', 'H360FD','H361', 'H361d','H362']:
-#         return f' {icon} (CMR)'
-#     if hcode in ['H410', 'H411']:
-#         return f' {icon} (ENV)'
-#     # Add other EDC codes if necessary
-#     return ""
-
-# def _add_ci_icon(civar,icon=':orange_square:'):
-#     if civar in ['Carcinogenicity','Genotoxicity_Mutagenicity','Reproductive','Developmental']:
-#         return f' {icon} (CMR)'
-#     if civar in ['Acute_Aquatic_Toxicity','Chronic_Aquatic_Toxicity']:
-#         return f' {icon} (ENV)'
-#     if civar in ['Endocrine_Disruption']:
-#         return f' {icon} (EDC)'
-#     return ""
 
 def _has_showable_codes(hcodes):
     try:
         return ('H3' in hcodes) | ('H4' in hcodes)
     except:
         return False
-    
 
 def _get_echa_text(cas):
     try:
@@ -135,7 +122,15 @@ def _get_authoritative_indicators_text(t,ghs_dict):
         return  '??? "Expand for details"\n\n' + content 
     return '   **No data**\n\n'
     
-
+def _get_gemini_text(cas):
+    import json
+    fn = os.path.join(config.PROCESSED_CAS_DIR,cas,'gemini_answers.json')
+    if os.path.exists(fn):
+        with open(fn,'r') as f:
+            jstr = f.read()
+        return json.loads(jstr)
+    return {}
+        
 def _get_other_indicators_text(t,cas,ghs_dict,cidf):
     content = ''
     if len(t)>0:
@@ -256,26 +251,31 @@ def create_chemical_pages(chem_df, ghs_df):
     os.makedirs(config.CHEMICAL_MD_OUT_DIR, exist_ok=True)
     
     num_pages = len(chem_df)
-    for i, row in chem_df[:10].iterrows():
+    for i, row in chem_df[:100].iterrows():
         cas = row.casrn
         print('.',end='')
+        gemini_dict = _get_gemini_text(cas)
         # make_graphics.create_tier_graphic()
         
         # Start building markdown content
         content = f'# {row.chem_name}\n\n'
         
         # Show Header
-        llcc = lists_of_lists.get_list_of_concerns(cas)
+        llcc = lists_of_lists.get_markdown_list_by_type(cas,"concern")
+        llg = lists_of_lists.get_markdown_list_by_type(cas,"group")
         content += cph.get_chem_page_header(cas, 
                                             ing_name=row.chem_name,
-                                            lists_of_concern=llcc)
+                                            g_dict = gemini_dict,
+                                            lists_of_concern=llcc,
+                                            lists_of_groups=llg,
+                                            infosrv=infosrv)
         
 
         ## end Summary Header  ##
         
         # ECHA summary   
-        admonition_type, echatitle, echa_text = _add_echa_summary(cas)         
-        content += f'??? {admonition_type} "{echatitle}"\n\n    {echa_text}\n\n'
+        # admonition_type, echatitle, echa_text = _add_echa_summary(cas)         
+        # content += f'??? {admonition_type} "{echatitle}"\n\n    {echa_text}\n\n'
 
         # Tier summary image
         content += '## Data for tier generation\n'

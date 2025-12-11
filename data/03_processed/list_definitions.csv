@@ -1,0 +1,18 @@
+list_name,list_alias,source_link,source,list_type,annotation
+is_on_Prop65,Calif. Prop 65,https://oehha.ca.gov/proposition-65,PROP65,concern,"California's Proposition 65: The law protects the state's drinking water sources from being contaminated with chemicals known to cause cancer, birth defects or other reproductive harm, and requires businesses to inform Californians about exposures to such chemicals"
+is_on_TEDX,TEDX list,https://endocrinedisruption.org/interactive-tools/endocrine-basics,TEDX,concern,The Endocrine Disruption Exchange: This list of Potential Endocrine Disruptors identifies chemicals that have shown evidence of endocrine disruption in scientific research.
+CWA311HS,Clean Water Act,https://comptox.epa.gov/dashboard/chemical-lists/CWA311HS,EPA,concern,see:
+CCL,Safe Drinking Water Act,https://comptox.epa.gov/dashboard/chemical-lists/CCL,EPA,concern,see:
+PFAS8a7,EPA PFAS 2024 list,https://comptox.epa.gov/dashboard/chemical-lists/PFAS8a7,EPA,concern,see:
+AEGLVALUES,Acute Exposure Guidelines,https://comptox.epa.gov/dashboard/chemical-lists/AEGLVALUES,EPA,concern,see:
+EPAHAPS,Hazardous Air Pollutants,https://comptox.epa.gov/dashboard/chemical-lists/EPAHAPS,EPA,concern,see:
+NATADB,National Air Toxics Assessment,https://comptox.epa.gov/dashboard/chemical-lists/NATADB,EPA,concern,see:
+IARC1,IARC Carcinogens (group 1),https://comptox.epa.gov/dashboard/chemical-lists/IARC1,EPA,concern,see:
+IARC2A,IARC Carcinogens (group 2A),https://comptox.epa.gov/dashboard/chemical-lists/IARC2A,EPA,concern,see:
+IARC2B,IARC Carcinogens (group 2B),https://comptox.epa.gov/dashboard/chemical-lists/IARC2B,EPA,concern,see:
+NERVEAGENTS,Nerve Agents,https://comptox.epa.gov/dashboard/chemical-lists/NERVEAGENTS,EPA,concern,see:
+PESTACTIVES,Pesticide Active Ingredients,https://comptox.epa.gov/dashboard/chemical-lists/PESTACTIVES,EPA,concern,see:
+SINLIST,"""Substitute In Now"" list",https://comptox.epa.gov/dashboard/chemical-lists/SINLIST,EPA,concern,see:
+STOCKHOLM,Persistant Organic Polluntants,https://comptox.epa.gov/dashboard/chemical-lists/STOCKHOLM,EPA,concern,see:
+PAHLIST,Polycyclic Aromatics (PAHs),https://comptox.epa.gov/dashboard/chemical-lists/PAHLIST,EPA,group,see:
+is_UVCB,"Unknown, Variable or Rxn Product",https://www.epa.gov/sites/default/files/2015-05/documents/uvcb.pdf,TSCA,group,"This TSCA status indicates the material has unknown or variable composition, is a reaction product, or is of biollogical composition."

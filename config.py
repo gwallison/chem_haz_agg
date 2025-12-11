@@ -24,9 +24,10 @@ FF_REPO_DIR = r"G:\My Drive\production\repos\openFF_data_2025_10_07"
 FF_WORKING_DATA = os.path.join(FF_REPO_DIR,'working_df.parquet')
 
 
-# ---  RAW files ---
-TSCA_RAW_CSV = os.path.join(RAW_DATA,'TSCAINV_052024.csv')
 
+TSCA_RAW_CSV = os.path.join(RAW_DATA,'TSCAINV_052024.csv')
+TEDX_RAW = os.path.join(RAW_DATA,'TEDX_EDC_trimmed.xls')
+PROP65_RAW = os.path.join(RAW_DATA,'prop65_2025_01_03.csv')
 
 # --- Input Data Paths ---
 # This assumes your data files are in the 'data/' directory
@@ -36,10 +37,11 @@ GHS_DATA_PQ = os.path.join(PROCESSED_DATA, 'consolidated_GHS.parquet')
 CHEMINFO_DATA_PQ = os.path.join(PROCESSED_DATA, 'cheminfo_hazard_summary.parquet')
 
 RAW_CAS_DIR = os.path.join(RAW_DATA, 'by_casrn') # Directory for cas specific files, like scifinder
+PROCESSED_CAS_DIR = os.path.join(PROCESSED_DATA, 'by_casrn') # Directory for cas specific files, like scifinder
 ECHA_PAGES = os.path.join(RAW_DATA,'echa_pages')
 ECHA_SUBSTANCE_LINKS = os.path.join(INTERMED_DATA,'echa_substance_links.parquet')
 
-NOT_USED_COMPTOX_CASRN_DTXSID_MASTER = os.path.join(RAW_DATA,'comp_tox_casrn_dtxsid_master.csv')
+# NOT_USED_COMPTOX_CASRN_DTXSID_MASTER = os.path.join(RAW_DATA,'comp_tox_casrn_dtxsid_master.csv')
 
 
 CHEMINFO_REF_DIR = os.path.join(RAW_DATA,'ChemInfo_ref_files')
@@ -85,6 +87,13 @@ MASTER_EVIDENCE_LOG_PATH = os.path.join(PROCESSED_DATA,'master_evidence_log.parq
 
 IRIS_EXCEL_FILE_PATH = os.path.join(RAW_DATA,'simple_list_alpha.xlsx')
 
+## full list of EPA list membership; fetched manually, then processed
+## see "List_oflists_section.py"
+EPA_LISTS_OF_LISTS_RAW = os.path.join(RAW_DATA,'epa_lists.xlsx')
+
+
+LISTS_OF_LISTS_PROCESSED = os.path.join(INTERMED_DATA,'list_of_lists_processed.parquet')
+LIST_OF_LISTS_DEFINED = os.path.join(PROCESSED_DATA,'list_definitions.csv')
 # --- Web URLs ---
 GHS_CODES_URL = 'https://pubchem.ncbi.nlm.nih.gov/ghs/'
 
@@ -118,7 +127,6 @@ HAZARD_MAP = {
 CHEMINFO_CATEGORY_MAP = {
     'CMR': ['Carcinogenicity', 'Genotoxicity_Mutagenicity', 'Reproductive', 'Developmental'],
     'ENV': ['Chronic_Aquatic_Toxicity', 'Acute_Aquatic_Toxicity'],
-    # 'Carcinogen': ['Carcinogenicity'],
     'EDC': ['Endocrine_Disruption'],
     'IHL': ['Inhalation'],
     'ORL': ['Oral'],

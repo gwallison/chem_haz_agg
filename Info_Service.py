@@ -14,10 +14,12 @@ import re
 class Info_Service():
     def __init__(self):
         # set up empty frames.  Only loaded if used.
-        self.epa_master = pd.read_parquet(config.EPA_CHEM_MASTER).set_index('casrn')
+        self.epa_master = pd.DataFrame()
         self.scifinder_info = pd.DataFrame()     
-        self.tier_summary = pd.read_parquet(config.TIERS_DATA_PQ).set_index('CASRN')
+        self.tier_summary = pd.DataFrame()
         self.tsca_df = pd.DataFrame()
+        self.list_of_lists = pd.DataFrame()
+
         
     # -------------------   TIERS values  -----------------
     def _load_tier(self):
@@ -90,6 +92,14 @@ class Info_Service():
     #         return 'no epa preferred name'
     
     
+    # --------------------  List of lists ----------------
+    def _load_list_of_lists(self):
+        if self.list_of_lists.empty:
+            self.list_of_lists = pd.read_parquet(config.LISTS_OF_LISTS_PROCESSED)
+        return self.list_of_lists
+    
+    def get_list_of_concerns(self,cas):
+        pass
     # --------------------   EPA STUFF --------------------        
     def _load_epa(self):
         if self.epa_master.empty:
@@ -145,47 +155,71 @@ class Info_Service():
     def get_scifinder_components_as_list(self,cas):
         df = self._load_scifinder()
         try:
-            lst1 = df.loc[cas,'comp1']
-            lst2 = df.loc[cas,'comp2']
-            print(lst1)
-            print(lst2)
-            return 'not working yet'
+            lst1 = list(df.loc[cas,'comp1'])
+            lst2 = list(df.loc[cas,'comp2'])
+            return lst1+lst2
         except:
-            print('errror')
+            print('error in fetching components as list')
             return []
-    
-    #-------------------  Other data sets --------------------
-    def _load_tsca(self):
-        if self.tsca_df.empty:
-            self.tsca_df = pd.read_csv(config.TSCA_RAW_CSV,
-                                       usecols=['CASRN','UVCB']) #'FLAG','ACTIVITY'])
-            self.tsca_df = self.tsca_df.set_index('CASRN')
-        return self.tsca_df
-    
-    def is_UVCB(self,cas):
-        df = self._load_tsca()
-        try:
-            val = df.loc[cas,'UVCB']
-            if val == 'UVCB':
-                return True
-            return False
-        except:
-            return False
 
-    def is_non_TSCA(self,cas):
-        df = self._load_tsca()
-        df = df.reset_index()
-        if cas in df.CASRN.tolist():
-            return False
-        return True
+    def get_scifinder_numref(self,cas):
+        df = self._load_scifinder()
+        try:
+            svalue = df.loc[cas,'numref']
+            # print(f'numref 1: {svalue}')
+            svalue = svalue.replace(',','')
+            if 'K' in svalue:
+                t = svalue.replace('K','')
+                t = int(t)*1000
+                return t
+            if 'M' in svalue:
+                t = svalue.replace('M','')
+                t = int(t)*1000000
+                return t
+            return int(svalue)
+                
+        except:
+            print('except numref')
+            return 'number references not valid'
+    
+    # #-------------------  Other data sets --------------------
+    # def _load_tsca(self):
+    #     if self.tsca_df.empty:
+    #         self.tsca_df = pd.read_csv(config.TSCA_RAW_CSV,
+    #                                    usecols=['CASRN','UVCB']) #'FLAG','ACTIVITY'])
+    #         self.tsca_df = self.tsca_df.set_index('CASRN')
+    #     return self.tsca_df
+    
+    # def is_UVCB(self,cas):
+    #     df = self._load_tsca()
+    #     try:
+    #         val = df.loc[cas,'UVCB']
+    #         if val == 'UVCB':
+    #             return True
+    #         return False
+    #     except:
+    #         return False
+
+    # def is_non_TSCA(self,cas):
+    #     df = self._load_tsca()
+    #     df = df.reset_index()
+    #     if cas in df.CASRN.tolist():
+    #         return False
+    #     return True
+    
+    #-----------------------  General List of lists fetch  --------------
+    def is_on_list(self,cas,list_name):
+        # fetch list
+        df = self._load_list_of_lists()
+        print(df.head())
+        df = df.set_index('CASRN')
+    
+
 
 
 if __name__ == '__main__':
     infosrv = Info_Service()
-    print(infosrv.is_UVCB(cas='64742-47-8'))
-    print(infosrv.is_UVCB(cas='50-00-0'))
-    print(infosrv.is_non_TSCA(cas='50-00-0'))
-    print(infosrv.is_UVCB(cas='64742-47-8'))    
-    print(infosrv.get_scifinder_substance_class(cas='50-00-0'))
     print(infosrv.get_epa_pref_name(cas='50-00-0'))
     print(infosrv.get_tier_list(cas='50-00-0'))
+    print(infosrv.is_on_list(cas='50-00-0', list_name='is_UVCB'))
+    print(infosrv.get_scifinder_components_as_list(cas='10025-69-1'))
