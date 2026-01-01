@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical's hazard profile indicates potential concerns for environmental (ENV) and dermal/eye (SKN) hazards, both assigned Tier 2, signifying that current data suggests potential risks beyond official classifications. However, most other hazard classes—including carcinogenicity, mutagenicity, reproductive hazards (CMR), endocrine disruption (EDC), inhalation (IHL), oral (ORL), and organ/systemic hazards (OGN)—are classified as Tier 4, meaning there is insufficient data for a confident hazard assessment.",
+  "Q2": "This chemical is not currently listed on any specified \"Lists of Concern\". However, this absence should be considered in light of its hazard profile, which shows a significant number of data-deficient (Tier 4) classifications, suggesting limited study.",
+  "Q3": "This chemical appears to be poorly characterized, evidenced by its low number of literature references (36), which falls below the 25th percentile for similar substances. Furthermore, the majority of its hazard classes (5 out of 7) are designated as Tier 4, indicating a significant lack of data for a confident hazard assessment."
+}

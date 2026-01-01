@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical's hazard profile indicates known hazards (Tier 1) for acute and chronic environmental impacts, as well as dermal and eye exposures. However, significant data gaps remain for its carcinogenicity, mutagenicity, reproductive toxicity, endocrine disruption, inhalation, oral, and organ/systemic hazards, all classified as Tier 4 (Data Deficient).",
+  "Q2": "This chemical is not currently listed on any specific Lists of Concern. However, given that a majority of its hazard categories are classified as \"Data Deficient\" in the Tier Profile, this absence may reflect a lack of comprehensive study rather than a confirmed low risk across all potential hazards.",
+  "Q3": "This chemical is moderately characterized, with 120 scientific literature references, which is above the 25th percentile for chemicals in our database but below the median. While its polymer nature and specific molecular formula do not place it in categories typically indicating poor definition, a substantial portion of its hazard profile, encompassing five out of seven categories (e.g., carcinogenicity, endocrine disruption), remains data deficient (Tier 4)."
+}

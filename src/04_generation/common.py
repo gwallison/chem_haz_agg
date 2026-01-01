@@ -6,6 +6,7 @@ Created on Mon Oct  6 07:20:27 2025
 """
 import os
 import pandas as pd
+import config
 
 pic_base_url = "https://storage.googleapis.com/open-ff-browser/images/"
 local_pic_dir = r"C:\MyDocs\integrated\openFF\images\pic_dir"
@@ -99,6 +100,36 @@ def getATSDR_info(cas):
         return t.ATSDR_link.tolist()[0], t.Chemical_Name.tolist()[0]
     except:
         return '',''
+
+def getNJ_RTK_info(cas):
+    # NJ RTK datasheets
+    t = pd.read_parquet(config.NJ_RTK_DATASHEET_PATH)
+    t = t[t.CASRN==cas]
+    try:
+        return t.Substance_URL.tolist()[0], t.Chemical_Name.tolist()[0]
+    except:
+        return '',''
+
+def get_niosh_pocket_info(cas):
+    # NIOSH Pocket guides datasheets
+    t = pd.read_parquet(config.NIOSH_POCKET_PATH)
+    t = t[t.CASRN==cas]
+    try:
+        return t.Link.tolist()[0], t.Chemical_Name.tolist()[0]
+    except:
+        return '',''
+
+def get_cameo_info(cas):
+    # Cameo datasheets - may have more than one link
+    t = pd.read_parquet(config.CAMEO_PROCESSED)
+    t = t[t.CASRN==cas]
+    try:
+        out = []
+        for i,row in t.iterrows():
+            out.append((row.CAMEO_link,row.Chemical_Name))
+        return out
+    except:
+        return []
 
 def getIRIS_info(cas):
     # IRIS

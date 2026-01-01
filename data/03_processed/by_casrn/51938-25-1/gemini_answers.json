@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical's hazard profile indicates a known, significant risk for oral exposure (Tier 1), and potential hazards for dermal and eye contact (Tier 2). However, data is insufficient to assess risks for carcinogenicity, mutagenicity, reproductive, environmental, endocrine disruption, inhalation, and organ/systemic hazards (Tier 4), meaning its safety profile in these areas is largely unknown.",
+  "Q2": "This chemical is not currently identified on any \"Lists of Concern.\" However, this absence may largely be due to a significant lack of available data, as most hazard categories are classified as \"data deficient\" (Tier 4).",
+  "Q3": "This chemical appears to be poorly characterized, with only 10 scientific literature references, which is significantly below average. Furthermore, its molecular formula indicates a polymeric structure with a variable number of repeating units, suggesting that its exact composition is not precisely defined. This lack of detailed characterization is reinforced by the five out of seven hazard classes that are categorized as \"data deficient\" (Tier 4)."
+}

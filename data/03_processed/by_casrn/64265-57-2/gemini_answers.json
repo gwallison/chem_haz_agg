@@ -1,0 +1,5 @@
+{
+  "Q1": "The chemical's hazard profile indicates potential concerns for carcinogenicity, mutagenicity, reproductive hazards (CMR2), and dermal/eye hazards (SKN2), identified through expanded scientific data. While oral hazards are deemed low to moderate (ORL3), significant data gaps exist for environmental, endocrine disruption, inhalation, and organ/systemic hazards (all Tier 4), meaning their risks are currently unknown.",
+  "Q2": "This chemical is not currently identified on any established lists of concern. However, the numerous data-deficient classifications in its hazard profile suggest that its absence from such lists may be partly due to a lack of comprehensive study.",
+  "Q3": "This chemical appears reasonably well-defined in terms of its structure, with a specific molecular formula and classification as a 'Small Molecule', and is not a UVCB. Its study is supported by 875 scientific references, which is close to the median for similar chemicals; however, significant gaps remain in its hazard assessment, with four out of seven hazard classes currently designated as data deficient (Tier 4)."
+}

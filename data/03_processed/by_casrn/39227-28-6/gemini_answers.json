@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical exhibits known hazards (Tier 1) for carcinogenicity, mutagenicity, and reproductive effects, as well as acute and chronic environmental hazards and oral toxicity. Further data indicate potential endocrine disruption, inhalation hazards, and dermal and eye hazards (Tier 2). However, information regarding organ and systemic hazards is currently data deficient (Tier 4).",
+  "Q2": "This chemical is identified on The Endocrine Disruption Exchange (TEDX) list of Potential Endocrine Disruptors, indicating scientific evidence for its endocrine-disrupting properties.",
+  "Q3": "This chemical is relatively well-characterized, with 5743 literature references, significantly above the median for studied chemicals. Its molecular formula is clearly defined, and it is classified as a Small Molecule, not an incompletely defined substance. While organ and systemic hazards are data deficient (Tier 4), other hazard classes are more comprehensively assessed."
+}

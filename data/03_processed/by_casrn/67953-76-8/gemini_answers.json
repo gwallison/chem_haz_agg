@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical's hazard profile indicates known, officially recognized hazards (Tier 1) for environmental, oral, and dermal/eye exposures according to the Globally Harmonized System (GHS). However, there are significant data gaps (Tier 4) concerning its potential for carcinogenicity, mutagenicity, reproductive toxicity, endocrine disruption, inhalation toxicity, and systemic organ effects.",
+  "Q2": "This chemical does not appear on any common 'Lists of Concern'. Given that data are deficient for several key hazard categories, including carcinogenicity, reproductive toxicity, endocrine disruption, and inhalation effects, the absence of listing might reflect a lack of comprehensive study rather than confirmed safety.",
+  "Q3": "This chemical is moderately characterized, with 93 literature references, which is below average for chemicals of this type. While not classified as a UVCB, its molecular formula indicates a partially undefined stoichiometry ('.xK'), and a significant portion of its hazard profile (4 out of 7 categories) remains data deficient, suggesting an incomplete understanding of its full impact."
+}

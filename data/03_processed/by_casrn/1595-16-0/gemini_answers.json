@@ -1,0 +1,5 @@
+{
+  "Q1": "The chemical 1-(Butan-2-yl)-4-methylbenzene largely has a data-deficient hazard profile, with Tier 4 ratings for carcinogenicity, mutagenicity, reproductive, environmental, inhalation, oral, dermal, eye, and organ/systemic hazards. However, it shows a Tier 2 rating for endocrine disruption, indicating potential concerns identified through expanded data sources beyond official GHS classifications.",
+  "Q2": "This chemical is not currently found on any recognized lists of concern. Given that its hazard profile is predominantly data-deficient across many categories, the absence of such listings may be due to a lack of comprehensive study rather than confirmed safety.",
+  "Q3": "While its molecular formula (C11H16) and substance class (Small Molecule) are clearly defined, indicating a known chemical structure, the overall characterization of this chemical's hazard profile is limited. With 247 scientific references, falling below the median for characterized chemicals, and six out of seven hazard classes categorized as data-deficient (Tier 4), there are significant gaps in our understanding of its potential dangers."
+}

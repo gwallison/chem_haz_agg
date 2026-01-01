@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical exhibits known significant hazards based on GHS for oral toxicity and organ/systemic effects (Tier 1). It also shows an expanded perspective of potential concern for environmental, endocrine disruption, and dermal/eye hazards (Tier 2). However, data are currently insufficient for a confident assessment of its carcinogenicity, mutagenicity, reproductive hazards, and inhalation hazards (Tier 4).",
+  "Q2": "This chemical is listed on The Endocrine Disruption Exchange (TEDX) list as a potential endocrine disruptor, indicating scientific evidence supporting this hazard.",
+  "Q3": "With 627 scientific literature references, this chemical is moderately studied, exceeding the 25th percentile but falling below the median for characterized substances. Its specific molecular formula (C10Cl8) and classification as a 'Small Molecule' suggest it is a well-defined compound. However, the presence of Tier 4 ratings for several hazard classes indicates some aspects of its hazard profile remain data deficient and require further investigation."
+}

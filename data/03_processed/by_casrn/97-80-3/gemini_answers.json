@@ -1,0 +1,5 @@
+{
+    "Q1": "This chemical's hazard profile indicates a Tier 2 rating for dermal and eye hazards, suggesting potential concerns based on current scientific data. It is classified as Tier 3 for endocrine disruption, indicating a demonstrated low to moderate hazard in this area. However, for most other hazard classes, including carcinogenicity, mutagenicity, reproductive, environmental, inhalation, oral, and organ/systemic hazards, the chemical is Tier 4, meaning there is insufficient data for a comprehensive assessment.",
+    "Q2": "This chemical is not currently found on major 'Lists of Concern'. Given that many of its hazard classes are rated as Tier 4 (data deficient), the absence from these lists may reflect a lack of comprehensive study rather than a confirmed absence of risk.",
+    "Q3": "While the chemical's structure is well-defined, not being a UVCB and having a specific molecular formula, its characterization regarding hazards is incomplete. With 144 literature references, it has seen moderate study, but a significant five out of seven hazard classes remain data deficient (Tier 4), indicating substantial gaps in its overall hazard profile."
+}

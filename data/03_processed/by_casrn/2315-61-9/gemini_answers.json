@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical exhibits known significant hazards for carcinogenicity, mutagenicity, reproductive toxicity (CMR), environmental concerns (ENV), oral exposure (ORL), and dermal/eye contact (SKN) at Tier 1. It also shows potential endocrine disruption (EDC) at Tier 2. However, data on inhalation (IHL) and organ/systemic (OGN) hazards are currently insufficient for a confident assessment, indicating data deficiencies at Tier 4.",
+  "Q2": "4-tert-Octylphenol diethoxylate is identified on the \"Substitute In Now\" list, signifying it as a chemical of high concern for which safer alternatives should be sought.",
+  "Q3": "With 128 literature references, this chemical is moderately studied, falling above the 25th percentile but below the median for reference count. Its molecular formula is well-defined as C18H30O3 and it is classified as a Small Molecule, not an incompletely defined substance. However, two of its seven hazard classes (inhalation and organ/systemic hazards) are currently data deficient."
+}

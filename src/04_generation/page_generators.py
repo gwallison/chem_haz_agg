@@ -120,7 +120,7 @@ def _get_authoritative_indicators_text(t,ghs_dict):
                     content += f'        * <<{code}>> : unknown code\n'
     if content != '':
         return  '??? "Expand for details"\n\n' + content 
-    return '   **No data**\n\n'
+    return '<center> <b>No data</b> </center> \n\n'
     
 def _get_gemini_text(cas):
     import json
@@ -173,7 +173,7 @@ def _get_other_indicators_text(t,cas,ghs_dict,cidf):
                     content += f'        * {_add_ci_icon(jrow.civar,icon=":orange_square:")}{jrow.civar}: {jrow.cilevel}\n'
     if content != '':
         return  '??? "Expand for details"\n\n' + content 
-    return '   **No data**\n\n'
+    return '<center> <b>No data</b> </center> \n\n'
 
 def _get_tier_3_text(t,cas,cidf):
     content= ''
@@ -192,7 +192,7 @@ def _get_tier_3_text(t,cas,cidf):
                     content += f'        * {jrow.civar}{_add_ci_icon(jrow.civar,icon=':blue_square:')}: {jrow.cilevel}\n'
     if content != '':
         return  '??? "Expand for details"\n\n' + content 
-    return '   **No data**\n\n'
+    return '<center> <b>No data</b> </center> \n\n'
             
     
 # --- Main Generator Functions ---
@@ -251,7 +251,7 @@ def create_chemical_pages(chem_df, ghs_df):
     os.makedirs(config.CHEMICAL_MD_OUT_DIR, exist_ok=True)
     
     num_pages = len(chem_df)
-    for i, row in chem_df[:100].iterrows():
+    for i, row in chem_df.iterrows():
         cas = row.casrn
         print('.',end='')
         gemini_dict = _get_gemini_text(cas)
@@ -278,7 +278,8 @@ def create_chemical_pages(chem_df, ghs_df):
         # content += f'??? {admonition_type} "{echatitle}"\n\n    {echa_text}\n\n'
 
         # Tier summary image
-        content += '## Data for tier generation\n'
+        content += '## SOURCES\n'
+        content += '### Source data for tier generation\n'
         # content += f'![tier graphic summary]({config.TIER_IMAGE_URL.format(cas_num=cas)})\n\n'
         
         # Tier 1 & 2 Details
@@ -291,16 +292,16 @@ def create_chemical_pages(chem_df, ghs_df):
         t = t[(t.GHS_H_Codes.str[0].isin(['H','E'])) & t.has_showable_codes]
 
         # Example for Authoritative
-        content += '### Authoritative indicators of hazards (GHS)\n\n'
+        content += '#### Authoritative indicators of hazards (GHS)\n\n'
         content += _get_authoritative_indicators_text(t, ghs_dict)
         
         # Example for Still hazardous
-        content += '### Other indications of hazards\n\n'
+        content += '#### Other indications of hazards\n\n'
         content += _get_other_indicators_text(t, cas, ghs_dict, ci_df)
 
 
         # Example for Tier 3
-        content += '### Affirmative data showing low concern\n\n'
+        content += '#### Affirmative data showing low concern\n\n'
         content += _get_tier_3_text(t, cas, ci_df)
 
         # Write the file

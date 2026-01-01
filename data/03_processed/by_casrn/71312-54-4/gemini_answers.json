@@ -1,0 +1,5 @@
+{
+  "Q1": "The hazard profile for 1,4-Dimethyl-2,3-diazabicyclo[2.2.1]hept-2-ene primarily indicates data deficiency (Tier 4) across most hazard classes, including carcinogenicity, mutagenicity, reproductive, environmental, inhalation, oral, dermal/eye, and organ/systemic hazards. The only exception is endocrine disruption, which shows a demonstrated low/moderate hazard (Tier 3), implying a favorable safety profile based on direct studies.",
+  "Q2": "This chemical is not currently listed on any specified 'Lists of Concern'. Given that most of its hazard tiers are classified as 'data deficient' (Tier 4), this absence may reflect a lack of comprehensive study rather than confirmed safety.",
+  "Q3": "Despite having a specific molecular formula and being categorized as a 'Small Molecule', this chemical is poorly characterized. It has only 18 literature references, far below the typical median for similar substances, and 6 out of 7 hazard classes are designated as data deficient (Tier 4), indicating significant gaps in its hazard assessment."
+}

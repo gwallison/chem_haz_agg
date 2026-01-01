@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical has a Tier 4 rating across all evaluated hazard classes, including Carcinogenicity, Mutagenicity, Reproductive, Environmental, Endocrine Disruption, Inhalation, Oral, Dermal/Eye, and Organ/Systemic hazards. A Tier 4 designation signifies that there is insufficient data to confidently assess its potential risks, meaning its hazard profile is largely unknown and a precautionary approach is advisable.",
+  "Q2": "This chemical does not currently appear on any established 'Lists of Concern'. However, given that its hazard profile is categorized as 'data deficient' across all evaluated classes, this absence likely reflects a lack of comprehensive study rather than confirmed safety.",
+  "Q3": "This chemical is not well characterized, as indicated by a low number of scientific literature references (20), which is significantly below the typical range for studied chemicals. Furthermore, all hazard classes are categorized as 'data deficient,' reinforcing that its full hazard profile remains largely unknown despite its identification as a polymer."
+}

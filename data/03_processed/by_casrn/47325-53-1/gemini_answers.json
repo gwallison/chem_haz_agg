@@ -1,0 +1,5 @@
+{
+  "Q1": "The chemical's hazard profile is currently data deficient across all assessed categories, including carcinogenicity, mutagenicity, reproductive hazards (CMR), endocrine disruption (EDC), environmental impacts (ENV), inhalation hazards (IHL), oral hazards (ORL), dermal and eye hazards (SKN), and organ and systemic hazards (OGN). A Tier 4 rating for every class signifies insufficient information for a confident hazard assessment, indicating its risks are unknown and a precautionary approach is warranted.",
+  "Q2": "This chemical is not currently identified on any established \"Lists of Concern.\" This absence, coupled with its overwhelmingly data-deficient hazard tier profile, strongly suggests a lack of extensive study rather than confirmed safety.",
+  "Q3": "Despite having a specific molecular formula (C22H46NO) and being classified as a 'Small Molecule,' this chemical is very poorly characterized regarding its hazard profile. With only 10 literature references and all seven hazard classes rated as data deficient (Tier 4), there is a significant lack of comprehensive study into its potential effects."
+}

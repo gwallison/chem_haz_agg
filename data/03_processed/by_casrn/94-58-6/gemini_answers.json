@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical presents known GHS-level hazards for carcinogenicity, mutagenicity, reproductive toxicity, and organ/systemic effects (Tier 1), along with potential oral hazards (Tier 2). While endocrine disruption is categorized as a low/moderate hazard (Tier 3), there are significant data gaps for its environmental, inhalation, and dermal/eye hazards (Tier 4).",
+  "Q2": "This chemical is listed under California's Proposition 65 due to its potential to cause cancer or reproductive harm, and it is classified by the International Agency for Research on Cancer (IARC) as Group 2B, indicating it is possibly carcinogenic to humans.",
+  "Q3": "This chemical is moderately characterized with 315 literature references, positioning it above the 25th percentile for study depth. Its specific molecular formula (C10H12O2) and 'Small Molecule' classification suggest it is a well-defined substance, not an Incompletely Defined Material. Despite this, significant data gaps remain, as evidenced by three Tier 4 classifications for environmental, inhalation, and dermal/eye hazards."
+}

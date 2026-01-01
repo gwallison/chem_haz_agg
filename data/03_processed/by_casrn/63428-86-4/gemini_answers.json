@@ -1,0 +1,5 @@
+{
+  "Q1": "The hazard profile for this chemical is mostly uncharacterized, with Tier 4 (Data Deficient) ratings for carcinogenicity, mutagenicity, reproductive, environmental, endocrine disruption, inhalation, oral, and organ/systemic hazards, meaning its risks are unknown. However, for dermal and eye hazards, it receives a Tier 2 rating, indicating that current scientific data suggest potential hazards in these areas, even if not officially recognized by the Globally Harmonized System (GHS).",
+  "Q2": "This chemical is not currently identified on any official 'Lists of Concern'. Given that most of its hazard categories are classified as 'Data Deficient' (Tier 4), this absence may reflect a lack of comprehensive study rather than confirmed safety.",
+  "Q3": "This chemical is poorly characterized, indicated by only two scientific literature references, which is significantly below the median for similar substances, and a high number of data-deficient (Tier 4) hazard categories. This scarcity of information suggests a significant gap in understanding its full hazard profile."
+}

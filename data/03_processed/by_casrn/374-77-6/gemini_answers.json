@@ -1,0 +1,5 @@
+{
+  "Q1": "The hazard profile for 1,1,2,2,3,4,4,5,5,6-Decafluoro-3,6-bis(trifluoromethyl)cyclohexane indicates data deficiencies for carcinogenicity, mutagenicity, reproductive hazards (CMR), environmental hazards (ENV), endocrine disruption (EDC), inhalation hazards (IHL), dermal/eye hazards (SKN), and organ/systemic hazards (OGN). For oral hazards (ORL), an expanded perspective suggests potential concerns based on current data or predictive models, going beyond formal GHS classifications.",
+  "Q2": "This chemical is identified on a \"List of Concern,\" specifically the EPA PFAS 2024 list. While it is on this list, the prevalence of data-deficient (Tier 4) classifications across its hazard profile suggests that the material may be underexplored in various hazard areas.",
+  "Q3": "This chemical is not extensively characterized, as evidenced by a relatively low number of scientific literature references (44, below the 25th percentile for similar chemicals) and data deficiencies across six of its seven hazard classes. However, its molecular formula is precisely defined, and it is classified as a 'Small Molecule' rather than an incompletely defined substance."
+}

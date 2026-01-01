@@ -1,0 +1,5 @@
+{
+  "Q1": "The chemical's hazard profile is largely data deficient, with all assessed hazard classes—including carcinogenicity, mutagenicity, reproductive hazards (CMR), endocrine disruption (EDC), environmental (ENV), inhalation (IHL), oral (ORL), dermal/eye (SKN), and organ/systemic hazards (OGN)—classified at Tier 4. This indicates there is insufficient information available to make a confident hazard assessment, meaning its risks are unknown and a precautionary approach is warranted.",
+  "Q2": "This chemical is not currently identified on any \"Lists of Concern.\" Given that all hazard classes are categorized as Tier 4 (data deficient), the absence of regulatory listings likely reflects a lack of comprehensive study rather than confirmed safety.",
+  "Q3": "This chemical is poorly characterized, with only 6 literature references, significantly below typical levels for studied compounds. While its molecular formula is specific (C24H51N2O) and it's classified as a 'Small Molecule' (not a UVCB), the complete absence of hazard data across all 7 categories (all Tier 4) underscores a significant lack of comprehensive study."
+}

@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical exhibits a known GHS hazard for dermal and eye effects (SKN1). Additionally, an expanded perspective suggests potential acute and chronic environmental hazards (ENV2) and inhalation hazards (IHL2). Data are currently deficient for its carcinogenicity, mutagenicity, reproductive hazards (CMR4), endocrine disruption (EDC4), and organ/systemic hazards (OGN4), while oral hazards are demonstrated to be low or moderate (ORL3).",
+  "Q2": "This chemical is not currently identified on specific lists of concern. However, with a notable number of hazard classes having data deficient (Tier 4) ratings, its absence from such lists might be attributed to a lack of comprehensive study rather than confirmed safety.",
+  "Q3": "This chemical is relatively well-studied overall, evidenced by a high number of literature references (4746), significantly above the median for characterized chemicals. While its molecular formula indicates a polymer and it is not classified as an 'incompletely defined' substance or a UVCB, its hazard profile still contains significant data gaps, with four out of seven hazard classes currently rated as data deficient (Tier 4)."
+}

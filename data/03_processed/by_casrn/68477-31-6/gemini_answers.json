@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical exhibits known hazards based on official GHS classifications for carcinogenicity, mutagenicity, and reproductive toxicity (CMR), as well as for inhalation (IHL) and oral (ORL) toxicity. Additional scientific data suggest potential environmental (ENV) and dermal/eye (SKN) hazards. However, there is insufficient information to assess potential endocrine disruption (EDC) or specific organ and systemic toxicity (OGN).",
+  "Q2": "This chemical does not appear on any specific \"Lists of Concern.\" This absence, combined with several hazard classes being categorized as \"data deficient\" in its Tier Profile, suggests that its potential risks may be largely unstudied or unevaluated by regulatory bodies.",
+  "Q3": "This chemical is poorly characterized, with no scientific literature references found and an unspecified molecular formula. Its classification as a \"Manual Registration\" and \"Registered Concept\" further indicates it is not a well-defined substance, which is consistent with several hazard classes in its Tier Profile being designated as \"data deficient.\""
+}

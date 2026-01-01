@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical's hazard profile indicates an 'Expanded Perspective' for acute/chronic environmental hazards and dermal/eye hazards, meaning there's more current data suggesting potential concerns beyond official GHS classifications. However, most other hazard classes, including carcinogenicity/mutagenicity/reproductive hazards, endocrine disruption, inhalation, oral, and organ/systemic hazards, are classified as 'Data Deficient,' indicating insufficient information for a confident assessment.",
+  "Q2": "No specific 'Lists of Concern' were identified for this chemical. Given that most hazard classes are marked as 'Data Deficient,' this absence of listed concerns may be due to a lack of comprehensive study rather than confirmed safety.",
+  "Q3": "This chemical appears to be poorly characterized; with only 48 literature references, it falls significantly below the typical number of studies for characterized chemicals. Furthermore, five out of seven hazard classes are designated as 'Data Deficient,' reinforcing the limited understanding of its potential risks."
+}

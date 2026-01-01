@@ -150,7 +150,7 @@ def get_data( prompt):
         response_mime_type="application/json" # Request JSON directly!
     )
 
-    print(f"Generating content using model {model_id}...")
+    # print(f"Generating content using model {model_id}...")
     try:
         # 4. Call 'generate_content' from the client
         response = client.models.generate_content(
@@ -241,7 +241,19 @@ def get_data( prompt):
         # 6. Use the client to delete the file here too
         # client.files.delete(name=myfile.name)
 
-def make_set(caslist):
+def keep_only_new_cas(caslist):
+    newlist = []
+    for cas in caslist:
+        fn = os.path.join(config.PROCESSED_CAS_DIR,cas,'gemini_answers.json')
+        if not os.path.exists(fn):
+            newlist.append(cas)
+    return newlist
+
+
+def make_set(caslist,replace_existing=False):
+    if not replace_existing:
+        caslist = keep_only_new_cas(caslist)
+    print(f'Starting run of {len(caslist)}')
     for cas in caslist:
         print(f'{cas}... ',end='')
         name = ifs.get_epa_pref_name(cas)
@@ -261,12 +273,11 @@ def make_set(caslist):
         with open(fn,'w') as f:
             f.write(res)
             
+
             
 if __name__ == '__main__':
     t = pd.read_parquet(config.MASTER_CAS_LIST)
-    caslst = t[:100].CASRN.tolist()
-    # caslst = ['50-21-5']
-    print(f'Starting run of {len(caslst)}')
-    make_set(caslst)    
+    caslst = t.CASRN.tolist()
+    make_set(caslst, replace_existing=False)    
     
      

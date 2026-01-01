@@ -1,0 +1,5 @@
+{
+  "Q1": "The Tier Profile for 2-Methyl-8-propyldodecane indicates that most hazard classes, including carcinogenicity, mutagenicity, reproductive (CMR), environmental (ENV), inhalation (IHL), oral (ORL), dermal/eye (SKN), and organ/systemic (OGN) hazards, are classified as Tier 4, meaning there is insufficient data for a confident assessment. Only endocrine disruption (EDC) is rated Tier 3, suggesting some studies support a low to moderate hazard profile for this specific class.",
+  "Q2": "2-Methyl-8-propyldodecane does not appear on any specified \"Lists of Concern.\" However, given that most of its hazard categories are classified as \"data deficient\" (Tier 4), this absence likely reflects a lack of extensive study on the material rather than confirmed safety.",
+  "Q3": "Despite being a defined \"Small Molecule\" with a clear molecular formula (C16H34), 2-Methyl-8-propyldodecane is poorly characterized. With only 24 literature references, significantly below average, and most hazard categories rated as \"data deficient\" (Tier 4), there is a substantial lack of study on its properties and potential hazards."
+}

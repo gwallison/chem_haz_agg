@@ -1,0 +1,5 @@
+{
+  "Q1": "The hazard profile for Ferric chloride shows known hazards (Tier 1) across most categories, including carcinogenicity, mutagenicity and reproductive hazards (CMR), environmental (ENV), inhalation (IHL), oral (ORL), dermal and eye (SKN), and organ/systemic (OGN) hazards. However, there is insufficient data to confidently assess its endocrine disruption hazards (EDC), which are categorized as data deficient (Tier 4).",
+  "Q2": "Ferric chloride is recognized as a chemical of concern and is specifically listed under the U.S. Clean Water Act. This indicates its potential environmental impact, particularly concerning water quality.",
+  "Q3": "Ferric chloride is extensively characterized, supported by a very high number of literature references (124,000), which significantly exceeds the typical median for chemicals studied. Its molecular formula (Cl3Fe) is precisely defined, it is classified as a Small Molecule, and it is not a UVCB, all indicating a well-understood chemical identity. Furthermore, only one of its hazard classes, endocrine disruption, is noted as data deficient, suggesting a largely complete hazard profile."
+}

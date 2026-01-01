@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical exhibits potential concerns for carcinogenicity, mutagenicity, reproductive effects, and environmental hazards, as indicated by a Tier 2 rating based on expanded scientific data. However, for endocrine disruption, inhalation, oral, dermal/eye, and organ/systemic hazards, the data is currently insufficient (Tier 4), meaning a confident hazard assessment cannot be made and a precautionary approach is warranted.",
+  "Q2": "This chemical is not currently identified on any official 'Lists of Concern'. This absence, coupled with several hazard categories having insufficient data (Tier 4), suggests that the chemical may not have been extensively studied, leading to an unknown risk profile rather than confirmed safety.",
+  "Q3": "Despite possessing a precisely defined molecular formula and not being an Incompletely Defined substance, the chemical is poorly characterized regarding its hazard profile. With only 19 literature references, significantly below typical levels, and five out of seven hazard categories classified as data deficient (Tier 4), its risks remain largely unstudied and its hazard profile is incomplete."
+}

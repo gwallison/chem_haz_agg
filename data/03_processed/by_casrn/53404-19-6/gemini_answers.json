@@ -1,0 +1,5 @@
+{
+  "Q1": "The chemical's hazard profile indicates an expanded perspective (Tier 2) for carcinogenicity, mutagenicity, or reproductive hazards (CMR), suggesting potential concerns identified beyond basic GHS classifications. However, most other hazard classes, including environmental (ENV), endocrine disruption (EDC), inhalation (IHL), oral (ORL), dermal and eye (SKN), and organ and systemic (OGN) hazards, are classified as data deficient (Tier 4), meaning there is insufficient information for a confident assessment.",
+  "Q2": "This chemical is listed under California's Proposition 65, which identifies chemicals known to cause cancer, birth defects, or other reproductive harm.",
+  "Q3": "While this chemical has a specific molecular formula and is not categorized as poorly defined in its substance class, its overall characterization is limited. It has only 46 literature references, which is significantly below the median for characterized chemicals, and six of its seven hazard classes are marked as data deficient, indicating substantial gaps in its hazard assessment."
+}

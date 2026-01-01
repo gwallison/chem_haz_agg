@@ -1,0 +1,5 @@
+{
+  "Q1": "The chemical's hazard profile reveals known hazards (Tier 1) across several categories, including carcinogenicity, mutagenicity, reproductive effects (CMR), environmental, inhalation, oral, dermal/eye, and organ/systemic hazards. Its endocrine disruption potential, however, is currently data deficient (Tier 4).",
+  "Q2": "This chemical is recognized on the TEDX list as a potential endocrine disruptor, indicating scientific concern regarding its ability to interfere with hormonal systems. Additionally, it is included in the Acute Exposure Guidelines (AEGL) by the EPA, highlighting its relevance for acute exposure risk assessment.",
+  "Q3": "This chemical is extensively characterized, evidenced by 3772 literature references, a precisely defined molecular formula (C4H6O), and classification as a 'Small Molecule' rather than a less-defined category or a UVCB. The hazard assessment is largely complete, with only one area, endocrine disruption, identified as data deficient (Tier 4)."
+}

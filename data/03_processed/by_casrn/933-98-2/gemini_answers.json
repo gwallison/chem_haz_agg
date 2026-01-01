@@ -1,0 +1,5 @@
+{
+    "Q1": "This chemical has a known significant hazard for oral exposure (Tier 1). Potential hazards are also indicated for inhalation and dermal/eye exposure (Tier 2). However, data are deficient for Carcinogenicity, Mutagenicity, and Reproductive hazards, Environmental hazards, Endocrine disruption, and Organ and systemic hazards, meaning its full risk profile is not yet established.",
+    "Q2": "This chemical is not currently identified on major lists of concern. Given the significant data deficiencies in its hazard profile across several categories, this absence may reflect a lack of comprehensive study rather than confirmed safety.",
+    "Q3": "This chemical is a well-defined small molecule with a clear molecular formula and is not classified as a UVCB. While it has a moderate number of scientific references (560), its hazard profile remains incomplete, with significant data gaps (Tier 4) in four out of seven hazard categories, indicating a need for further study to fully characterize its risks."
+}

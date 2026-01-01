@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical exhibits known hazards for carcinogenicity, mutagenicity, reproductive hazards (CMR1) and organ/systemic effects (OGN1) according to international standards. An expanded perspective indicates potential hazards for environmental, inhalation, and dermal/eye exposures (ENV2, IHL2, SKN2), while oral exposure shows a demonstrated low to moderate hazard (ORL3). Data is currently insufficient to assess its endocrine disruption potential (EDC4).",
+  "Q2": "This chemical is not currently identified on any specific \"Lists of Concern.\" While data is deficient for endocrine disruption (EDC4), the overall hazard profile is not broadly uncharacterized, suggesting this absence is not solely due to a widespread lack of study.",
+  "Q3": "This chemical appears to be relatively well-characterized. With 1563 literature references, its research depth exceeds the median for similar compounds, and its molecular formula and substance class are precisely defined, indicating it is not an UVCB. Only one hazard class (endocrine disruption) currently lacks sufficient data for a confident assessment."
+}

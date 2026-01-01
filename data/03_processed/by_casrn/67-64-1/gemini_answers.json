@@ -1,0 +1,5 @@
+{
+  "Q1": "Acetone's hazard profile indicates known significant hazards in several categories, including carcinogenicity, mutagenicity, or reproductive hazards (CMR1), inhalation (IHL1), oral (ORL1), and organ/systemic hazards (OGN1). Additionally, an expanded perspective from current data identifies potential environmental (ENV2), endocrine disruption (EDC2), and dermal/eye (SKN2) concerns.",
+  "Q2": "Acetone is listed on the TEDX (The Endocrine Disruption Exchange) list, which identifies chemicals with scientific evidence suggesting potential endocrine disruption. This indicates a recognized concern regarding its possible effects on the endocrine system.",
+  "Q3": "This chemical is exceptionally well-characterized, evidenced by 272,000 literature references, far exceeding the median for characterized chemicals. Its molecular formula (C3H6O) is precisely defined, it is classified as a 'Small Molecule,' and it is not identified as an Incompletely Defined substance (UVCB), nor does it have any data deficient (Tier 4) hazard classifications."
+}

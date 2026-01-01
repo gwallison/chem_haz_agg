@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical's hazard profile indicates potential environmental and dermal/eye hazards (Tier 2), based on current scientific literature and predictive models. However, its carcinogenicity, mutagenicity, reproductive hazards, endocrine disruption, inhalation, oral, and organ/systemic hazards are all classified as data deficient (Tier 4), meaning comprehensive risk assessments in these areas are not yet possible.",
+  "Q2": "This chemical is not explicitly listed on any specified \"Lists of Concern.\" Given that the majority of its hazard categories are classified as data deficient (Tier 4), this absence from concern lists may primarily reflect a lack of comprehensive study rather than confirmed safety.",
+  "Q3": "This chemical is poorly characterized, with zero literature references in SciFinder and an \"Unspecified\" molecular formula. Its classification as \"Generic Registration\" and \"Manual Registration\" further indicates it is an ill-defined substance, a conclusion strongly supported by five out of seven hazard categories being deemed data deficient (Tier 4)."
+}

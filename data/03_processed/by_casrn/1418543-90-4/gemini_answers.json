@@ -1,0 +1,5 @@
+{
+    "Q1": "Most hazard classes for this chemical, including carcinogenicity, mutagenicity and reproductive hazards; environmental; inhalation; oral; dermal and eye; and organ and systemic hazards, are categorized as Tier 4. This indicates a significant lack of data for a confident hazard assessment. Only endocrine disruption hazards are classified as Tier 3, suggesting a demonstrated low or moderate concern based on available studies.",
+    "Q2": "This chemical is not currently listed on any specified \"Lists of Concern.\" However, given that most of its hazard classifications are Tier 4 (data deficient), this absence may be due to a lack of comprehensive study rather than a confirmed safety profile.",
+    "Q3": "This chemical is poorly characterized, with only one literature reference available in the SciFinder database, which is significantly below typical levels for studied compounds. Although its molecular formula is specific and it is classified as a \"Small Molecule\" rather than an ill-defined substance, the high number of Tier 4 (data deficient) ratings across most hazard classes confirms a substantial lack of comprehensive safety data."
+}

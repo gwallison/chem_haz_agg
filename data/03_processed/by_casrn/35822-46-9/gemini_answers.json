@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical, 1,2,3,4,6,7,8-Heptachlorodibenzodioxin, is associated with known GHS hazards for carcinogenicity, mutagenicity, or reproductive toxicity (CMR), and significant acute or chronic environmental hazards (ENV). Further data suggest potential concerns for inhalation (IHL), oral (ORL), and dermal/eye (SKN) hazards. While it shows a low to moderate hazard for endocrine disruption (EDC), there is insufficient data to confidently assess its organ and systemic hazards (OGN).",
+  "Q2": "Based on the provided information, this chemical is not explicitly listed on any specified \"Lists of Concern.\"",
+  "Q3": "This chemical appears to be well-characterized, evidenced by 6,214 literature references, which is significantly above the median for characterized chemicals. Its molecular formula and classification as a \"Small Molecule\" indicate it is a well-defined substance, not an incompletely defined material or UVCB, though there is a data gap concerning organ and systemic hazards."
+}

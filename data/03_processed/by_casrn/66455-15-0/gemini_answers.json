@@ -1,0 +1,5 @@
+{
+    "Q1": "The hazard profile for Alcohols, C10-14, ethoxylated indicates known hazards for oral (ORL1) and dermal/eye exposure (SKN1) based on official GHS classifications. It also shows expanded hazard perspectives for acute/chronic environmental impacts (ENV2) and inhalation (IHL2). However, there are significant data deficiencies (Tier 4) for carcinogenicity, mutagenicity, reproductive hazards (CMR), endocrine disruption (EDC), and organ/systemic hazards (OGN).",
+    "Q2": "This chemical currently appears on no specific lists of concern. Given the significant number of data-deficient hazard classifications (Tier 4), this absence may reflect a lack of comprehensive study rather than confirmed safety across all potential hazards.",
+    "Q3": "This chemical is poorly characterized, evidenced by zero literature references in the SciFinder database and an \"Unspecified\" molecular formula. Its classification as \"Manual Registration\" and \"Registered Concept\" further suggests an incomplete definition, alongside three out of seven hazard classes designated as data deficient (Tier 4)."
+}

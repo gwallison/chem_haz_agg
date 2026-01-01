@@ -1,0 +1,5 @@
+{
+  "Q1": "The hazard profile for Amides, coco, N,N-bis(hydroxyethyl) indicates a known hazard for carcinogenicity, mutagenicity, and reproductive toxicity (CMR Tier 1) based on official GHS classifications. It also shows potential dermal and eye hazards (SKN Tier 2) from an expanded perspective beyond GHS. For endocrine disruption, inhalation, and organ/systemic hazards, the chemical is data deficient (Tier 4), meaning its risks in these areas are currently unknown.",
+  "Q2": "Amides, coco, N,N-bis(hydroxyethyl) is listed by the International Agency for Research on Cancer (IARC) as a Group 2B carcinogen, meaning it is possibly carcinogenic to humans.",
+  "Q3": "This chemical is poorly characterized, indicated by a very low number of scientific literature references (11 compared to a median of 963), an \"Unspecified\" molecular formula, and its classification under \"Manual Registration\" and \"Registered Concept\" substance classes. Furthermore, three out of its seven hazard classes are designated as data deficient (Tier 4), highlighting significant gaps in its hazard assessment."
+}

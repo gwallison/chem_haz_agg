@@ -1,0 +1,5 @@
+{
+  "Q1": "The hazard profile for 1,2-Dibromotetrafluoroethane indicates a significant lack of data for carcinogenicity, mutagenicity, reproductive hazards (CMR), oral hazards (ORL), dermal and eye hazards (SKN), and organ and systemic hazards (OGN), all classified as Tier 4. However, it shows an expanded perspective (Tier 2) for environmental hazards (ENV) and a demonstrated low/moderate hazard (Tier 3) for endocrine disruption (EDC) and inhalation hazards (IHL).",
+  "Q2": "This chemical is identified on the EPA PFAS 2024 list of concern, indicating its recognition by the U.S. Environmental Protection Agency as a substance requiring attention.",
+  "Q3": "1,2-Dibromotetrafluoroethane is structurally well-characterized, with a defined molecular formula (C2Br2F4) and categorized as a 'Small Molecule,' not a UVCB. It also has a moderate number of scientific literature references (1279) for a chemical of its type. However, despite this foundational characterization, its hazard assessment reveals significant data deficiencies, with five out of seven hazard classes currently rated as Tier 4 (data deficient)."
+}

@@ -1,0 +1,5 @@
+{
+  "Q1": "The hazard profile for this chemical reveals a Tier 1 (known hazard) classification for dermal and eye exposure, indicating officially recognized dangers with skin and eye contact. For most other hazard classes, including Carcinogenicity, Mutagenicity, Reproductive hazards, Environmental hazards, Endocrine disruption, Inhalation hazards, Oral hazards, and Organ/systemic hazards, the chemical is designated as Tier 4, signifying insufficient data for a confident assessment.",
+  "Q2": "This chemical is not listed on any specified \"Lists of Concern.\" This absence, coupled with the prevalence of \"Tier 4\" (data deficient) classifications across most hazard categories, suggests that a comprehensive hazard profile may not yet be established due to limited study.",
+  "Q3": "Despite being a defined polymer and not classified as a UVCB, the chemical's hazard profile is notably under-characterized. With 401 literature references, its study level is moderate but below the typical median, and a substantial majority (six out of seven) of its hazard classes are designated as \"Tier 4,\" indicating insufficient data for confident assessment."
+}

@@ -1,0 +1,5 @@
+{
+  "Q1": "The hazard profile for this chemical reveals a known concern for oral hazards (Tier 1) and potential dermal and eye hazards based on an expanded data perspective (Tier 2). However, major data gaps exist for carcinogenicity, mutagenicity, and reproductive hazards (CMR), environmental hazards (ENV), endocrine disruption (EDC), inhalation hazards (IHL), and organ and systemic hazards (OGN), all of which are classified as data deficient (Tier 4).",
+  "Q2": "This chemical is not currently identified on any specific \"Lists of Concern.\" However, the significant number of hazard classes classified as data deficient (Tier 4) suggests that its absence from these lists may be due to a lack of comprehensive study and available information.",
+  "Q3": "This chemical is considered incompletely characterized, indicated by its \"Incompletely Defined\" substance class and a relatively low number of literature references (42), placing it below the median for similar substances. Additionally, the prevalence of data deficient (Tier 4) classifications for several hazard types further underscores the incompleteness of its overall hazard profile."
+}

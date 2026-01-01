@@ -1,5 +1,5 @@
 {
-  "Q1": "Terephthalic acid exhibits known hazards (Tier 1) for carcinogenicity, mutagenicity, reproductive, oral, and organ/systemic toxicity. Expanded perspectives (Tier 2) indicate potential dermal/eye and inhalation hazards, while data are currently deficient (Tier 4) for assessing environmental and endocrine disruption concerns.",
-  "Q2": "Terephthalic acid is not currently found on any specific 'Lists of Concern'.",
-  "Q3": "This chemical is extensively characterized, evidenced by 64,000 literature references, significantly higher than typical. It has a precise molecular formula (C8H6O4), is classified as a 'Small Molecule', and is not a poorly defined UVCB, indicating a comprehensive understanding of its basic properties."
+  "Q1": "Terephthalic acid exhibits known hazards (Tier 1) concerning carcinogenicity, mutagenicity, reproductive hazards (CMR), oral hazards, and organ/systemic hazards. Expanded perspectives (Tier 2) indicate potential inhalation, dermal, and eye hazards. However, its environmental and endocrine disruption hazards are currently data deficient (Tier 4), meaning their full risk profiles are unknown.",
+  "Q2": "Terephthalic acid is not currently noted on any specific \"Lists of Concern.\" However, the data deficient classifications for environmental and endocrine disruption hazards suggest its full hazard profile may not be comprehensively studied or understood.",
+  "Q3": "Terephthalic acid is extensively characterized, supported by 64,000 literature references, a precise molecular formula (C8H6O4), and its classification as a well-defined \"Small Molecule.\" Despite some data gaps for environmental and endocrine disruption hazards, the high volume of research suggests a generally well-understood chemical."
 }

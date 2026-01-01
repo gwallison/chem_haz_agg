@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical's hazard profile indicates potential concerns for environmental and oral exposures, both rated as Tier 2, meaning current scientific data suggests possible hazards. However, for carcinogenicity, mutagenicity, reproductive, endocrine disruption, inhalation, dermal/eye, and organ/systemic hazards, the data is insufficient (Tier 4) to make a confident assessment, highlighting significant knowledge gaps.",
+  "Q2": "Undecafluoro(heptafluoropropyl)cyclohexane is identified on the EPA PFAS 2024 list, signifying it as a substance of regulatory interest. The presence of numerous data-deficient (Tier 4) hazard categories in its profile suggests that despite being on a list of concern, it may lack comprehensive study.",
+  "Q3": "This chemical is not extensively characterized, evidenced by only 28 literature references, far below the median for similar compounds. While its molecular formula and substance class are well-defined, a majority of its hazard categories remain data-deficient (Tier 4), indicating a substantial lack of information about its potential health and environmental impacts."
+}

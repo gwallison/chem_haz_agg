@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical exhibits known hazards for oral (ORL1) and organ/systemic toxicity (OGN1) according to GHS standards. Additionally, an expanded perspective indicates potential concerns for carcinogenicity, mutagenicity, reproductive hazards (CMR2), inhalation (IHL2), and dermal/eye hazards (SKN2). However, there are significant data deficiencies regarding its environmental impact (ENV4) and endocrine disruption potential (EDC4).",
+  "Q2": "This chemical is not currently listed on any specified \"Lists of Concern.\" However, the presence of data deficiencies for environmental and endocrine disruption hazards (Tier 4) suggests that its absence from such lists might be due to a lack of comprehensive study in these particular areas.",
+  "Q3": "Ethylenediaminetetraacetic acid, disodium salt is extensively characterized, supported by its precise molecular formula (C10H16N2O8.2Na), clear substance class, and not being classified as a UVCB. With 38,000 literature references, it is considerably well-studied compared to most chemicals, yet its hazard profile still contains specific data gaps in environmental impact and endocrine disruption."
+}

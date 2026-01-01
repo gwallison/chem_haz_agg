@@ -1,0 +1,5 @@
+{
+  "Q1": "The hazard profile for 7-Methylpentadecane indicates that most hazard classes, including carcinogenicity, mutagenicity, reproductive, environmental, inhalation, oral, dermal, eye, organ, and systemic hazards, are currently data deficient (Tier 4). The only exception is endocrine disruption hazards, which has a Tier 2 rating, suggesting an expanded perspective based on current scientific data, rather than formal GHS conclusions.",
+  "Q2": "7-Methylpentadecane is not currently listed on any specific 'Lists of Concern'. This absence, combined with the prevalent data deficient (Tier 4) classifications across its hazard profile, suggests that the chemical may not have been extensively studied rather than confirmed as safe.",
+  "Q3": "7-Methylpentadecane is chemically well-defined with a clear molecular formula (C16H34) and is classified as a Small Molecule, not a UVCB. However, its hazard characterization is largely incomplete, with six out of seven hazard classes deemed data deficient (Tier 4), despite having 172 literature references, which is above the 25th percentile but below the median for characterized chemicals."
+}

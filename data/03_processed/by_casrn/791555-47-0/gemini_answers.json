@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical's hazard profile is entirely data deficient, with all hazard classes (Carcinogenicity, mutagenicity and reproductive hazards; Endocrine disruption; Environmental; Inhalation; Oral; Dermal and eye; Organ and systemic hazards) classified as Tier 4. This indicates insufficient information to confidently assess potential dangers, meaning its risks are currently unknown and a precautionary approach is warranted.",
+  "Q2": "This chemical is not found on any 'Lists of Concern'. However, given that all its hazard classifications are Tier 4 (data deficient), this absence is likely due to a lack of comprehensive study rather than a confirmed lack of hazard.",
+  "Q3": "This chemical is very poorly characterized, evidenced by zero literature references in SciFinder and a Tier 4 (data deficient) rating across all hazard categories. While it has a defined molecular formula and is classified as a 'Small Molecule', the overall lack of study means its hazard profile is largely incomplete."
+}

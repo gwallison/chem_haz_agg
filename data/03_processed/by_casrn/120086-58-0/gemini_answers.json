@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical presents known significant hazards for both environmental impact and dermal/eye exposure, each classified as Tier 1 based on official GHS standards. However, for carcinogenicity, mutagenicity, reproductive toxicity, endocrine disruption, inhalation, oral, and organ/systemic hazards, the chemical is rated as Tier 4, indicating insufficient data to make a confident hazard assessment.",
+  "Q2": "This chemical is not currently listed on any specified \"Lists of Concern.\" The predominance of Tier 4 (data deficient) classifications in its hazard profile suggests that this absence may reflect a lack of comprehensive study for many hazard endpoints rather than a confirmed low risk across all areas.",
+  "Q3": "Although the chemical is well-defined chemically with a specific molecular formula and is not a UVCB, its hazard profile is largely uncharacterized. With 104 literature references, it has received some attention, but five out of seven hazard categories are classified as Tier 4, signifying substantial data gaps in its complete hazard assessment."
+}

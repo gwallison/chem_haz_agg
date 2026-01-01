@@ -1,0 +1,5 @@
+{
+  "Q1": "The chemical's hazard profile is entirely data deficient across all assessed hazard classes, including carcinogenicity, mutagenicity, reproductive hazards (CMR), environmental hazards (ENV), endocrine disruption (EDC), inhalation (IHL), oral (ORL), dermal and eye (SKN), and organ and systemic hazards (OGN). This indicates insufficient information to confidently assess any potential risks, warranting a precautionary approach due to unknown hazards.",
+  "Q2": "This chemical is not currently listed on any \"Lists of Concern.\" However, this absence is likely attributable to a significant lack of available hazard data, as indicated by its data-deficient tier profile across all hazard categories.",
+  "Q3": "This chemical is very poorly characterized, with only one literature reference available. Its entire hazard profile is classified as data deficient, reflecting a substantial lack of scientific study and information despite its molecular formula indicating an ammonium salt with a variable stoichiometric component."
+}

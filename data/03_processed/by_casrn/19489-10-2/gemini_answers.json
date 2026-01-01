@@ -1,0 +1,5 @@
+{
+  "Q1": "The hazard profile for cis-1-Ethyl-3-methylcyclohexane indicates a significant lack of data across most hazard categories. Carcinogenicity, Mutagenicity, and Reproductive hazards (CMR), Environmental hazards (ENV), Inhalation (IHL), Oral (ORL), Dermal and eye (SKN), and Organ and systemic hazards (OGN) are all classified as Tier 4, meaning data is deficient. Endocrine disruption (EDC) is the only category with a demonstrated low to moderate hazard, classified as Tier 3.",
+  "Q2": "Currently, cis-1-Ethyl-3-methylcyclohexane is not explicitly found on established lists of concern. However, considering the many Tier 4 (data deficient) classifications in its hazard profile, this lack of listing may be due to insufficient study rather than confirmed safety.",
+  "Q3": "While cis-1-Ethyl-3-methylcyclohexane is a structurally well-defined small molecule with a precise molecular formula and is not a UVCB, its hazard characterization is notably incomplete. With 67 literature references, it has received some scientific attention, yet the majority of its hazard categories are Tier 4, indicating significant data gaps for a comprehensive safety assessment."
+}

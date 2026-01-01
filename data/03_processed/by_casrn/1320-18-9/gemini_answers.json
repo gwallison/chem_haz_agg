@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical's hazard profile indicates an identified environmental hazard (ENV2), suggesting potential concerns based on current scientific data. However, its Carcinogenicity, Mutagenicity, and Reproductive hazards (CMR), Endocrine disruption (EDC), Inhalation (IHL), Oral (ORL), Dermal and Eye (SKN), and Organ and Systemic hazards (OGN) are all rated as Tier 4, meaning there is insufficient data to make confident assessments and its risks in these areas are largely unknown.",
+  "Q2": "This chemical is listed under the Clean Water Act. Given that most of its hazard classes are categorized as \"data deficient\" (Tier 4), the limited number of identified lists of concern might reflect a lack of comprehensive study rather than a definitively low hazard profile across all potential hazards.",
+  "Q3": "The chemical is considered \"Incompletely Defined\" and has a relatively modest number of scientific references (83), indicating limited study. Furthermore, the extensive presence of Tier 4 \"data deficient\" ratings across most hazard classes suggests that its overall hazard profile is not well characterized."
+}

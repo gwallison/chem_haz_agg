@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical has known carcinogenicity, mutagenicity, or reproductive hazards based on official GHS classifications (Tier 1). It also shows potential hazards for inhalation, dermal, and eye exposure, identified through current scientific literature or predictive models (Tier 2). Oral hazards are considered low to moderate, supported by direct studies (Tier 3). However, there are significant data gaps for its environmental, endocrine disruption, and organ/systemic hazards (Tier 4), meaning its risks in these areas are largely unknown.",
+  "Q2": "This chemical is included on the \"Substitute In Now\" list, indicating it is recognized as a chemical of concern for which safer alternatives should be considered.",
+  "Q3": "This chemical is poorly characterized, with no scientific literature references found and an \"Unspecified\" molecular formula. Its classification as \"Manual Registration; Registered Concept\" further indicates an ill-defined material, and a significant portion of its hazard profile (three out of seven categories) lacks sufficient data for assessment. This suggests that its hazard profile is far from complete due to limited study."
+}

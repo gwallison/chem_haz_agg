@@ -10,27 +10,7 @@ import re
 import xml.etree.ElementTree as ET
 import config
 
-test = """
-??? note "Grid Example"
-    This admonition contains a grid with two separate blocks of content.
 
-    <div class="grid" markdown>
-
-    <div markdown>
-    ### Left Column
-    * Item 1
-    * Item 2
-    * Item 3
-    </div>
-
-    <div markdown>
-    ### Right Column
-    > This is a blockquote in the right column.
-    > Grids allow arranging elements like this.
-    </div>
-
-    </div>    
-"""
 
 # imgdir = r"C:/MyDocs/integrated/chem_profiles/mkdocs/docs/images"
 # imgdir = config.TIER_IMAGE_DIR
@@ -107,26 +87,41 @@ def getTierImg_with_tooltips(cas, tooltip_data):
 
     return outtxt
 
-def _chem_def_text(name,cas,class1,class2,img):
+def _chem_def_text(infosrv,name,cas,class1,class2,img,subs_class,complst):
     opttext = f"""
-    * :file_folder: [Chem Class](https://open-ff.org/fracfocus-chemical-classification-index/) level 1: __{class1}__
-    * :file_folder: Chem Class level 2: __{class2}__
+    * :file_folder: [Chemical Class](https://open-ff.org/fracfocus-chemical-classification-index/) level 1: __{class1}__
+    * :file_folder: Chemical Class level 2: __{class2}__
 """
 
     if class1=='':
         opttext = ''
-
+    
+    comptxt = ''
+    for comp in complst:
+        compname = infosrv.get_epa_pref_name(comp)
+        comptxt += f'    * :id: CASRN: {comp} ; :octicons-beaker-16:  {compname}\n'
+    if len(comptxt)>0:
+        comptxt = f'    ### Components of {cas}\n'+comptxt
+        
     text = f"""
 ??? info "Chemical details of {name}"
     ### Chemical Identity
     * :octicons-beaker-16:  {name}
     * :id: CASRN: {cas}
 {opttext}
-
+    * :file_folder: [Substance Class(s) (from SciFinder)](https://open-ff.org/the-substance-classes-of-fracfocus-materials/): __{subs_class}__
     ### Chemical Structure
     {img}
+{comptxt}
+
 """
     return text
+
+# def _component_desc(caslst):
+#     if caslst == []:
+#         return ""
+    
+    
 def get_chem_page_header(cas,ing_name,g_dict,
                          lists_of_concern,lists_of_groups,
                          infosrv):
@@ -199,13 +194,13 @@ def get_chem_page_header(cas,ing_name,g_dict,
             tooltip_data_for_svg[element_id] = f"{title_str}<br>No indicators found for this tier."
             
     # --- Build the info about data completeness
-    is_unspecified = 'unspec' in infosrv.get_scifinder_molecule(cas).lower()
+    # is_unspecified = 'unspec' in infosrv.get_scifinder_molecule(cas).lower()
     subs = infosrv.get_scifinder_substance_class(cas)
-    has_generic = 'generic' in subs.lower()
-    has_manual =  'manual'  in subs.lower()
-    has_incomplete = 'incomplete' in subs.lower()
-    has_concept = 'concept' in subs.lower()
-    numref = infosrv.get_scifinder_numref(cas)
+    # has_generic = 'generic' in subs.lower()
+    # has_manual =  'manual'  in subs.lower()
+    # has_incomplete = 'incomplete' in subs.lower()
+    # has_concept = 'concept' in subs.lower()
+    # numref = infosrv.get_scifinder_numref(cas)
 
     # --- Start building the header string
     
@@ -220,7 +215,9 @@ def get_chem_page_header(cas,ing_name,g_dict,
     except:
         class1 = ''
         class2 = ''
-    chemdef = _chem_def_text(ing_name, cas, class1, class2, chem_img)
+    # subs
+    complst = infosrv.get_scifinder_components_as_list(cas)
+    chemdef = _chem_def_text(infosrv,ing_name, cas, class1, class2, chem_img,subs, complst)
     # print(chemdef)
     s+= chemdef
     
@@ -268,17 +265,17 @@ def get_chem_page_header(cas,ing_name,g_dict,
     # # s += f'    Number of reference (via SciFinder): {numref}\n\n'
  
     tiertxt = getTierImg_with_tooltips(cas, tooltip_data_for_svg)
-    s += '## "Hazard Profile" \n\n'
+    s += '## Hazard Profile \n\n'
     if 'Q1' in g_dict.keys():
         answer = g_dict['Q1']
     else:
         answer = 'no summary generated yet'
     s += f'**Our Tier Summary**: {answer}\n\n'
-    s += '*Tap or hover over each box for more detail.*\n\n'
+    s += '<center> <i>Tap or hover over each box for evidence of Tier designation.</i> </center>\n\n'
     s += f'<center>{tiertxt}</center>\n\n'    
 
     s += separator
-    s+= '## "Lists of Concern"? \n'
+    s+= '## Lists of Concern \n'
     if 'Q2' in g_dict.keys():
         answer = g_dict['Q2']
     else:
@@ -297,7 +294,53 @@ def get_chem_page_header(cas,ing_name,g_dict,
         answer = 'no summary generated yet'
     
     s+= f'{answer}\n'
-    # if len(lists_of_concern)>0:
+
+    s += separator
+
+ 
+    s+= '## Toxicological Profiles and First Responder Data Sheets\n'
+    new_tab = '{: target="_blank" rel="noopener" }'
+
+        
+    lnk,name = common.getATSDR_info(cas)
+    if len(lnk)>0:
+        s+= f'[ATSDR]({lnk}){new_tab} (as {name}) \n\n'
+    else:
+        s+=  '~~ATSDR~~ \n\n'
+
+    lnk,name = common.getNJ_RTK_info(cas)
+    if len(lnk)>0:
+        s+= f'[NJ Right-to-Know datasheet]({lnk}){new_tab} (as {name}) \n\n'
+    else:
+        s+=  '~~NJ Right-to-Know datasheet~~ \n\n'
+
+    lnk,name = common.getIRIS_info(cas)
+    if len(lnk)>0:
+        s+= f'[IRIS]({lnk}){new_tab} (as {name}) \n\n'
+    else:
+        s+=  '~~IRIS~~ \n\n'
+
+    name = common.get_Cmpd_of_Concern_info(cas)
+    if len(name)>0:
+        s+= f'[Compound_of_Concern](https://environmentalhealthproject.shinyapps.io/compounds/){new_tab} (as {name}) \n\n'
+    else:
+        s+=  '~~Compound_of_Concern~~ \n\n'
+
+    lnk,name = common.get_niosh_pocket_info(cas)
+    if len(lnk)>0:
+        s+= f'[NIOSH Pocket Guide]({lnk}){new_tab} (as {name}) \n\n'
+    else:
+        s+=  '~~NIOSH Pocket Guide~~ \n\n'
+
+    res = common.get_cameo_info(cas)
+    if len(res)>0:
+        for row in res:
+            s+= f'[CAMEO]({row[0]}){new_tab} (as {row[1]}) \n\n'
+    else:
+        s+=  '~~CAMEO~~ \n\n'
+        
+               
+ # if len(lists_of_concern)>0:
     #     s+= '??? danger "List of Concerns **Details**"\n'
     #     s+= f'{lists_of_concern}\n\n'
     s += separator

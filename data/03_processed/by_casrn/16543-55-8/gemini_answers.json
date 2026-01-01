@@ -1,0 +1,5 @@
+{
+  "Q1": "N′-Nitrosonornicotine presents known significant hazards (Tier 1) related to carcinogenicity, mutagenicity, and reproductive toxicity (CMR), as well as oral exposure (ORL). Additionally, potential hazards are indicated (Tier 2) for inhalation (IHL) and dermal/eye exposure (SKN). Data are currently deficient (Tier 4) for a confident assessment of environmental (ENV) and organ/systemic (OGN) hazards, while endocrine disruption (EDC) is rated as a low/moderate hazard (Tier 3).",
+  "Q2": "This chemical is listed on California's Proposition 65, which identifies chemicals known to cause cancer, birth defects, or other reproductive harm, requiring public notification of potential exposures.",
+  "Q3": "This chemical is relatively well-characterized, with 1223 scientific literature references, which is above the median for characterized substances. It has a specific molecular formula (C9H11N3O) and is classified as a 'Small Molecule,' indicating it is a well-defined substance and not a UVCB. However, its hazard profile is not entirely complete, as two hazard classes (environmental and organ/systemic hazards) are categorized as data-deficient."
+}

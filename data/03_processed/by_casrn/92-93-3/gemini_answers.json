@@ -1,0 +1,5 @@
+{
+  "Q1": "4-Nitrobiphenyl presents known significant hazards, including carcinogenicity, mutagenicity, or reproductive toxicity (CMR1), and acute/chronic environmental hazards (ENV1) as defined by GHS. It also shows an expanded perspective of endocrine disruption hazards (EDC2) and demonstrated low/moderate oral hazards (ORL3). However, there are significant data deficiencies for inhalation hazards (IHL4), dermal and eye hazards (SKN4), and organ and systemic hazards (OGN4).",
+  "Q2": "This chemical is included on several prominent lists of concern. Notably, it is listed under California's Proposition 65 due to its potential to cause cancer or reproductive harm, and it is also identified as a Hazardous Air Pollutant.",
+  "Q3": "This chemical appears to be relatively well-characterized, with 3991 literature references, significantly above the median for characterized chemicals, and a clearly defined molecular formula (C12H9NO2) as a 'Small Molecule'. Despite this extensive study, specific data gaps remain, as indicated by data-deficient classifications for inhalation, dermal/eye, and organ/systemic hazards in its tier profile."
+}

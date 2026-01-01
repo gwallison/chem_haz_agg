@@ -1,0 +1,5 @@
+{
+  "Q1": "The chemical's hazard profile is largely data deficient, with Carcinogenicity, Mutagenicity, and Reproductive hazards (CMR), Environmental, Inhalation, Oral, Dermal/Eye, and Organ/Systemic hazards all rated as Tier 4. However, Endocrine Disruption hazards are categorized as Tier 3, indicating a demonstrated low to moderate hazard in this specific area.",
+  "Q2": "This chemical is not currently identified on any established \"Lists of Concern.\" This absence of concern may be linked to its largely data-deficient hazard profile, as indicated by most hazard classes being Tier 4, suggesting a lack of comprehensive study.",
+  "Q3": "This chemical is poorly characterized, with only 22 literature references, which is significantly below the typical number for studied compounds. This lack of research is further reflected in its hazard profile, where six out of seven hazard classes are designated as Tier 4, indicating insufficient data for confident assessment, despite having a well-defined molecular formula and substance class."
+}

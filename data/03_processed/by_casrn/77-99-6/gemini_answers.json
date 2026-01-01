@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical exhibits known significant hazards (Tier 1) for carcinogenicity, mutagenicity, and reproductive toxicity (CMR), as well as for acute and chronic environmental impacts (ENV). Inhalation, oral, and endocrine disruption hazards are evaluated as low to moderate (Tier 3). However, information for dermal/eye and organ/systemic hazards is currently insufficient for a confident assessment (Tier 4).",
+  "Q2": "This chemical is not currently identified on prominent \"Lists of Concern.\" However, the presence of data deficiencies in its hazard profile for dermal/eye and organ/systemic effects suggests that this absence may partly reflect a lack of comprehensive study in these specific areas.",
+  "Q3": "This chemical is very well characterized, supported by a substantial number of literature references (30,000) and a precisely defined molecular formula as a 'Small Molecule,' not classified as a UVCB. Despite its extensive study, some data gaps persist in its hazard profile, specifically for dermal/eye and organ/systemic effects."
+}

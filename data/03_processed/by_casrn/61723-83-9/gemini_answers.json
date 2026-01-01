@@ -1,0 +1,5 @@
+{
+  "Q1": "The chemical's hazard profile is largely uncharacterized, with all evaluated hazard classes, including Carcinogenicity, Mutagenicity, Reproductive hazards (CMR), Environmental (ENV), Endocrine Disruption (EDC), Inhalation (IHL), Oral (ORL), Dermal/Eye (SKN), and Organ/Systemic (OGN), being classified as Tier 4. This indicates insufficient data for a confident hazard assessment, meaning its potential risks are unknown.",
+  "Q2": "This chemical is not currently identified on any specific lists of concern. Given that its hazard profile is largely classified as data deficient (Tier 4 across all categories), the absence of concern list entries may reflect a lack of comprehensive study rather than confirmed safety.",
+  "Q3": "This chemical is poorly characterized, indicated by only 3 literature references, its classification as an \"Incompletely Defined\" substance, and a molecular formula suggesting a polymer with variable composition. All evaluated hazard classes are also designated as data deficient (Tier 4), highlighting a significant lack of comprehensive study and a largely unknown hazard profile."
+}

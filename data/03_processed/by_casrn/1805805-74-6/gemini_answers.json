@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical's hazard profile indicates potential concerns for inhalation and dermal/eye exposure based on an expanded perspective beyond official GHS classifications. For other significant hazard categories, including carcinogenicity, mutagenicity, reproductive toxicity (CMR), endocrine disruption (EDC), environmental impact, oral toxicity, and organ/systemic effects, there is currently insufficient data to make a confident assessment.",
+  "Q2": "This chemical is not currently identified on any official \"Lists of Concern.\" This absence, coupled with a majority of its hazard categories being classified as data deficient (Tier 4), suggests that the chemical may not have been extensively studied or formally evaluated by regulatory bodies.",
+  "Q3": "This chemical is poorly characterized, evidenced by zero literature references in the SciFinder database and five out of seven hazard categories being classified as \"data deficient\" (Tier 4). Despite having a defined molecular formula, there is a significant lack of comprehensive safety information available for this substance."
+}

@@ -1,0 +1,5 @@
+{
+  "Q1": "The chemical's hazard profile is largely data deficient across several categories including carcinogenicity, mutagenicity, reproductive hazards (CMR), environmental hazards (ENV), endocrine disruption (EDC), inhalation hazards (IHL), and organ/systemic hazards (OGN). However, it exhibits a demonstrated low to moderate hazard for oral exposure (ORL Tier 3) and has an expanded perspective for dermal and eye hazards (SKN Tier 2), indicating more current data beyond basic GHS classifications.",
+  "Q2": "This chemical is not currently listed on any specified lists of concern. This absence, coupled with significant data deficiencies identified across most hazard categories in its Tier Profile, suggests that the material may be understudied rather than inherently safe.",
+  "Q3": "This chemical is poorly characterized, with its molecular formula being 'Unspecified' and its substance class indicating a 'Manual Registration' and 'Registered Concept.' Further evidence of its limited characterization includes zero literature references in SciFinder and data deficiency for five out of seven hazard classes in its Tier Profile."
+}

@@ -1,0 +1,5 @@
+{
+  "Q1": "The chemical's hazard profile is largely data deficient across all assessed categories. For Carcinogenicity, Mutagenicity, and Reproductive hazards (CMR), Endocrine Disruption (EDC), Environmental, Inhalation, Oral, Dermal/Eye, and Organ/Systemic hazards, the chemical is assigned a Tier 4 rating. This indicates insufficient information to confidently assess potential risks, suggesting a precautionary approach is warranted due to unknown hazards.",
+  "Q2": "This chemical is not currently identified on any specific \"Lists of Concern.\" However, given its consistently data-deficient Tier 4 ratings across all hazard classes, the absence of such listings may reflect a lack of comprehensive study rather than confirmed safety.",
+  "Q3": "While not categorized as an ill-defined substance or a UVCB, the chemical's characterization remains incomplete. With 171 literature references, it falls between the 25th percentile and the median for chemical study, and all major hazard classes are rated as data deficient (Tier 4), indicating a significant lack of comprehensive hazard assessment."
+}

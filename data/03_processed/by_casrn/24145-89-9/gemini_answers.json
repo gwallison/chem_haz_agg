@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical's hazard profile is largely uncharacterized, with most categories, including Carcinogenicity, Mutagenicity, Reproductive, Environmental, Inhalation, Oral, Dermal/Eye, and Organ/Systemic hazards, classified as Data Deficient (Tier 4). However, for endocrine disruption, studies suggest a Demonstrated Low/Moderate Hazard (Tier 3).",
+  "Q2": "This chemical does not appear on any specified \"Lists of Concern.\" Given that its hazard profile is largely classified as \"Data Deficient\" (Tier 4), this absence may be due to a lack of comprehensive study rather than a confirmed lack of hazards.",
+  "Q3": "While the chemical's identity is well-defined, with a specific molecular formula and classification as a \"Small Molecule\" that is not a UVCB, its hazard profile is not extensively characterized. With 106 literature references, scientific investigation is moderate, but 6 out of 7 hazard categories are classified as \"Data Deficient,\" indicating a substantial lack of comprehensive safety data."
+}

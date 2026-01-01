@@ -1,0 +1,5 @@
+{
+  "Q1": "The hazard profile for this chemical is largely data deficient, with six out of seven categories indicating insufficient information for a confident assessment (Tier 4). These categories include carcinogenicity, mutagenicity, reproductive hazards, environmental hazards, endocrine disruption, inhalation, oral, and organ/systemic hazards. Dermal and eye hazards are classified at Tier 2, suggesting some available data points to potential concerns beyond basic official classifications.",
+  "Q2": "This chemical is not currently listed on known lists of concern. However, this absence may be linked to the chemical's extensive data deficiency across most hazard categories, suggesting a lack of comprehensive study rather than confirmed safety.",
+  "Q3": "This chemical appears to be poorly characterized, evidenced by only nine literature references, which is significantly less than typical for most chemicals. Despite not being explicitly classified as a UVCB, its complex copolymer formula and the high number of data-deficient hazard tiers (six out of seven) indicate a substantial lack of detailed study regarding its properties and potential risks."
+}

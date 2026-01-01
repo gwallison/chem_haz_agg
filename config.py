@@ -86,6 +86,12 @@ GHS_EVIDENCE_PATH = os.path.join(PROCESSED_DATA, 'ghs_evidence_log.parquet')
 MASTER_EVIDENCE_LOG_PATH = os.path.join(PROCESSED_DATA,'master_evidence_log.parquet')
 
 IRIS_EXCEL_FILE_PATH = os.path.join(RAW_DATA,'simple_list_alpha.xlsx')
+NJ_RTK_DATASHEET_PATH = os.path.join(INTERMED_DATA,"nj_hazardous_substances.parquet")
+NIOSH_POCKET_PATH = os.path.join(INTERMED_DATA,'niosh_pocket_datasheets.parquet')
+CAMEO_RAW = os.path.join(RAW_DATA,"cameo_links_master_v3.csv")
+CAMEO_PROCESSED = os.path.join(INTERMED_DATA,'cameo_datasheets.parquet')
+OECD_CHEMICALS = os.path.join(INTERMED_DATA,'oecd_chem.parquet')
+OECD_GROUPS = os.path.join(INTERMED_DATA,'oecd_groups.parquet')
 
 ## full list of EPA list membership; fetched manually, then processed
 ## see "List_oflists_section.py"
@@ -133,7 +139,15 @@ CHEMINFO_CATEGORY_MAP = {
     'SKN': ['Dermal','Skin_Irritation','Eye_Irritation','Skin_Sentization'],
     'OGN': []
 }
+# Some materials are not valid in the GHS world, but still have
+#   data; they should not be in our catalog.
+# Other non-valid CASRN, such as are used in Open-FF, should also be ignored.
 
+CAS_TO_IGNORE = ['proprietary','ambiguousID','conflictingID', #Open-FF metalabels
+                 '7732-18-5', # water
+                 '7727-37-9', # N2
+                 '124-38-9',  # CO2
+                 ]
 
 # --- Table Settings ---
 ITABLES_SETTINGS = {

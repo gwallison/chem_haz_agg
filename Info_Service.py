@@ -182,39 +182,16 @@ class Info_Service():
             print('except numref')
             return 'number references not valid'
     
-    # #-------------------  Other data sets --------------------
-    # def _load_tsca(self):
-    #     if self.tsca_df.empty:
-    #         self.tsca_df = pd.read_csv(config.TSCA_RAW_CSV,
-    #                                    usecols=['CASRN','UVCB']) #'FLAG','ACTIVITY'])
-    #         self.tsca_df = self.tsca_df.set_index('CASRN')
-    #     return self.tsca_df
-    
-    # def is_UVCB(self,cas):
-    #     df = self._load_tsca()
-    #     try:
-    #         val = df.loc[cas,'UVCB']
-    #         if val == 'UVCB':
-    #             return True
-    #         return False
-    #     except:
-    #         return False
-
-    # def is_non_TSCA(self,cas):
-    #     df = self._load_tsca()
-    #     df = df.reset_index()
-    #     if cas in df.CASRN.tolist():
-    #         return False
-    #     return True
-    
-    #-----------------------  General List of lists fetch  --------------
     def is_on_list(self,cas,list_name):
         # fetch list
         df = self._load_list_of_lists()
-        print(df.head())
-        df = df.set_index('CASRN')
+        try:
+            val = df[df.CASRN==cas][list_name].tolist()[0]
+            # print(val)
+            return val 
+        except:
+            return False
     
-
 
 
 if __name__ == '__main__':

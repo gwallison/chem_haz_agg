@@ -1,0 +1,5 @@
+{
+  "Q1": "The hazard profile for this chemical reveals that most hazard classes, including Carcinogenicity, Mutagenicity, Reproductive, Endocrine Disruption, Inhalation, Oral, Dermal, Eye, and Organ/Systemic hazards, are currently data deficient (Tier 4). An exception is environmental hazards, which show an 'Expanded Perspective' (Tier 2), indicating some potential concern based on current data beyond standard GHS classifications.",
+  "Q2": "This chemical is not currently listed on any specific 'Lists of Concern.' This absence of formal listings, coupled with its largely data-deficient hazard profile (Tier 4 across many categories), suggests that it may not have been extensively studied or formally assessed for many potential hazards.",
+  "Q3": "This chemical demonstrates moderate characterization, with 322 literature references, falling below the median but above the 25th percentile. While its molecular formula is defined and it is not classified as a TSCA UVCB, indicating some structural understanding, the high number of data-deficient (Tier 4) hazard classifications highlights significant gaps in its comprehensive hazard assessment."
+}

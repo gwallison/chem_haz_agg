@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical exhibits known hazards (Tier 1) for environmental, oral, and dermal/eye exposures based on internationally recognized criteria. However, data are deficient (Tier 4) for assessing carcinogenicity, mutagenicity, reproductive hazards (CMR), endocrine disruption (EDC), inhalation hazards, and organ/systemic hazards, indicating a lack of comprehensive information for these areas.",
+  "Q2": "This chemical appears on the \"Substitute In Now\" list, suggesting it is a candidate for substitution due to identified concerns. The presence of several data-deficient hazard tiers indicates that its overall risk profile may be incomplete.",
+  "Q3": "Despite a moderately high number of literature references (878), the chemical is considered \"Incompletely Defined\" and a polymer, indicating a lack of precise structural characterization. This is further reflected in the significant data deficiencies across multiple hazard classes, suggesting its overall hazard profile is not yet complete or well-understood."
+}

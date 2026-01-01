@@ -1,0 +1,5 @@
+{
+  "Q1": "The chemical 3-Methyl-1-heptene exhibits an expanded perspective (Tier 2) for environmental hazards (ENV) and a demonstrated low/moderate hazard (Tier 3) for endocrine disruption (EDC). However, its hazard profiles for carcinogenicity, mutagenicity, reproductive hazards (CMR), inhalation (IHL), oral (ORL), dermal and eye (SKN), and organ and systemic (OGN) hazards are currently data deficient (Tier 4).",
+  "Q2": "3-Methyl-1-heptene is not explicitly listed on any provided lists of concern. This absence, coupled with the numerous data deficient (Tier 4) hazard classifications across most categories, suggests that the chemical may not have been extensively studied or formally evaluated for regulatory concern.",
+  "Q3": "While 3-Methyl-1-heptene has a specific molecular formula (C8H16) and is classified as a Small Molecule, indicating a well-defined structure, its overall characterization is moderate. With 113 literature references, it is above the 25th percentile but below the median for characterized chemicals, and a majority of its hazard classes are data deficient (Tier 4), suggesting an incomplete understanding of its full hazard profile."
+}

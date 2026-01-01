@@ -1,0 +1,5 @@
+{
+  "Q1": "The chemical's hazard profile indicates a significant lack of data across all assessed hazard classes. Specifically, for carcinogenicity, mutagenicity, reproductive hazards (CMR), environmental hazards (ENV), endocrine disruption (EDC), inhalation (IHL), oral (ORL), dermal and eye (SKN), and organ and systemic hazards (OGN), a Tier 4 rating signifies insufficient information for a confident assessment, meaning its risks are currently unknown.",
+  "Q2": "This chemical does not appear on any specified \"Lists of Concern.\" This absence, combined with its consistently \"Data Deficient\" (Tier 4) hazard ratings across all categories, suggests that a lack of study, rather than confirmed safety, is the likely reason for its absence from such lists.",
+  "Q3": "This chemical is poorly characterized, evident from a complete lack of scientific literature references (0 found) and an \"Unspecified\" molecular formula. Its classification as \"Manual Registration\" and \"Registered Concept,\" alongside \"Data Deficient\" (Tier 4) ratings for all hazard classes, further underscore a profound lack of comprehensive study and defined chemical identity."
+}

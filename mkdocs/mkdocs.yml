@@ -1,18 +1,16 @@
-site_name: Chemical Hazard Catalog
+site_name: Open-FF Chemical Hazard Catalog
 
 theme:
   name: material
   custom_dir: overrides
   features:
     - content.tabs.link
+    - content.tooltips
     - navigation.sections
     - navigation.instant
   icon:
     annotation: material/help-circle
   favicon: img/favicon.ico  # Path is relative to the 'docs' directory
-  analytics:
-    provider: google
-    gtag: G-P9QJLSJ71E
     
 use_directory_urls: false
 
@@ -21,16 +19,26 @@ site_url: https://storage.googleapis.com/open-ff-chem-profiles
 
 nav:
   - 'Chemical Index': 'index.md'
-  - 'About the Project': 'about.md'
+  - 'About this Project': 'about.md'
   - 'Understanding the "Tier" system and graphic': 'tier_explainer.md'
 
-
+extra:
+  analytics:
+    provider: google
+    property: G-P9QJLSJ71E # <-- This is the correct structure for GA4
+    
 markdown_extensions:
+  - abbr
   - tables
+  - pymdownx.snippets:
+      # Automatically include the glossary file on every page
+      auto_append:
+        - includes/abbreviations.md
   - attr_list  # This line is required for custom attributes
   - md_in_html
   - admonition
   - pymdownx.details
+  - pymdownx.tilde
   - pymdownx.emoji:  # <-- Colon is required here
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg

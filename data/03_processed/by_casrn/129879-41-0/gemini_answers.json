@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical's hazard profile indicates an expanded perspective of potential carcinogenicity, mutagenicity, or reproductive hazards (CMR2), and a demonstrated low/moderate hazard for oral exposure (ORL3). However, there are significant data deficiencies (Tier 4) for environmental, endocrine disruption, inhalation, dermal and eye, and organ and systemic hazards, meaning insufficient information exists for confident assessment in these areas.",
+  "Q2": "There are no specific 'Lists of Concern' identified for this chemical. Given that most of its hazard classes are categorized as 'data deficient' (Tier 4), this absence may be due to a lack of comprehensive study rather than confirmed safety.",
+  "Q3": "This chemical is poorly characterized from a hazard perspective, with only 4 scientific literature references, which is significantly below the median for characterized chemicals. While its molecular formula and substance class are well-defined (C26H52NO9P, Small Molecule), a majority of its hazard categories are data deficient (Tier 4), further indicating a lack of comprehensive safety data."
+}

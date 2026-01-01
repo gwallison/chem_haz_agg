@@ -19,6 +19,7 @@ def load_and_prepare_data():
         config.MASTER_CAS_LIST,
         columns=['CASRN', 'orig_source']
     )
+    df = df[~df.CASRN.isin(config.CAS_TO_IGNORE)]
     df = df.rename({'CASRN':'casrn'},axis=1)
     epadf = pd.read_parquet(config.EPA_CHEM_MASTER)
     epadf = epadf.rename({'preferredName':'chem_name'},axis=1)

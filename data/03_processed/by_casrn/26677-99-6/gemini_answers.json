@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical shows a known hazard (Tier 1) for dermal and eye effects (SKN). However, most other hazard categories, including carcinogenicity, mutagenicity, reproductive hazards (CMR), endocrine disruption (EDC), environmental (ENV), inhalation (IHL), oral (ORL), and organ/systemic hazards (OGN), are classified as data deficient (Tier 4), meaning their risks are currently unknown.",
+  "Q2": "This chemical does not appear on any specified 'Lists of Concern'. However, the prevalence of data-deficient (Tier 4) classifications for most hazard categories suggests that this absence may be due to insufficient study of the material rather than a confirmed lack of concern.",
+  "Q3": "This chemical shows a moderate degree of characterization, with 962 literature references, a defined molecular formula, and a standard substance class. Despite these indicators, the high number of data-deficient (Tier 4) hazard classifications highlights that significant gaps remain in understanding its full hazard profile."
+}

@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical exhibits known significant hazards for oral and dermal/eye exposure (Tier 1) based on official GHS classifications. It also presents potential environmental hazards (Tier 2) informed by recent scientific data. However, data is currently insufficient to assess carcinogenicity, mutagenicity, reproductive hazards, endocrine disruption, inhalation, and organ/systemic hazards (Tier 4).",
+  "Q2": "This chemical is not currently identified on any official 'Lists of Concern'. Given that many of its hazard classes are rated as 'data deficient' (Tier 4), this absence may reflect a lack of comprehensive study rather than confirmed safety across all potential hazard areas.",
+  "Q3": "3-Methoxypropylamine appears to be relatively well-studied from a chemical definition and literature perspective, with over 3,000 scientific references and a clearly defined molecular structure. However, its hazard profile remains incomplete, as evidenced by insufficient data for five out of seven hazard classes (Tier 4)."
+}

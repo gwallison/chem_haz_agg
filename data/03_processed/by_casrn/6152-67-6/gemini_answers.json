@@ -1,0 +1,5 @@
+{
+  "Q1": "The chemical's hazard profile indicates potential concerns for inhalation and dermal/eye hazards, categorized as Tier 2, suggesting an expanded perspective beyond standard classifications. While environmental hazards show a demonstrated low/moderate risk (Tier 3), significant data gaps (Tier 4) exist for carcinogenicity, mutagenicity, reproductive hazards, endocrine disruption, oral hazards, and organ/systemic hazards, meaning its risk in these areas is largely unknown.",
+  "Q2": "This chemical is not explicitly listed on any provided lists of concern. However, given the number of data-deficient (Tier 4) classifications in its hazard profile, this absence may reflect a lack of comprehensive study rather than confirmed safety across all potential hazard areas.",
+  "Q3": "This chemical's molecular formula and substance class are well-defined, and it is not classified as a UVCB. With 131 literature references, its research depth is moderate compared to other chemicals, yet a significant portion of its hazard profile remains poorly characterized due to several data deficiencies (Tier 4 classifications)."
+}

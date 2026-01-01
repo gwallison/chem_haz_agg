@@ -1,0 +1,5 @@
+{
+    "Q1": "This chemical's hazard profile indicates significant known hazards (Tier 1) for environmental, inhalation, oral, dermal/eye, and organ/systemic toxicity. Carcinogenicity, mutagenicity, and reproductive hazards are evaluated at Tier 2, reflecting an expanded perspective beyond formal GHS classifications. Notably, endocrine disruption hazards remain data deficient (Tier 4), meaning insufficient information is available for a confident assessment.",
+    "Q2": "This chemical is not identified on any of the provided \"Lists of Concern.\"",
+    "Q3": "This chemical is poorly characterized, indicated by zero literature references in SciFinder, significantly below the typical range for similar substances. Its molecular formula is \"Unspecified,\" and its substance class is categorized as \"Manual Registration\" and \"Registered Concept,\" all suggesting an incompletely defined material. This lack of characterization is further reflected by a data deficiency (Tier 4) in the endocrine disruption hazard class."
+}

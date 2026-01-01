@@ -1,0 +1,5 @@
+{
+  "Q1": "The hazard profile for 3-Methoxy-2-methylphenol indicates known hazards for oral (ORL1) and dermal/eye (SKN1) exposures, based on GHS classifications. Expanded perspectives suggest potential hazards for endocrine disruption (EDC2) and inhalation (IHL2). However, data are deficient for carcinogenicity, mutagenicity, and reproductive hazards (CMR4), acute and chronic environmental hazards (ENV4), and organ and systemic hazards (OGN4).",
+  "Q2": "Currently, 3-Methoxy-2-methylphenol is not listed on prominent 'Lists of Concern'. This absence may be partially attributed to significant data gaps in several hazard categories, indicating a potential lack of comprehensive study for this material.",
+  "Q3": "This chemical has a clearly defined molecular formula (C8H10O2) and is classified as a 'Small Molecule', not a UVCB, suggesting it is structurally well-characterized. With 95 literature references, it is moderately studied, falling above the 25th percentile but below the median for characterized chemicals. However, the presence of three 'Tier 4' data-deficient hazard classes indicates that its overall hazard profile is not yet complete."
+}

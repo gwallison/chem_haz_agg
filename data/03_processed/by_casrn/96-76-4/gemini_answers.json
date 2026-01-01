@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical exhibits known hazards (Tier 1) for acute and chronic environmental, oral, dermal/eye, and organ/systemic toxicity based on internationally recognized criteria. It also shows potential hazards (Tier 2) for endocrine disruption and inhalation from an expanded perspective. However, information regarding carcinogenicity, mutagenicity, and reproductive hazards (CMR) is currently data deficient (Tier 4).",
+  "Q2": "2,4-Di-tert-butylphenol is identified on the TEDX list, which compiles chemicals with scientific evidence suggesting their potential to disrupt the endocrine system.",
+  "Q3": "This chemical is relatively well-characterized, with over 7,200 literature references in the SciFinder database, significantly exceeding the median for such materials. Its molecular formula (C14H22O) and classification as a 'Small Molecule' indicate it is well-defined, and it is not considered a UVCB. While one hazard class (Carcinogenicity, mutagenicity, and reproductive hazards) is data deficient, the majority have established hazard profiles."
+}

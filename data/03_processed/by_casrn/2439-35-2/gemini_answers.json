@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical exhibits a significant hazard profile, with officially recognized Tier 1 dangers for carcinogenicity, mutagenicity, or reproductive effects (CMR), environmental impact (ENV), inhalation (IHL), oral (ORL), dermal and eye exposure (SKN), and organ/systemic effects (OGN). The only data gap identified is for endocrine disruption (EDC), which is classified as Tier 4, indicating insufficient information for a confident assessment.",
+  "Q2": "This chemical is not currently identified on any specific lists of concern. Despite this absence from such lists, its extensive Tier 1 hazard classifications indicate that many of its dangers are officially recognized and well-documented.",
+  "Q3": "This chemical is well-characterized, evidenced by 4,194 literature references, a precisely defined molecular formula (C7H13NO2), and classification as a 'Small Molecule' rather than an ill-defined substance or UVCB. Its hazard profile is largely complete, with only one out of seven hazard categories (endocrine disruption) marked as data deficient."
+}

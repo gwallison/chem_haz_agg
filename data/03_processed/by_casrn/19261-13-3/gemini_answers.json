@@ -1,0 +1,5 @@
+{
+  "Q1": "The chemical's hazard profile indicates that most categories, including Carcinogenicity, Mutagenicity, Reproductive hazards (CMR), environmental (ENV), inhalation (IHL), oral (ORL), dermal and eye (SKN), and organ/systemic (OGN) hazards, are classified as Tier 4, meaning there is insufficient data for a confident assessment. The only exception is Endocrine Disruption (EDC), which is rated Tier 3, suggesting a demonstrated low to moderate hazard based on available studies.",
+  "Q2": "This chemical is not currently identified on any established \"Lists of Concern.\" This absence, coupled with its predominantly data-deficient hazard tier profile, suggests that the material may not have been extensively studied or formally assessed for potential hazards by regulatory agencies.",
+  "Q3": "While the chemical itself is well-defined as a small molecule with a specific molecular formula and is not a UVCB, its hazard profile remains largely incomplete. This is indicated by a relatively low number of scientific literature references (34) and a predominantly data-deficient (Tier 4) classification across most hazard categories."
+}

@@ -1,0 +1,5 @@
+{
+  "Q1": "The chemical \"Quaternary ammonium compounds, bis(hydrogenated tallow alkyl)dimethyl, salts with bentonite\" has a consistently data-deficient hazard profile across all evaluated categories. All seven hazard classes, including Carcinogenicity, Mutagenicity, and Reproductive hazards (CMR), Environmental (ENV), and Endocrine Disruption (EDC), are classified as Tier 4, indicating insufficient information for a confident assessment and warranting a precautionary approach.",
+  "Q2": "This chemical does not currently appear on any specified \"Lists of Concern.\" However, given that all hazard categories are classified as \"data deficient\" (Tier 4) due to a lack of available data, this absence may reflect insufficient study rather than confirmed safety.",
+  "Q3": "This chemical is very poorly characterized, evidenced by only two literature references in SciFinder, well below the median for characterized chemicals. Its molecular formula is \"Unspecified,\" and its classification as \"Manual Registration\" and \"Registered Concept\" further indicates it is an incompletely defined material with an unknown hazard profile."
+}

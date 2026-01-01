@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical exhibits several known hazards, including carcinogenicity, mutagenicity, or reproductive toxicity (CMR), as well as inhalation (IHL) and oral (ORL) hazards, all classified at Tier 1 based on official GHS criteria. Environmental (ENV), dermal/eye (SKN), and organ/systemic (OGN) hazards are classified at Tier 2, indicating potential hazards identified from broader scientific data. Endocrine disruption (EDC) is marked as Tier 4, signifying a lack of sufficient data for a confident assessment.",
+  "Q2": "No specific \"Lists of Concern\" were provided for this chemical. Given its poorly characterized nature and a Tier 4 classification for endocrine disruption, the absence of listed concerns may be partly attributable to a lack of comprehensive study.",
+  "Q3": "This chemical is very poorly characterized, evidenced by zero scientific literature references and an \"Unspecified\" molecular formula. Its classification as \"Manual Registration\" and \"Registered Concept\" further indicates it is not a well-defined substance, contributing to significant data deficiencies, such as the Tier 4 classification for endocrine disruption."
+}
