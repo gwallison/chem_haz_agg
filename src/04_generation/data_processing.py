@@ -38,17 +38,65 @@ def load_and_prepare_data():
     tiers['SKN_level'] = 'SKN' + tiers.SKN_Tier.str[-1]
     tiers['OGN_level'] = 'OGN' + tiers.OGN_Tier.str[-1]
     
+    # prepare frames for search terms
+    lofl = pd.read_parquet(config.LISTS_OF_LISTS_PROCESSED)
+    list_def = pd.read_csv(config.LIST_OF_LISTS_DEFINED)
+    
+    concerns = list_def[list_def.list_type=='concern'].list_name.tolist()
+    benign = list_def[list_def.list_type=='benign'].list_name.tolist()
+    cgroups = list_def[list_def.list_type=='group'].list_name.tolist()
+    
     # Aggregate data by CAS number
     chem_summary = df.groupby('casrn', as_index=False)[['chem_name','orig_source']].first()
     
     chem_summary = chem_summary.merge(tiers, on='casrn', how='left')
-    
+    # print(chem_summary.columns)
     # Create text for the searchable tier column
     def alttxt(row):
         return f'{row.CMR_level} {row.ENV_level} {row.EDC_level} {row.IHL_level} {row.ORL_level} {row.SKN_level} {row.OGN_level}'
     chem_summary['alttxt'] = chem_summary.apply(alttxt, axis=1)
+
+    def concern_txt(row):
+        t = lofl[lofl.CASRN==row.casrn][concerns].copy()
+        # print(t)
+        t['CASRN'] = row.casrn
+        s = ''
+        for col_name, col_data in t.items():
+            if col_name=='CASRN':
+                continue
+            if col_data.any():
+                s+= col_name + ' '
+        return s   
+    chem_summary['concerns'] = chem_summary.apply(concern_txt,axis=1)      
     
-    print("Data loading and preparation complete.")
+    def benign_txt(row):
+        t = lofl[lofl.CASRN==row.casrn][benign].copy()
+        # print(t)
+        t['CASRN'] = row.casrn
+        s = ''
+        for col_name, col_data in t.items():
+            if col_name=='CASRN':
+                continue
+            if col_data.any():
+                s+= col_name + ' '
+        return s   
+    chem_summary['low_hazard'] = chem_summary.apply(benign_txt,axis=1)      
+    
+    def groups_txt(row):
+        t = lofl[lofl.CASRN==row.casrn][cgroups].copy()
+        # print(t)
+        t['CASRN'] = row.casrn
+        s = ''
+        for col_name, col_data in t.items():
+            if col_name=='CASRN':
+                continue
+            if col_data.any():
+                s+= col_name + ' '
+        return s   
+    chem_summary['groups'] = chem_summary.apply(groups_txt,axis=1)    
+    
+    # print("Data loading and preparation complete.")
+    # print(chem_summary.columns)
     return chem_summary
 
 def get_ghs_codes():

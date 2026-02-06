@@ -16,6 +16,10 @@ def get_master_df():
 def save_master_df(df):
     """ saves master and a simple csv for COMPTOX purposes"""
     df.to_parquet(MASTER_FILE_FN)
+    
+def save_temp_csv():
+    """  used to make a copy of the master that is easy to copy and paste from"""
+    df = get_master_df()
     df.to_csv(config.TEMP_CASRN_CSV)
         
 
@@ -204,13 +208,33 @@ def update_DTXSID():
     save_master_df(df)
     
 if __name__ == '__main__':
-
-    update_DTXSID()
-    # new_in_ECMC = r"C:\Users\Gary\Downloads\ECMC_summary_dashboard (1).csv"
+    # add_from_build_nb()
+    save_temp_csv()
+    
+    # update_DTXSID()
+    
+    # ## ---------------- new from ECMC? ---------------
+    # ## in ECMC dashboard, download the "CAS Number"... table
+    # new_in_ECMC = r"C:\Users\Gary\Downloads\ECMC_summary_dashboard (2).csv"
     # tmpdf = pd.read_csv(new_in_ECMC)
     # tmpfn = r"C:\MyDocs\integrated\gwa_local\tmp\ecmc_new_chem.parquet"
     # tmpdf.to_parquet(tmpfn)
     # add_casrns_from_file(tmpfn,
     #                      'ECMC disclosures',
     #                      'CAS Number')
+    # save_temp_csv()
     # print_summary()
+    # ## -------------- ----------------------------------
+    
+    ## ---------------- new from CSV ---------------
+    ## EDIT: new_csv, and name of source, and name of column
+    # new_csv = r"G:\My Drive\Info_home\Projects\Project_Homes\FF Chem Info\SUMMA_canisters_PA_Dave_Brown.csv"
+    # tmpdf = pd.read_csv(new_csv)
+    # tmpfn = r"C:\MyDocs\integrated\gwa_local\tmp\new_chem_for_chemhaz.parquet"
+    # tmpdf.to_parquet(tmpfn)
+    # add_casrns_from_file(tmpfn,
+    #                      'Dave Brown PA SUMMA canister list',
+    #                      'CASRN')
+    # print_summary()
+    # -------------- ----------------------------------
+    

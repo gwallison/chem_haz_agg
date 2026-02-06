@@ -118,7 +118,7 @@ if __name__ == '__main__':
     # tierdf = tierdf.replace('Tier ','')
     # print(tierdf.head())
     for i,row in tierdf.iterrows():
-        print(row)
+        # print(row)
         tierval = min([row.CMR,row.ENV,row.EDC,row.IHL,row.ORL,row.SKN,row.OGN])
         if tierval == 3:
             if max([row.CMR,row.ENV,row.EDC,row.IHL,row.ORL,row.SKN,row.OGN])==4:

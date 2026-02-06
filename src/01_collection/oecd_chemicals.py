@@ -79,6 +79,8 @@ def scrape_oecd_chemicals():
     # Filter out potential header remnants or empty strings
     df = df[df['CASRN'].str.contains(r'\d', na=False)] 
     
+    df.to_parquet(config.OECD_CHEMICALS)
+    
     return df
 
 def scrape_oecd_full_details(detail_url):
@@ -152,11 +154,35 @@ def scrape_oecd_full_details(detail_url):
             # Join lists with a separator for the DataFrame
             results['PDF_File_Names'] = " | ".join(pdf_names) if pdf_names else None
             results['PDF_File_Links'] = " | ".join(pdf_links) if pdf_links else None
+            
         except:
             pass
 
     return pd.DataFrame([results])
 
+def get_all_oecd_chem_details(only_new=True):
+    mcaslist = pd.read_parquet(config.MASTER_CAS_LIST).CASRN.tolist()
+    chem_ref = pd.read_parquet(config.OECD_CHEMICALS)
+    try:
+        oecd_details = pd.read_parquet(config.OECD_CHEMICAL_DETAILS)
+    except:
+        oecd_details = pd.DataFrame({'CASRN':[]})
+    already = []
+    if only_new:
+        already = oecd_details.CASRN.tolist()
+    for cas in mcaslist:
+        print(f'Working on casrn: {cas}')
+        if cas in already:
+            continue  # already done
+        t = chem_ref[chem_ref.CASRN==cas]
+        if t.empty:  # no oecd data for this chemical
+            continue
+        resdf = scrape_oecd_full_details(t.Link.tolist()[0])
+        resdf['CASRN'] = cas
+        oecd_details = pd.concat([oecd_details,resdf])
+        oecd_details.to_parquet(config.OECD_CHEMICAL_DETAILS)
+        time.sleep(5)
+        
 def scrape_oecd_groups():
 
     url = "https://hpvchemicals.oecd.org/ui/ChemGroup.aspx"
@@ -223,26 +249,20 @@ def scrape_oecd_groups():
                             "CASRN": casrn
                         })
 
-        return pd.DataFrame(all_data)
+        out =  pd.DataFrame(all_data)
+        out.to_parquet(config.OECD_GROUPS)
+        return out
 
     finally:
         driver.quit()
+        
+    
 
 if __name__ == "__main__":
     
-    url = "https://hpvchemicals.oecd.org/ui/SIDS_Details.aspx?id=fc1ced8a-ce14-45fa-b003-dfeda5e38075"
-    df_details = scrape_oecd_full_details(url)
-    print(df_details.T)
+    # _ = scrape_oecd_chemicals()
 
-    # out = scrape_oecd_groups()
-    # out.to_parquet(config.OECD_GROUPS)
-
-    # Execute the scraper
-    # df_chemicals = scrape_oecd_chemicals()
+    get_all_oecd_chem_details()
     
-    # if df_chemicals is not None:
-    #     print(f"Successfully extracted {len(df_chemicals)} records.")
-    #     print(df_chemicals.head())
-        
-    #     # Optional: Save to CSV
-    #     df_chemicals.to_parquet(config.OECD_CHEMICALS, index=False)
+    # _ = scrape_oecd_groups()
+    

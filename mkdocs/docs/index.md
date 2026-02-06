@@ -1,4 +1,9 @@
-# Profiles of FracFocus Chemicals 
+---
+hide:
+  - navigation
+---
+
+# Profiles of Fracking and Petrochemical Materials 
 
 
 ??? info "Explanation of table columns"
@@ -21,7 +26,7 @@
     - :blue_square: *Blue* (Level 3 - **Low Hazard**): research has indicated that this material is likely a 
     a low or moderate hazard.
     
-    - :grey_question: *Gray* (Level 4 - **Unknown Hazard**): Many chemicals on this list are poorly studied or poorly defined.
+    - :white_medium_square: *Gray* (Level 4 - **Unknown Hazard**): Many chemicals on this list are poorly studied or poorly defined.
     While we cannot place them in other levels, they should not be considered non-hazardous.
     
 
@@ -31,6 +36,8 @@
     what you see in the table.
     
     - **Find specific materials:**   Type parts of the name or CASRN of the chemical of interest. 
+    
+    - **Find members of specific lists:** Type the name of the list (for example, "CWA311HS" for the Clean Water Act) into the search bar. 
     
     - **Find groups of materials:**  To find all chemicals that are, say, rated "Tier 1" for 
     the "ENV" classification, type "ENV1" into the search bar.  All other chemicals
@@ -49,7 +56,7 @@
 ## Table of reported chemicals
 
 
-<iframe src="./assets/tables/my_table.html" width="100%" height="600px" frameborder="0">
+<iframe src="./assets/tables/my_table.html" width="100%" height="800px" frameborder="0">
   Your browser does not support iframes.
 </iframe>
 

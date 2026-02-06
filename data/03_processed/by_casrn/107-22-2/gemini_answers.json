@@ -1,5 +1,5 @@
 {
-  "Q1": "Glyoxal exhibits known significant hazards (Tier 1) concerning carcinogenicity, mutagenicity, and reproductive health (CMR), as well as inhalation, oral, dermal/eye, and organ/systemic effects. Its acute and chronic environmental hazards are identified through an expanded perspective beyond GHS (Tier 2), while data regarding endocrine disruption hazards are currently insufficient (Tier 4).",
-  "Q2": "Glyoxal is not specifically noted on any provided \"Lists of Concern.\" However, a data gap exists for its endocrine disruption hazards (Tier 4), suggesting an area where further study could provide a more complete hazard profile.",
-  "Q3": "Glyoxal is well-characterized, with 20,000 literature references, far surpassing the typical number for chemicals. It is a well-defined \"Small Molecule\" with a specific molecular formula (C2H2O2) and is not classified as an incompletely defined UVCB, although there is a data deficiency for endocrine disruption hazards."
+  "Q1": "Glyoxal exhibits several known hazards, including carcinogenicity, mutagenicity, reproductive, inhalation, oral, dermal/eye, and organ/systemic toxicities (Tier 1). Environmental hazards have an expanded perspective (Tier 2), while endocrine disruption hazards are currently data deficient (Tier 4).",
+  "Q2": "Glyoxal is not currently featured on the provided lists of concern or lists of low hazard.",
+  "Q3": "Glyoxal appears to be well-characterized, with 20,000 scientific references indicating extensive study within our fracking and petrochemical dataset. Its specific molecular formula (C2H2O2) and classification as a \"Small Molecule\" further confirm its clear definition, though there is a data gap concerning endocrine disruption hazards."
 }

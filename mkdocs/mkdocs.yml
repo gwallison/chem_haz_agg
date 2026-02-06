@@ -53,3 +53,7 @@ extra_javascript:
   - javascripts/tablesort.date.js  
   - javascripts/tooltip.js
   
+extra_css:
+  - stylesheets/extra.css
+  
+  

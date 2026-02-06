@@ -1,25 +1,16 @@
 import time
 import pandas as pd
-from io import StringIO # [NEW] Import StringIO to fix pandas warning
+from io import StringIO
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, StaleElementReferenceException, NoSuchElementException
-
-# Import webdriver_manager and Service
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
 # --- Configuration ---
 URL = 'https://chem.echa.europa.eu/100.000.002/self-classified'
-
-# --- Selectors ---
-
-# Host element for the EU cookie banner
-ECL_COOKIE_HOST_SELECTOR = (By.TAG_NAME, "ecl-cookie-consent-banner")
-# Button *inside* the cookie shadow DOM
-COOKIE_ACCEPT_SELECTOR = (By.CSS_SELECTOR, "button.ecl-button.ecl-button--primary")
 
 # Host element for the main page content
 MAIN_CONTENT_HOST_SELECTOR = (By.TAG_NAME, "cnldas-self-classifications-app")
@@ -28,74 +19,43 @@ MAIN_CONTENT_HOST_SELECTOR = (By.TAG_NAME, "cnldas-self-classifications-app")
 TABS_SELECTOR = (By.CSS_SELECTOR, "div.das-lib-tabs_header-item")
 TABLE_CONTAINER_SELECTOR = (By.CSS_SELECTOR, "section.cnl-classification")
 TABLE_SELECTOR = (By.TAG_NAME, "table")
-
-# [UPDATED] Selector for the "Next" pagination button (must be CSS, not XPATH)
 NEXT_BUTTON_SELECTOR = (By.CSS_SELECTOR, "div.cnl-nav-secondary a:last-of-type")
 
-# ---------------------
-
 def get_shadow_root(driver, host_element):
-    """
-    Returns the shadow root of a given host element.
-    """
     return driver.execute_script('return arguments[0].shadowRoot', host_element)
 
+def js_click(driver, element):
+    """Clicks an element using JavaScript to bypass 'ElementClickIntercepted' errors."""
+    driver.execute_script("arguments[0].click();", element)
+
 def scrape_echa_page(url):
-    """
-    Scrapes all tables from all tabs on the ECHA self-classified page,
-    handling tab pagination.
-    """
     options = webdriver.ChromeOptions()
-    # options.add_argument('--headless')
     options.add_argument('--start-maximized')
     
     print("Setting up WebDriver...")
-    try:
-        service = Service(ChromeDriverManager().install())
-        driver = webdriver.Chrome(service=service, options=options)
-    except Exception as e:
-        print(f"Error setting up WebDriver: {e}")
-        return []
+    service = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=service, options=options)
     
     print(f"Opening URL: {url}")
     driver.get(url)
 
-    # --- Step 1: Handle Cookie Banner (in its own Shadow DOM) ---
-    try:
-        print("Looking for cookie banner host...")
-        cookie_host = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located(ECL_COOKIE_HOST_SELECTOR)
-        )
-        print("Cookie banner host found. Accessing its shadow DOM.")
-        
-        cookie_shadow_root = get_shadow_root(driver, cookie_host)
-        
-        cookie_button = WebDriverWait(driver, 5).until(
-            lambda d: cookie_shadow_root.find_element(COOKIE_ACCEPT_SELECTOR[0], COOKIE_ACCEPT_SELECTOR[1])
-        )
-        
-        print("Clicking 'Accept all cookies'.")
-        cookie_button.click()
-        time.sleep(1) 
-    except TimeoutException:
-        print("No cookie banner found, or it timed out. Continuing...")
-    except Exception as e:
-        print(f"Error handling cookie banner: {e}")
-    # -----------------------------------------------------------
+    # --- MANUAL STEP ---
+    print("\n" + "!"*50)
+    print("ACTION REQUIRED:")
+    print("1. Handle cookie banner manually.")
+    print("2. Navigate to the 'Self-Classified' section if not already there.")
+    print("3. Press ENTER here to start.")
+    print("!"*50 + "\n")
+    input("Press Enter to start scraping...")
 
     scraped_data = []
     
     try:
-        # --- Step 2: Access Main Content's Shadow DOM ---
-        print("Waiting for main page content host...")
-        main_content_host = WebDriverWait(driver, 20).until(
+        main_content_host = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located(MAIN_CONTENT_HOST_SELECTOR)
         )
-        print("Main content host found. Accessing its shadow DOM.")
-        
         main_shadow_root = get_shadow_root(driver, main_content_host)
         
-        # --- [NEW] Step 3: Pagination Loop ---
         page_num = 1
         while True:
             print(f"\n--- Scraping Tab Page {page_num} ---")
@@ -105,124 +65,62 @@ def scrape_echa_page(url):
                     lambda d: main_shadow_root.find_element(TABS_SELECTOR[0], TABS_SELECTOR[1])
                 )
             except TimeoutException:
-                print("No tabs found on this page. Exiting.")
+                print("No tabs found. Ending.")
                 break
                 
             tabs = main_shadow_root.find_elements(TABS_SELECTOR[0], TABS_SELECTOR[1])
             num_tabs = len(tabs)
-            print(f"Found {num_tabs} visible tabs on this page.")
-            
-            if not tabs:
-                print("No tabs found, ending pagination.")
-                break
             first_tab_on_page = tabs[0]
 
-            # 4. Loop through *visible* tabs by index
             for i in range(num_tabs):
-                tab_info = {}
                 try:
+                    # Refresh tab list to avoid stale elements
                     tabs = main_shadow_root.find_elements(TABS_SELECTOR[0], TABS_SELECTOR[1])
                     tab = tabs[i]
 
-                    # 5. Get tab info
-                    try:
-                        tab_info['order'] = tab.find_element(By.CSS_SELECTOR, "div.das-tab-order").text
-                        tab_info['type'] = tab.find_element(By.CSS_SELECTOR, "div.das-registration-type").text
-                        tab_info['percentage'] = tab.find_element(By.CSS_SELECTOR, "div.das-percentage").text
-                        tab_info['status'] = tab.find_element(By.CSS_SELECTOR, "div.das-submission-status").text
-                    except NoSuchElementException:
-                        tab_info['full_text'] = tab.text.replace('\n', ' | ')
+                    # Extract basic info for logs
+                    label = tab.text.split('\n')[0] if '\n' in tab.text else "Unknown Tab"
+                    print(f"Processing Tab {i+1}/{num_tabs}: {label}")
 
-                    print(f"--- Processing Tab {i+1} on Page {page_num}: {tab_info.get('type', tab_info.get('full_text', 'N/A'))} ---")
+                    # USE JS CLICK TO AVOID INTERCEPTION
+                    js_click(driver, tab)
+                    time.sleep(1.5) # Give the table a moment to load
 
-                    # 6. Click the tab
-                    tab.click()
-
-                    # 7. Wait for the table's container
-                    table_container_pane = WebDriverWait(driver, 10).until(
-                        lambda d: main_shadow_root.find_element(TABLE_CONTAINER_SELECTOR[0], TABLE_CONTAINER_SELECTOR[1])
-                    )
-
-                    # 8. Find all tables *within that container*
-                    tables = table_container_pane.find_elements(TABLE_SELECTOR[0], TABLE_SELECTOR[1])
+                    # Locate tables
+                    container = main_shadow_root.find_element(TABLE_CONTAINER_SELECTOR[0], TABLE_CONTAINER_SELECTOR[1])
+                    tables = container.find_elements(TABLE_SELECTOR[0], TABLE_SELECTOR[1])
                     
-                    if not tables:
-                        print("Section found, but no tables within it.")
-                        continue
+                    for idx, table in enumerate(tables):
+                        html = table.get_attribute('outerHTML')
+                        df = pd.read_html(StringIO(html))[0]
+                        scraped_data.append({'page': page_num, 'tab': i, 'table': idx, 'data': df})
+                        print(f"   Scraped table {idx} ({len(df)} rows)")
 
-                    print(f"Found {len(tables)} tables on this tab.")
-
-                    # 9. Scrape each table
-                    for table_index, table in enumerate(tables):
-                        table_html = table.get_attribute('outerHTML')
-                        
-                        # [UPDATED] Use StringIO to fix pandas warning
-                        df_list = pd.read_html(StringIO(table_html))
-                        
-                        if df_list:
-                            df = df_list[0]
-                            scraped_data.append({
-                                'tab_info': tab_info,
-                                'table_index': table_index,
-                                'data': df
-                            })
-                            print(f"Scraped table {table_index} with shape {df.shape}")
-
-                except TimeoutException:
-                    print(f"No 'Classification' table section found on this tab.")
-                    continue
-                except StaleElementReferenceException as e:
-                    print(f"Stale element error on tab {i}. Skipping. Error: {e}")
+                except Exception as e:
+                    print(f"   Error on tab {i}: {str(e)[:100]}")
                     continue
             
-            # --- Step 5: Pagination Logic ---
+            # --- PAGINATION ---
             try:
-                # Find the "Next" button *inside the shadow root*
-                next_button_anchor = main_shadow_root.find_element(NEXT_BUTTON_SELECTOR[0], NEXT_BUTTON_SELECTOR[1])
+                next_btn = main_shadow_root.find_element(NEXT_BUTTON_SELECTOR[0], NEXT_BUTTON_SELECTOR[1])
+                if "cnl-disabled" in next_btn.get_attribute("class"):
+                    print("Reached final page.")
+                    break
                 
-                # Check if it's disabled
-                if "cnl-disabled" in next_button_anchor.get_attribute("class"):
-                    print("\n'Next' button is disabled. End of all tabs.")
-                    break # Exit the while True loop
-                else:
-                    # If it's enabled, click it and wait for the page to update
-                    print("\nClicking 'Next' button...")
-                    next_button_anchor.click()
-                    # Wait for the old first tab to go stale
-                    WebDriverWait(driver, 10).until(
-                        EC.staleness_of(first_tab_on_page)
-                    )
-                    print("New page of tabs loaded.")
-                    page_num += 1
-
+                print("Moving to next page of tabs...")
+                js_click(driver, next_btn) # USE JS CLICK HERE TOO
+                
+                WebDriverWait(driver, 10).until(EC.staleness_of(first_tab_on_page))
+                page_num += 1
+                time.sleep(1)
             except NoSuchElementException:
-                print("\nNo 'Next' button found. Assuming end of all tabs.")
-                break # Exit the while True loop
+                break
 
-    except TimeoutException:
-        print("Error: Main page content (tabs) did not load, even after handling cookies.")
-    
     finally:
-        if 'driver' in locals() and driver:
-            driver.quit()
-        
+        print(f"\nScraping finished. Total records: {len(scraped_data)}")
+        # driver.quit() # Keeping open for your review
+
     return scraped_data
 
-# --- Run the scraper ---
 if __name__ == "__main__":
     all_data = scrape_echa_page(URL)
-    
-    print(f"\n\n--- Total Scraped Data ---")
-    print(f"Successfully scraped data from {len(all_data)} tables.")
-    
-    if all_data:
-        print(f"Scraped a total of {len(all_data)} tables.")
-        # Example: Print info from the first and last table scraped
-        print("\nExample data from the first table:")
-        print(f"Tab Info: {all_data[0]['tab_info']}")
-        print(all_data[0]['data'].head())
-        
-        if len(all_data) > 1:
-            print("\nExample data from the last table:")
-            print(f"Tab Info: {all_data[-1]['tab_info']}")
-            print(all_data[-1]['data'].head())

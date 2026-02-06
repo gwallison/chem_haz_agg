@@ -797,11 +797,11 @@ def add_to_SciFinder_output_set(chemlst=[],outdir=outdir,
         if c.sum()>0:
             print(f'Already in origin: {outdf[c].CASRN.tolist()}')
             concatdf = pd.concat([origdf,outdf[~c]])
-                
+    print(concatdf)            
     concatdf.to_parquet(config.SCIFINDER_OUTPUT_PATH)
             
 if __name__ == '__main__':
-    update_from_master_list(bySource='')
+    # update_from_master_list(bySource='')
     # errorlst = check_all_for_download_errors()
     # missing = verify_all_components_are_local()
     # make_full_SciFinder_output_set()

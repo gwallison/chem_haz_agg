@@ -7,7 +7,11 @@ import master_list_manager as mlm
 
 dummy = pd.DataFrame()
 column_keep = ['dtxsid','casrn','dtxcid','compoundId','genericSubstanceId',
-               'preferredName','qcLevel','henrysLawAtm']
+               'preferredName','qcLevel','qcNotes',
+               'henrysLawAtm','molFormula','multicomponent',
+               "totalAssays","toxcastSelect","activeAssays","percentAssays",
+               'pubmedCount','pubchemCount','sourcesCount','wikipediaArticle','cpdataCount',
+               'hasStructureImage']
 def make_fresh_chem_dictionary():
     cols = {}
     for col in column_keep:
@@ -19,9 +23,7 @@ def update_epa_chem_df():
     """ 
     If no chemlist supplied, update from data/01_raw/comp_tox_casrn_dtxsid_master.csv
 
-    If onlynew=True, just append new data onto existing,
-    otherwise update all on chemlist.
-    
+    If changing code, delete config.EPA_CHEM_MASTER to get fresh copies   
     """
     mastcasdf = mlm.get_master_df()
     try:
@@ -30,11 +32,11 @@ def update_epa_chem_df():
     except:
         epadf = pd.DataFrame(make_fresh_chem_dictionary())
     
-    workdic = make_fresh_chem_dictionary()
     
     allcas = set(mastcasdf.CASRN.unique())
     epacas = set(epadf.casrn.unique())
     workcas = list(allcas.difference(epacas))
+
     print(len(allcas),len(epacas),len(workcas))
     print(f'Number to analyze: {len(workcas)}')
     
@@ -48,22 +50,25 @@ def update_epa_chem_df():
     for dtxsids in inchemdf[inchemdf.DTXSIDs.notna()].DTXSIDs.tolist():
         try:
             for dtxsid in dtxsids:
+                workdic = make_fresh_chem_dictionary()
                 response = eac.get_chemical_details(dtxsid)
                 # print(response)
                 for var in column_keep:
                     workdic[var].append(response[var])
                     print(f'{var}: {response[var]}')
+                new = pd.DataFrame(workdic)
+                epadf = pd.concat([epadf,new])
+                epadf.to_parquet(config.EPA_CHEM_MASTER)
+                
         except:
             print(f'\nBad response for DTXSID: {dtxsid}')
-        time.sleep(2)
+        time.sleep(4)
     print(len(workdic))    
-    new = pd.DataFrame(workdic)
-    out = pd.concat([epadf,new])
-    out.to_parquet(config.EPA_CHEM_MASTER)
     # print(f'\n ****  wrote dataframe to {outfn}')
 
 def main():
-    """  """
+    """ To create fresh set, delete config.EPA_CHEM_MASTER first
+    Getting data from EPA will take many hours"""
     update_epa_chem_df()
     
 if __name__ == "__main__":

@@ -7,6 +7,9 @@ Created on Mon Oct  6 07:20:27 2025
 import os
 import pandas as pd
 import config
+import Info_Service
+
+infosvc = Info_Service.Info_Service()
 
 pic_base_url = "https://storage.googleapis.com/open-ff-browser/images/"
 local_pic_dir = r"C:\MyDocs\integrated\openFF\images\pic_dir"
@@ -101,6 +104,24 @@ def getATSDR_info(cas):
     except:
         return '',''
 
+def getCompTox_ref(cas):
+    # name and link to CompTox page
+    DTX = infosvc.get_epa_chem_value(cas,'dtxsid')
+    name = infosvc.get_epa_pref_name(cas)
+    url = f"https://comptox.epa.gov/dashboard/chemical/details/{DTX}"
+    try:
+        return url, name
+    except:
+        return '',''
+
+def get_ECHA_infocard(cas):
+    t = pd.read_parquet(config.ECHA_SUBSTANCE_LINKS)
+    t = t[t.CASRN==cas]
+    try:
+        return t.substance_link.tolist()[0], t.Name.tolist()[0]
+    except:
+        return '',''
+
 def getNJ_RTK_info(cas):
     # NJ RTK datasheets
     t = pd.read_parquet(config.NJ_RTK_DATASHEET_PATH)
@@ -131,13 +152,36 @@ def get_cameo_info(cas):
     except:
         return []
 
+def get_oecd_chemical_page(cas):
+    # OECD chemical summary page
+    t = pd.read_parquet(config.OECD_CHEMICALS)
+    t = t[t.CASRN==cas]
+    try:
+        return t.Link.tolist()[0], t['Chemical Name'].tolist()[0]
+    except:
+        return '',''
+    
+
 def getIRIS_info(cas):
     # IRIS
-    fn = r"C:/MyDocs/integrated/chem_profiles/data/02_intermediate/iris_data.parquet"
+    fn = config.IRIS_PROCESSED
     t = pd.read_parquet(fn)
     t = t[t.CASRN==cas]
     try:
         return t.URL.tolist()[0], t.chemical_name.tolist()[0]
+    except:
+        return '',''
+
+def getPPRTV_info(cas):
+    # PPRTV
+    fn = config.PPRTV_PROCESSED
+    t = pd.read_parquet(fn)
+    print(len(t))
+    t = t[t.CASRN==cas]
+    print(len(t))
+    print(f'in getPPRTV {cas}')
+    try:
+        return t.URL.tolist()[0], t.Chemical_Name.tolist()[0]
     except:
         return '',''
 

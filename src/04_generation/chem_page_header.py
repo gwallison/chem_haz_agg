@@ -6,7 +6,7 @@ Created on Mon Oct  6 07:12:04 2025
 """
 import common
 import os
-import re
+# import re
 import xml.etree.ElementTree as ET
 import config
 
@@ -87,15 +87,21 @@ def getTierImg_with_tooltips(cas, tooltip_data):
 
     return outtxt
 
-def _chem_def_text(infosrv,name,cas,class1,class2,img,subs_class,complst):
+def _chem_def_text(infosrv,name,cas,class1,class2,img,
+                   subs_class,oecd_grps,complst):
     opttext = f"""
-    * :file_folder: [Chemical Class](https://open-ff.org/fracfocus-chemical-classification-index/) level 1: __{class1}__
-    * :file_folder: Chemical Class level 2: __{class2}__
+    * :file_folder: [E&H Chemical Class](https://open-ff.org/fracfocus-chemical-classification-index/) L1: __{class1}__ ; L2: __{class2}__  
 """
+#    * :file_folder: [E&H Chemical Class](https://open-ff.org/fracfocus-chemical-classification-index/) level 2: __{class2}__
+
 
     if class1=='':
         opttext = ''
-    
+        
+    oecdtext = ''
+    for grp in oecd_grps:
+        oecdtext += f'    * :file_folder: [OECD group](https://hpvchemicals.oecd.org/ui/ChemGroup.aspx): __{grp}__\n'
+        
     comptxt = ''
     for comp in complst:
         compname = infosrv.get_epa_pref_name(comp)
@@ -108,8 +114,9 @@ def _chem_def_text(infosrv,name,cas,class1,class2,img,subs_class,complst):
     ### Chemical Identity
     * :octicons-beaker-16:  {name}
     * :id: CASRN: {cas}
-{opttext}
     * :file_folder: [Substance Class(s) (from SciFinder)](https://open-ff.org/the-substance-classes-of-fracfocus-materials/): __{subs_class}__
+{opttext}
+{oecdtext}
     ### Chemical Structure
     {img}
 {comptxt}
@@ -123,7 +130,9 @@ def _chem_def_text(infosrv,name,cas,class1,class2,img,subs_class,complst):
     
     
 def get_chem_page_header(cas,ing_name,g_dict,
-                         lists_of_concern,lists_of_groups,
+                         lists_of_concern,lists_of_benign,
+                         lists_of_groups,
+                         echasum,
                          infosrv):
     import evidence_generator as eg
     
@@ -196,6 +205,7 @@ def get_chem_page_header(cas,ing_name,g_dict,
     # --- Build the info about data completeness
     # is_unspecified = 'unspec' in infosrv.get_scifinder_molecule(cas).lower()
     subs = infosrv.get_scifinder_substance_class(cas)
+    oecd_grp = infosrv.get_oecd_group(cas)
     # has_generic = 'generic' in subs.lower()
     # has_manual =  'manual'  in subs.lower()
     # has_incomplete = 'incomplete' in subs.lower()
@@ -203,69 +213,49 @@ def get_chem_page_header(cas,ing_name,g_dict,
     # numref = infosrv.get_scifinder_numref(cas)
 
     # --- Start building the header string
+    s+= '#### Looking for a different chemical?  [To Chemical Index](../index.md){ .md-button .md-button--primary } {: style="text-align: right" } \n\n'
+    s += separator
     
-    s+= '??? note "Looking for a different chemical?"\n'
-    s+= '    If you are looking for a different chemical, please use the **Chemical Index** page to filter and search the complete catalog. (Using the "Search" bar above instead of the index may cause the profile|hover function to not work.)\n\n'
-
-    s+= '    [**Go to Chemical Index**](../index.md)\n\n'
+ 
+    s+= '## BASICS\n\n'
     # ---  Chem Definition Admonition
     try:
-        class1 = repodic["eh_Class_L1"]
-        class2 = repodic["eh_Class_L2"]
+        class1 = repodic["eh_Class_L1"].strip()
+        class2 = repodic["eh_Class_L2"].strip()
     except:
         class1 = ''
         class2 = ''
     # subs
     complst = infosrv.get_scifinder_components_as_list(cas)
-    chemdef = _chem_def_text(infosrv,ing_name, cas, class1, class2, chem_img,subs, complst)
+    chemdef = _chem_def_text(infosrv,ing_name, cas, 
+                             class1, class2, chem_img,
+                             subs, oecd_grp, complst)
     # print(chemdef)
     s+= chemdef
     
     
-    # s+= test
-    # # s+= f'??? info "TEST Chemical details of {ing_name}"\n'
-    # s+= '<div class="grid cards" markdown>\n\n'
-    
-    # s+= f'- :octicons-beaker-16:  __{ing_name}__\n'
-    # s+= f'- :id: CASRN: __{cas}__ \n'
-    # try:
-    #     s+= f'- :file_folder: [Chem Class](https://open-ff.org/fracfocus-chemical-classification-index/) level 1:<br> __{repodic["eh_Class_L1"]}__ \n'
-    #     s+= f'- :file_folder: Chem Class level 2:<br> __{repodic["eh_Class_L2"]}__ \n'
-    # except:
-    #     pass
-    # s+= f'- {chem_img}\n'
-
-    # s+= '</div>\n\n'
-
-    # s+= f'??? info "Chemical details of {ing_name}"\n'
-    # # s += '<div class="grid cards 1" markdown> \n\n'
-
-    # s+= f'    -    **{ing_name}**\n\n'
-    # s+= f'         {chem_img}\n\n'
-    # s+= f'         <center>CASRN: **{cas}**</center>\n\n'
-    # s+= f'         <center>Molecular formula: {infosrv.get_scifinder_molecule(cas)}</center>\n\n'
-    # comp = infosrv.get_scifinder_components_as_list(cas)
-    # if len(comp)>0:
-    #     s+= f'    -    **Components of {cas}**:\n\n'
-    #     s+= f'         {comp}\n\n'
-    # # get EH classification
-    # try:
-    #     tmp = ''
-    #     tmp += '    -    [**Chemical Classification**](https://open-ff.org/fracfocus-chemical-classification-index/) (Elsner and Holzer):<br>'
-    #     tmp += f'        {repodic["eh_Class_L1"]}<br>'
-    #     tmp += f'        ({repodic["eh_Class_L2"]})\n\n'
-    #     s += tmp
-    # except:
-    #     s += '    Chemical classification not available\n\n'
-    # # s += '</div>\n\n'  # <-- CLOSE the grid cards div here.
-
-    # # s += f'    Measures of data deficiency:\n\n'
-    # # s += f'    Molecular formula not specified: {is_unspecified}\n\n'
-    # # s += f'    Substance class poorly defined: {has_generic|has_manual|has_incomplete|has_concept}\n\n'
-    # # s += f'    Number of reference (via SciFinder): {numref}\n\n'
  
     tiertxt = getTierImg_with_tooltips(cas, tooltip_data_for_svg)
-    s += '## Hazard Profile \n\n'
+    s+= '## HAZARD EVIDENCE\n\n'
+
+    s += """### Hazard Tiers
+<div class="annotate" markdown>Tier levels(1) Hazard classes(2) </div>
+
+1.    __Open-FF's Compiled Hazard Summary:__\n
+      **Tier 1**: :red_square: Authoritative GHS record of substantial hazard\n
+      **Tier 2**: :orange_square: Expanded perspective\n
+      **Tier 3**: :blue_square: Demonstrated Low Hazard\n
+      **Tier 4**: :white_medium_square: Data Deficient \n
+2.    __Hazard classes:__ \n
+      **CMR**: Carcinogen, Mutagen or Reproductive hazard\n
+      **IHL**: Inhalation hazards\n
+      **ORL**: Oral hazards\n
+      **SKN**: Dermal and eye hazards\n
+      **OGN**: Organ and systemic hazards\n
+      **EDC**: Endocrine disruption hazards (note that GHS does not yet have comprehensive classification of EDCs. Therefore, the strongest hazard level in this system is effectively level 2)\n
+      **ENV**: Environmental hazards\n
+      
+"""
     if 'Q1' in g_dict.keys():
         answer = g_dict['Q1']
     else:
@@ -275,7 +265,7 @@ def get_chem_page_header(cas,ing_name,g_dict,
     s += f'<center>{tiertxt}</center>\n\n'    
 
     s += separator
-    s+= '## Lists of Concern \n'
+    s+= '### Lists of Concern and/or Low Hazard\n'
     if 'Q2' in g_dict.keys():
         answer = g_dict['Q2']
     else:
@@ -283,11 +273,21 @@ def get_chem_page_header(cas,ing_name,g_dict,
     
     s+= f'{answer}\n'
     if len(lists_of_concern)>0:
-        s+= '??? danger "List of Concerns **Details**"\n'
+        s+= '??? danger "List of Concerns: Details"\n'
         s+= f'{lists_of_concern}\n\n'
+        
+    # ECHA summary   
+    if len(echasum[2])>0: # the text is non zero
+        admonition_type, echatitle, echa_text = echasum         
+        s += f'??? {admonition_type} "{echatitle}"\n\n    {echa_text}\n\n'
+        
+    
+    if len(lists_of_benign)>0:
+        s+= '??? info "Evidence of Low Hazard: Details"\n'
+        s+= f'{lists_of_benign}\n\n'
     s += separator
     
-    s+= f'## How complete is the understanding of this chemical? \n'
+    s+= '### How complete is the understanding of this chemical? \n'
     if 'Q3' in g_dict.keys():
         answer = g_dict['Q3']
     else:
@@ -298,115 +298,72 @@ def get_chem_page_header(cas,ing_name,g_dict,
     s += separator
 
  
-    s+= '## Toxicological Profiles and First Responder Data Sheets\n'
+    s+= '### Links to Profiles and Data Sheets\n'
     new_tab = '{: target="_blank" rel="noopener" }'
 
         
     lnk,name = common.getATSDR_info(cas)
     if len(lnk)>0:
-        s+= f'[ATSDR]({lnk}){new_tab} (as {name}) \n\n'
+        s+= f':material-check: [ATSDR]({lnk}){new_tab} (as {name}) \n\n'
     else:
-        s+=  '~~ATSDR~~ \n\n'
+        s+=  ':octicons-x-16: ~~ATSDR~~ \n\n'
+
+    lnk,name = common.getCompTox_ref(cas)
+    if len(lnk)>0:
+        s+= f':material-check: [EPA CompTox]({lnk}){new_tab} (as {name}) \n\n'
+    else:
+        s+=  ':octicons-x-16: ~~EPA CompTox~~ \n\n'
+
+    lnk,name = common.get_ECHA_infocard(cas)
+    if len(lnk)>0:
+        s+= f':material-check: [ECHA InfoCard]({lnk}){new_tab} (as {name}) \n\n'
+    else:
+        s+=  ':octicons-x-16: ~~ECHA InfoCard~~ \n\n'
 
     lnk,name = common.getNJ_RTK_info(cas)
     if len(lnk)>0:
-        s+= f'[NJ Right-to-Know datasheet]({lnk}){new_tab} (as {name}) \n\n'
+        s+= f':material-check: [NJ Right-to-Know datasheet]({lnk}){new_tab} (as {name}) \n\n'
     else:
-        s+=  '~~NJ Right-to-Know datasheet~~ \n\n'
+        s+=  ':octicons-x-16: ~~NJ Right-to-Know datasheet~~ \n\n'
 
     lnk,name = common.getIRIS_info(cas)
     if len(lnk)>0:
-        s+= f'[IRIS]({lnk}){new_tab} (as {name}) \n\n'
+        s+= f':material-check: [IRIS]({lnk}){new_tab} (as {name}) \n\n'
     else:
-        s+=  '~~IRIS~~ \n\n'
+        s+=  ':octicons-x-16: ~~IRIS~~ \n\n'
+
+    lnk,name = common.getPPRTV_info(cas)
+    if len(lnk)>0:
+        s+= f':material-check: [PPRTV]({lnk}){new_tab} (as {name}) \n\n'
+    else:
+        s+=  ':octicons-x-16: ~~PPRTV~~ \n\n'
 
     name = common.get_Cmpd_of_Concern_info(cas)
     if len(name)>0:
-        s+= f'[Compound_of_Concern](https://environmentalhealthproject.shinyapps.io/compounds/){new_tab} (as {name}) \n\n'
+        s+= f':material-check: [EHP Compounds of Concern](https://environmentalhealthproject.shinyapps.io/compounds/){new_tab} (as {name}) \n\n'
     else:
-        s+=  '~~Compound_of_Concern~~ \n\n'
+        s+=  ':octicons-x-16: ~~EHP Compounds of Concern~~ \n\n'
 
     lnk,name = common.get_niosh_pocket_info(cas)
     if len(lnk)>0:
-        s+= f'[NIOSH Pocket Guide]({lnk}){new_tab} (as {name}) \n\n'
+        s+= f':material-check: [NIOSH Pocket Guide]({lnk}){new_tab} (as {name}) \n\n'
     else:
-        s+=  '~~NIOSH Pocket Guide~~ \n\n'
+        s+=  ':octicons-x-16: ~~NIOSH Pocket Guide~~ \n\n'
 
     res = common.get_cameo_info(cas)
     if len(res)>0:
         for row in res:
-            s+= f'[CAMEO]({row[0]}){new_tab} (as {row[1]}) \n\n'
+            s+= f':material-check: [CAMEO]({row[0]}){new_tab} (as {row[1]}) \n\n'
     else:
-        s+=  '~~CAMEO~~ \n\n'
+        s+=  ':octicons-x-16: ~~CAMEO~~ \n\n'
         
+    lnk,name = common.get_oecd_chemical_page(cas)
+    if len(lnk)>0:
+        s+= f':material-check: [OECD reference page]({lnk}){new_tab} (as {name}) \n\n'
+    else:
+        s+=  ':octicons-x-16: ~~OECD reference page~~ \n\n'
                
- # if len(lists_of_concern)>0:
-    #     s+= '??? danger "List of Concerns **Details**"\n'
-    #     s+= f'{lists_of_concern}\n\n'
-    s += separator
-        
-    # s += '<div class="grid cards 1" markdown> \n\n'
-    
-    # s+= f'-   **{ing_name}**\n\n'
-    # s+= f'    {chem_img}\n\n'
-    # s+= f'    <center>CASRN: **{cas}**</center>\n\n'
-    # # get EH classification
-    # try:
-    #     s+= f'    Classification:<br>'
-    #     s+= f'    {repodic["eh_Class_L1"]}<br>'
-    #     s+= f'    ({repodic["eh_Class_L2"]})\n\n'
-    # except:
-    #     pass
-    # # s+= '    ---\n\n'
-    
-    # s+= f'-   **Group Membership**\n\n'
-    # s+= f'{lists_of_groups}\n\n'
-    
-    # s+= f'-   **Lists of concern**\n\n'
-    # s+= f'{lists_of_concern}\n\n'
-
-    # s+= f'-   **SciFinder data**\n\n'
-    # try:
-    #     components = scifi["comp1"]+scifi["comp2"]
-    #     s+= f'    Substance type: {scifi["subs_class"]}\n\n'
-    #     s+= '    ---\n\n'
-    #     if len(components)>0:
-    #         s+= f'    Components: {components}\n\n'
-    #     else:
-    #         s+= '    (no components listed)\n\n'
-    #     if len(scifi["subnotes"])>0:
-    #         s+= f'    {scifi["subnotes"]}\n\n'
-    # except:
-    #     s+= '     (No SciFinder data compiled)\n\n'
-    
-
-    
-    # s+= '-   **Toxicological Profiles**\n\n'
-    # new_tab = '{: target="_blank" rel="noopener" }'
-    
-    # lnk,name = common.getATSDR_info(cas)
-    # if len(lnk)>0:
-    #     s+= f'    :white_check_mark: [ATSDR]({lnk}){new_tab} ({name}) \n\n'
-    # else:
-    #     s+=  '    :x: ATSDR\n\n'
-
-    # lnk,name = common.getIRIS_info(cas)
-    # if len(lnk)>0:
-    #     s+= f'    :white_check_mark: [IRIS]({lnk}){new_tab} ({name}) \n\n'
-    # else:
-    #     s+=  '    :x: IRIS\n\n'
-
-
-    # name = common.get_Cmpd_of_Concern_info(cas)
-    # if len(name)>0:
-    #     s+= f'    :white_check_mark: [Compound_of_Concern](https://environmentalhealthproject.shinyapps.io/compounds/){new_tab} ({name}) \n\n'
-    # else:
-    #     s+=  '    :x: Compound_of_Concern\n\n'
-           
-
-    # s += '</div>\n\n'  # <-- CLOSE the grid cards div here.
-
-    # --- MODIFICATION START ---
+ 
     
 
     return s

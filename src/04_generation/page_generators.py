@@ -29,6 +29,9 @@ opt.buttons=['pageLength', "copyHtml5", "csvHtml5", ]
 opt.maxBytes = 0
 opt.allow_html = True
 
+outsize = None # set to None for full run
+
+
 # --- Helper functions for markdown generation ---
 
 def _add_GHS_icon(hcode):
@@ -66,7 +69,7 @@ def _has_showable_codes(hcodes):
 def _get_echa_text(cas):
     try:
         cas_dir = os.path.join(config.RAW_CAS_DIR, cas)
-        print(cas_dir)
+        # print(cas_dir)
         for fn in os.listdir(cas_dir):
             if "ECHA_Info_hazard_su" in fn:
                 with open(os.path.join(cas_dir, fn), 'r') as f:
@@ -76,8 +79,8 @@ def _get_echa_text(cas):
                 s = s.replace('Warning', '**Warning**')
                 return s
     except FileNotFoundError:
-        return "NO ECHA SUMMARY TEXT"
-    return "NO ECHA SUMMARY TEXT"
+        return ""
+    return ""
 
 def _add_echa_summary(cas):
     # ECHA summary
@@ -215,7 +218,7 @@ def create_summary_table(df):
     
     # Generate HTML
     html = itables.to_html_datatable(
-        table_df[['CASRN', 'chem_name','orig_source', 'tier_analysis', 'tier search']],
+        table_df[:outsize][['CASRN', 'chem_name', 'tier_analysis', 'concerns', 'low_hazard', 'groups', 'tier search','orig_source',]],
         **config.ITABLES_SETTINGS
     )
     
@@ -251,23 +254,33 @@ def create_chemical_pages(chem_df, ghs_df):
     os.makedirs(config.CHEMICAL_MD_OUT_DIR, exist_ok=True)
     
     num_pages = len(chem_df)
-    for i, row in chem_df.iterrows():
+    for i, row in chem_df[:outsize].iterrows():
         cas = row.casrn
         print('.',end='')
         gemini_dict = _get_gemini_text(cas)
-        # make_graphics.create_tier_graphic()
+
+        # hide left pane
+        content = """---
+hide:
+  - navigation
+---
+"""
         
         # Start building markdown content
-        content = f'# {row.chem_name}\n\n'
+        content += f'# {row.casrn}: {row.chem_name}\n\n'
         
         # Show Header
         llcc = lists_of_lists.get_markdown_list_by_type(cas,"concern")
+        llb = lists_of_lists.get_markdown_list_by_type(cas,"benign")
         llg = lists_of_lists.get_markdown_list_by_type(cas,"group")
+        echa_sum = _add_echa_summary(cas)
         content += cph.get_chem_page_header(cas, 
                                             ing_name=row.chem_name,
                                             g_dict = gemini_dict,
                                             lists_of_concern=llcc,
+                                            lists_of_benign=llb,
                                             lists_of_groups=llg,
+                                            echasum = echa_sum,
                                             infosrv=infosrv)
         
 
@@ -278,7 +291,7 @@ def create_chemical_pages(chem_df, ghs_df):
         # content += f'??? {admonition_type} "{echatitle}"\n\n    {echa_text}\n\n'
 
         # Tier summary image
-        content += '## SOURCES\n'
+        content += '## SOURCES\n\n'
         content += '### Source data for tier generation\n'
         # content += f'![tier graphic summary]({config.TIER_IMAGE_URL.format(cas_num=cas)})\n\n'
         

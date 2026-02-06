@@ -48,6 +48,7 @@ CHEMINFO_REF_DIR = os.path.join(RAW_DATA,'ChemInfo_ref_files')
 EPA_CHEM_MASTER = os.path.join(PROCESSED_DATA,'epa_chem_master.parquet')
 CASRN_DTXSID_MAP_OUTPUT = os.path.join(RAW_DATA,'epa_cas_dtxsid_map.parquet')
 TEMP_CASRN_CSV = os.path.join(RAW_DATA,'temp_casrn_list.csv')
+EPA_HAZ_TOXVAL_JSON_DIR = os.path.join(RAW_DATA,'epa_haz_toxval_json')
 
 SCIFINDER_OUTPUT_PATH = os.path.join(PROCESSED_DATA,'scifinder_df.parquet')
 
@@ -86,12 +87,18 @@ GHS_EVIDENCE_PATH = os.path.join(PROCESSED_DATA, 'ghs_evidence_log.parquet')
 MASTER_EVIDENCE_LOG_PATH = os.path.join(PROCESSED_DATA,'master_evidence_log.parquet')
 
 IRIS_EXCEL_FILE_PATH = os.path.join(RAW_DATA,'simple_list_alpha.xlsx')
+IRIS_PROCESSED = os.path.join(INTERMED_DATA,"iris_data.parquet")
+PPRTV_EXCEL_FILE_PATH = os.path.join(RAW_DATA,'pprtv_chemicals.xls')
+PPRTV_PROCESSED = os.path.join(INTERMED_DATA,"pprtv_data.parquet")
 NJ_RTK_DATASHEET_PATH = os.path.join(INTERMED_DATA,"nj_hazardous_substances.parquet")
 NIOSH_POCKET_PATH = os.path.join(INTERMED_DATA,'niosh_pocket_datasheets.parquet')
 CAMEO_RAW = os.path.join(RAW_DATA,"cameo_links_master_v3.csv")
 CAMEO_PROCESSED = os.path.join(INTERMED_DATA,'cameo_datasheets.parquet')
 OECD_CHEMICALS = os.path.join(INTERMED_DATA,'oecd_chem.parquet')
 OECD_GROUPS = os.path.join(INTERMED_DATA,'oecd_groups.parquet')
+OECD_CHEMICAL_DETAILS = os.path.join(INTERMED_DATA,'oecd_chem_details.parquet')
+RAW_GRAS_DETAILS = os.path.join(RAW_DATA, 'raw_gras_chem.csv')
+GRAS_DETAILS = os.path.join(INTERMED_DATA, 'gras_chem.parquet')
 
 ## full list of EPA list membership; fetched manually, then processed
 ## see "List_oflists_section.py"
@@ -153,10 +160,14 @@ CAS_TO_IGNORE = ['proprietary','ambiguousID','conflictingID', #Open-FF metalabel
 ITABLES_SETTINGS = {
     "columnDefs": [
         {"width": "75px", "targets": 0},
-        {"width": "170px", "targets": 1},
-        {"width": "160px", "targets": 2},
-        {"width": "160px", "targets": 3},
-        {"visible": False, "targets": 4}
+        {"width": "200px", "targets": 1},
+        {"width": "60px", "targets": 2},
+        {"width": "80px", "targets": 3},
+        {"width": "80px", "targets": 4},
+        {"width": "80px", "targets": 5},
+        {"visible": False, "targets": 6}, # tier code
+        {"visible": False, "targets": 7}, # data source
+
     ],
     "lengthMenu": [5, 10, 20, 50, 100],
     "pageLength": 5

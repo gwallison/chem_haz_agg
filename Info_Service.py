@@ -10,15 +10,20 @@ sys.path.insert(0,'c:/MyDocs/integrated/') # adjust to your setup
 import pandas as pd
 import chem_profiles.config as config
 import re
+import os
 
 class Info_Service():
     def __init__(self):
         # set up empty frames.  Only loaded if used.
         self.epa_master = pd.DataFrame()
         self.scifinder_info = pd.DataFrame()     
+        self.oecd_groups = pd.DataFrame()
         self.tier_summary = pd.DataFrame()
         self.tsca_df = pd.DataFrame()
+        self.gras_data = pd.DataFrame()
         self.list_of_lists = pd.DataFrame()
+        self.IRIS_data = pd.DataFrame()
+        self.PPRTV_data = pd.DataFrame()
 
         
     # -------------------   TIERS values  -----------------
@@ -97,14 +102,48 @@ class Info_Service():
         if self.list_of_lists.empty:
             self.list_of_lists = pd.read_parquet(config.LISTS_OF_LISTS_PROCESSED)
         return self.list_of_lists
+        
+    def is_on_list(self,cas,list_name):
+        # fetch list
+        df = self._load_list_of_lists()
+        try:
+            val = df[df.CASRN==cas][list_name].tolist()[0]
+            # print(val)
+            return val 
+        except:
+            return False
+
+    # def get_list_of_concerns(self,cas):
+    #     pass
     
-    def get_list_of_concerns(self,cas):
-        pass
+    # def get_benign_lists(self,cas):
+    #     epa_lists = {'SCIL Green Circle': 'SCILGREENCIRCLE',
+    #                  'SCIL Green Half Circle': 'SCILGREENHALFCIRCLE',
+    #                  'SCIL Yellow Triangle': 'SCILYELLOWTRIANGLE',}
+    #     _ = self._load_list_of_lists()
+    #     out = []
+    #     for lst in epa_lists.keys():
+    #         if self.is_on_list(cas,epa_lists[lst]):
+    #             out.append(lst)
+    #     return out
+        
+        
     # --------------------   EPA STUFF --------------------        
     def _load_epa(self):
         if self.epa_master.empty:
             self.epa_master = pd.read_parquet(config.EPA_CHEM_MASTER).set_index('casrn')
         return self.epa_master
+    
+    def get_epa_chem_value(self,cas,val_name):
+        df = self._load_epa()
+        try:
+            return df.loc[cas,val_name]
+        except:
+            return f'no {val_name}'
+
+    def get_epa_chem_column_list(self):
+         df = self._load_epa()
+         return df.columns
 
     def get_epa_pref_name(self,cas):
         df = self._load_epa()
@@ -112,6 +151,58 @@ class Info_Service():
             return df.loc[cas,'preferredName']
         except:
             return 'no epa preferred name'
+
+    def _load_iris_data(self):
+        if self.IRIS_data.empty:
+              self.IRIS_data = pd.read_parquet(config.IRIS_PROCESSED)
+        return self.IRIS_data
+
+    def is_IRIS_chem(self,cas):
+        df = self._load_iris_data()
+        if cas in df.CASRN.tolist():
+            return True
+        return False
+
+    def _load_PPRTV_data(self):
+        if self.PPRTV_data.empty:
+              self.PPRTV_data = pd.read_parquet(config.PPRTV_PROCESSED)
+        return self.PPRTV_data
+
+    def is_PPRTV_chem(self,cas):
+        df = self._load_PPRTV_data()
+        if cas in df.CASRN.tolist():
+            return True
+        return False
+
+    ## temp code to get Number of ToxValDB records
+    def count_json_records(self,filename):
+        """
+        Loads a JSON file and returns the number of top-level records.
+        """
+        import json
+        try:
+            with open(filename, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                
+            if isinstance(data, (list, dict)):
+                return len(data)
+            else:
+                # For edge cases where the JSON is just a single string, number, or null
+                return 1 if data is not None else 0
+                
+        except FileNotFoundError:
+            return 0
+        except json.JSONDecodeError:
+            return "Error: Failed to decode JSON. Check file formatting."
+        except Exception as e:
+            return f"An unexpected error occurred: {e}"
+
+    def get_number_toxval_records(self,cas):
+        import json
+        ddir = r"C:\MyDocs\integrated\chem_profiles\data\01_raw\epa_haz_toxval_json"
+        fn = os.path.join(ddir,f'toxval_{cas}.json')
+        return self.count_json_records(fn)
+        
         
     # --------------------   SciFinder Stuff ---------------
     def _load_scifinder(self):
@@ -126,7 +217,7 @@ class Info_Service():
         df = self._load_scifinder()
         try:
             s = df.loc[cas,'sf_name']
-            print(s)
+            # print(s)
             if remove_scifi_suffix:
                 s = re.sub(pattern, '', s)
             return s
@@ -182,15 +273,34 @@ class Info_Service():
             print('except numref')
             return 'number references not valid'
     
-    def is_on_list(self,cas,list_name):
-        # fetch list
-        df = self._load_list_of_lists()
+    # --------------------   OECD Stuff ---------------
+    def _load_oecd_groups(self):
+        if self.oecd_groups.empty:
+            self.oecd_groups = pd.read_parquet(config.OECD_GROUPS)
+        return self.oecd_groups
+
+    def get_oecd_group(self,cas):
+        df = self._load_oecd_groups()
+        groups = []
         try:
-            val = df[df.CASRN==cas][list_name].tolist()[0]
-            # print(val)
-            return val 
+            t = df[df.CASRN==cas].copy()
+            for i,row in t.iterrows():
+                groups.append(row['Group Name'])
+            return groups
         except:
-            return False
+            return groups
+
+    # --------------------   FDA GRAS Stuff ---------------
+    def _load_gras_data(self):
+        if self.gras_data.empty:
+              self.gras_data = pd.read_parquet(config.GRAS_DETAILS)
+        return self.gras_data
+
+    def is_GRAS_chem(self,cas):
+        df = self._load_gras_data()
+        if cas in df.CASRN.tolist():
+            return True
+        return False
     
 
 
@@ -200,3 +310,4 @@ if __name__ == '__main__':
     print(infosrv.get_tier_list(cas='50-00-0'))
     print(infosrv.is_on_list(cas='50-00-0', list_name='is_UVCB'))
     print(infosrv.get_scifinder_components_as_list(cas='10025-69-1'))
+    print(infosrv.is_GRAS_chem('128-37-0'))

@@ -36,7 +36,8 @@ ex_format = """
         }
 """
 
-def make_prompt(cas,name,tier_lst,lists_of_concern,ifs,uvcb):
+def make_prompt(cas,name,tier_lst,lists_of_concern,
+                lists_of_benign,ifs,uvcb):
     prompt = f"""
     You are a professional chemical documentation specialist. Your task is to generate concise, objective, explanatory, and interpretive 'answer capsule' text to a several questions.  The audience is the general public with a college-level education.
     Your output will be in JSON format, organized by the different questions and their number.
@@ -72,15 +73,25 @@ def make_prompt(cas,name,tier_lst,lists_of_concern,ifs,uvcb):
     Please return your 1-3 sentence summary of the Tier Profile in the JSON output.
     
     
-    # Question: Is this chemical on "Lists of Concern"?
+    # Question: Is this chemical on "Lists of Concern and/or Low Hazard"?
     Question Number: Q2
-    Task: Summarize the Lists of Concern that this chemical is on.  If there are several lists,
-    you may focus on just a few of the more well known lists.  If there are no lists of concern and the tier level classifications
+    Task: Summarize the Lists of Concern and lists of Low Hazard that this chemical is on.  If there are several lists,
+    you may focus on just a few of the more well known lists. 
+    - If there are no lists of concerns, but some lists of low hazard, we
+    may conclude that the material is generally considered of low concern.  
+    - If there are no lists of concern or low hazard and the tier level classifications
     have many level '4' (data deficient), point out that the lack of lists of concern
-    may be due to the due to the lack of study of the material.
+    may be due to the due to the lack of study of the material or that the material itself is not 
+    in common use and therefore not evaluated for the lists.
+    - You may note that materials with membership in both sets of
+    lists probably indicate that Low Hazard refers to very low quantities in highly regulated conditions but still hazardous 
+    outside of those conditions.
     
     The lists of concern for this chemical are:
     {lists_of_concern}.
+    
+    The lists of Low Hazard for this chemical are:
+    {lists_of_benign}
     
     Please return your 1-2 sentence summary of the Tier Profile in the JSON output.
     
@@ -91,22 +102,29 @@ def make_prompt(cas,name,tier_lst,lists_of_concern,ifs,uvcb):
     and therefore it's hazard profile is complete.
     ## Description of the data below:
 
-        "numref" is the number of literature references in the SciFinder database. Across the set of chemicals
-        we characterize, the median numref is 963 references, the 25 percentile is 39 references, the minimum is zero references and the maximum 
-        is 1.3 million references.
+        "numref" is the number of chemical literature references in the SciFinder database. Across the set of chemicals
+        we characterize, 
+        the median numref is 963 references, the 25 percentile is 39 references, the minimum is zero references and the maximum 
+        is 1.3 million references.  Emphasize that the material's number of reference is in relation to our limited data set of fracking and petrochemical materials 
+        of about 3,000 chemicals.
 
         "molecular_formula" is the molecular formula returned by SciFinder.  If it has
-        the term "Unspecified" in it, that the material's formula is at least partially undefined.
+        the term "Unspecified" in it, that material's formula is at least partially undefined.
         
         "substance_class": Several categories in the SciFinder Substance Class indicate that the material is poorly defined. These are: 
             "Generic Registration",
             "Manual Registration",
-            "General Derivative",
-            "Incompletely Defined", and
-            "Registered Concept"
+            "General Derivative",  and
+            "Incompletely Defined",
             Roughly 20% of materials in our database are so defined.
+            
+            The term "Registered Concept" doesn’t represent a specific type of substance with a defined structure. Instead, it acts 
+            as a broader category for concepts, ideas, and groupings of substances. As such, this class indicates that a material 
+            is not well defined.
+            
         
-        "is_a_UVCB" indicates that the material is a TSCA defined "UVCB" and therefore not well characterized.
+        "is_a_UVCB" indicates that the material is a TSCA defined "UVCB" and therefore not well characterized, largely because 
+        of its unknown or variable nature. If the substance is not a UVCB, do not mention it's non-UVCB status.
         
     You may also use the number of Tier 4 classes in the tier levels as a measure of data deficiency.
     
@@ -262,9 +280,13 @@ def make_set(caslist,replace_existing=False):
         ll = lol.List_of_list()
         lists_of_concern = ll.get_markdown_list_by_type(cas=cas,
                                                         ltype='concern')
+        lists_of_benign = ll.get_markdown_list_by_type(cas=cas,
+                                                        ltype='benign')
+        
         uvcb = 'is_on_UVCB' in ll.get_simple_list(cas)
         
-        prompt = make_prompt(cas,name,tier_lst,lists_of_concern,ifs,uvcb)
+        prompt = make_prompt(cas,name,tier_lst,
+                             lists_of_concern,lists_of_benign,ifs,uvcb)
         # print(prompt)
         res = get_data(prompt)
         os.makedirs(os.path.join(config.PROCESSED_CAS_DIR,cas),
@@ -273,6 +295,34 @@ def make_set(caslist,replace_existing=False):
         with open(fn,'w') as f:
             f.write(res)
             
+def clear_all_answers():
+    # CAREFUL THIS MOVES ALL EXISTING gemini files!
+    import shutil
+    outdir = r"C:\MyDocs\integrated\testing\tmp\gemini_answers"
+    t = pd.read_parquet(config.MASTER_CAS_LIST)
+    caslst = t.CASRN.tolist()
+    for cas in caslst:
+        fn = os.path.join(config.PROCESSED_CAS_DIR,cas,'gemini_answers.json')
+        if os.path.exists(fn):
+            shutil.move(fn,os.path.join(outdir,cas))
+        
+            
+def make_test_prompt(cas='50-00-0'):
+    name = ifs.get_epa_pref_name(cas)
+    # print(name)
+    tier_lst = ifs.get_tier_list(cas)
+    ll = lol.List_of_list()
+    lists_of_concern = ll.get_markdown_list_by_type(cas=cas,
+                                                    ltype='concern')
+    lists_of_benign = ll.get_markdown_list_by_type(cas=cas,
+                                                    ltype='benign')
+    
+    uvcb = 'is_on_UVCB' in ll.get_simple_list(cas)
+    
+    prompt = make_prompt(cas,name,tier_lst,
+                         lists_of_concern,lists_of_benign,ifs,uvcb)
+    print(prompt)
+
 
             
 if __name__ == '__main__':
@@ -280,4 +330,6 @@ if __name__ == '__main__':
     caslst = t.CASRN.tolist()
     make_set(caslst, replace_existing=False)    
     
+    # make_test_prompt('77-92-9')    
      
+    #####   CAREFUL!  clear_all_answers()

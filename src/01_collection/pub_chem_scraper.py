@@ -314,6 +314,6 @@ def run_pubchem_update(verbose: bool = False):
 
 # --- Main Execution ---
 if __name__ == "__main__":
-    run_pubchem_update(verbose=True)
+    run_pubchem_update(verbose=False)
     # print(get_cid_with_pubchempy('50-00-0'))
 

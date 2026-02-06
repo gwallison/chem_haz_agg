@@ -1,5 +1,5 @@
 {
-  "Q1": "Sodium azide exhibits significant \"Known Hazards\" (Tier 1) for environmental impact, dermal and eye effects, and organ/systemic toxicity based on GHS classifications. An \"Expanded Perspective\" (Tier 2) reveals additional potential concerns for carcinogenicity, mutagenicity, reproductive toxicity, and inhalation and oral exposure. Information on endocrine disruption is currently \"Data Deficient\" (Tier 4).",
-  "Q2": "Based on the information provided, sodium azide is not explicitly listed on specific \"Lists of Concern.\"",
-  "Q3": "Sodium azide is extensively characterized, with 37,000 scientific literature references, far exceeding the typical chemical. Its precise molecular formula (N3Na) and classification as a \"Small Molecule\" confirm it is a well-defined substance, not an Incompletely Defined (UVCB) material, leading to a largely complete hazard profile across most critical areas."
+  "Q1": "Sodium azide exhibits known and officially recognized hazards for environmental, dermal/eye, and organ/systemic toxicity. An expanded perspective from current data indicates potential hazards for carcinogenicity, mutagenicity, reproductive, inhalation, and oral routes. Information regarding endocrine disruption hazards is currently deficient.",
+  "Q2": "No specific lists of concern or low hazard were provided for sodium azide in the available data.",
+  "Q3": "Sodium azide is extensively characterized, with 37,000 literature references, significantly more than the median in our dataset of fracking and petrochemical materials. Its well-defined molecular formula (N3Na) and classification as a \"Small Molecule\" further confirm its clear identity, with only endocrine disruption hazard data currently noted as deficient."
 }

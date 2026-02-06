@@ -28,8 +28,10 @@ class List_of_list():
                 'link':row.source_link,
                 'source':row.source,
                 'type':row.list_type, #'concern','benign','group'
-                'annon':row.annotation}
+                'annot':row.annotation}
+            # print(f'{row.list_alias} {row.annotation}')
         self.concern_lists = self.list_definitions[self.list_definitions.list_type=='concern'].list_name.tolist()
+        self.benign_lists = self.list_definitions[self.list_definitions.list_type=='benign'].list_name.tolist()
                     
         # self.list_def = self.list_def.set_index('list_name')
         # self.concern_lists = self.list_def.to_dict()
@@ -127,10 +129,12 @@ class List_of_list():
         # check if source_name already used
         sources_names = list(sources.keys())
         for col in cols:
+            # print(col)
             if col in sources_names:
                 print(f'!!! {col} name already used !!!  OVERWRITING!')
             caslst = indf[indf[col]=='Y'].CASRN.tolist()
             sources[col] = caslst
+        print(sources.keys())
         return sources
 
     
@@ -177,6 +181,19 @@ class List_of_list():
 
         return sources
     
+    def _get_GRAS_list(self,sources):
+        print('  -- get GRAS list')
+        t = pd.read_parquet(config.GRAS_DETAILS)
+
+        sources_names = list(sources.keys())
+        for col in ['is_on_GRAS']:
+            if col in sources_names:
+                print(f'!!! {col} name already used !!!  OVERWRITING!')
+
+        sources['is_on_GRAS'] = t.CASRN.tolist()
+
+        return sources
+
     def remake_all_lists(self):
         # create the list of lists from scratch using the RAW file
         # That dataframe has only the master_cas_list items, but
@@ -186,8 +203,11 @@ class List_of_list():
         
         sources = self._get_epa_lists(sources)
         sources = self._get_tsca_lists(sources)
+        print(sources.keys())
         sources = self._get_tedx_lists(sources)
         sources = self._get_prop56_lists(sources)
+        sources = self._get_GRAS_list(sources)
+        
         
         out = self.incorporate_casrn_lists(sources)   
         out.to_parquet(config.LISTS_OF_LISTS_PROCESSED)
@@ -254,21 +274,21 @@ class List_of_list():
     def get_markdown_list_by_type(self,cas,ltype='concern'):
         """returns markdown of the lists of 
         the given chemical is on"""
-
+        new_tab = '{: target="_blank" rel="noopener" }'
         out = ''
         d = self.list_dict
+        # print(d)
 
         t = self.df_of_lists[self.df_of_lists.CASRN==cas]
         cols = self.list_definitions[self.list_definitions.list_type==ltype].list_name.tolist()
-        # ccols = self.concern_lists
+        # print(cols)
 
         t = t[cols+['CASRN']]
         try:
             true_columns = t.columns[t.iloc[0] == True].tolist()
             if len(true_columns)>0:
-                # annot = ''
                 for i,name in enumerate(true_columns):
-                    out+= f'    **{d[name]["alias"]}** {d[name]["annon"]} [Link]({d[name]["link"]}) \n\n'
+                    out+= f'    **{d[name]["alias"]}** {d[name]["annot"].strip()}[- Link to resource]({d[name]["link"]}){new_tab} \n\n'
         except: # empty list
             pass
         return out

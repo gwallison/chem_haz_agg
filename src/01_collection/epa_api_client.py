@@ -289,50 +289,58 @@ def inspect_api_pages(num_pages=3):
         
         offset += len(chemicals_list)
 
+### -------------- ToxVal data harvest and processing --------------
+
+def get_hazard_details(dtxsid: str):
+    """
+    Fetches ToxVal hazard data from the EPA CompTox API for a given DTXSID.
+    Updated to resolve 404 error.
+    """
+    api_key = os.environ.get("EPA_API_KEY")
+    if not api_key:
+        print("Error: EPA_API_KEY environment variable not set.")
+        return None
+    
+    # Updated endpoint path:
+    endpoint = f"/hazard/toxval/search/by-dtxsid/{dtxsid}"
+    
+    headers = {
+        'accept': 'application/json', 
+        'x-api-key': api_key
+    }
+    
+    return _make_request('GET', endpoint, headers=headers)
+
+# def debug_hazard_endpoint(dtxsid):
+#     api_key = os.environ.get("EPA_API_KEY")
+#     # We will test the three most likely variations of the hazard path
+#     variations = [
+#         f"/hazard/toxval/search/by-dtxsid/{dtxsid}",
+#         f"/hazard/toxval/details/search/by-dtxsid/{dtxsid}",
+#         f"/hazard/toxval/summary/search/by-dtxsid/{dtxsid}"
+#     ]
+    
+#     headers = {'accept': 'application/json', 'x-api-key': api_key}
+    
+#     for endpoint in variations:
+#         print(f"\nTesting Endpoint: {endpoint}")
+#         url = f"https://comptox.epa.gov/ctx-api{endpoint}"
+#         try:
+#             response = requests.get(url, headers=headers, timeout=30)
+#             print(f"Status: {response.status_code}")
+#             data = response.json()
+#             if data:
+#                 # If it's a list, show the count; if a dict, show keys
+#                 count = len(data) if isinstance(data, list) else "1 (Dict)"
+#                 print(f"SUCCESS: Found {count} records at this path.")
+#                 return endpoint # Found the winner
+#             else:
+#                 print("Response returned 200 but body was empty [].")
+#         except Exception as e:
+#             print(f"Failed: {str(e)}")
+#     return None
+
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="A command-line interface for the EPA CompTox API.")
-    subparsers = parser.add_subparsers(dest="command", required=True, help="Available commands")
-
-    parser_details = subparsers.add_parser("get-details", help="Fetch chemical details by DTXSID.")
-    parser_details.add_argument("dtxsid", type=str, help="The DTXSID of the chemical (e.g., DTXSID7020182).")
-
-    parser_casrn = subparsers.add_parser("get-dtxsids", help="Fetch DTXSIDs by CASRNs.")
-    parser_casrn.add_argument("casrns", nargs='+', type=str, help="One or more CASRNs (e.g., 50-00-0 75-07-0).")
-    
-    parser_all = subparsers.add_parser("get-all-count", help="Get the total count of all chemicals in the database.")
-    
-    parser_map = subparsers.add_parser("create-map", help="Create a full CASRN to DTXSID map and return its size.")
-    
-    parser_inspect = subparsers.add_parser("inspect-pages", help="Fetch and inspect the maps for a few pages of data.")
-    parser_inspect.add_argument("num_pages", type=int, nargs='?', default=3, help="The number of pages to fetch and inspect (default: 3).")
-
-
-    args = parser.parse_args()
-
-    if args.command == "get-details":
-        data = get_chemical_details(args.dtxsid)
-        if data:
-            print("\n--- API Response ---")
-            print(json.dumps(data, indent=2))
-            
-    elif args.command == "get-dtxsids":
-        data = get_dtxsids_by_casrns(args.casrns)
-        if data:
-            print("\n--- API Response ---")
-            print(json.dumps(data, indent=2))
-            
-    elif args.command == "get-all-count":
-        count = get_all_chemicals_count()
-        if count is not None:
-            print(f"\nTotal number of chemicals found: {count}")
-            
-    elif args.command == "create-map":
-        casrn_map = create_casrn_dtxsid_map()
-        if casrn_map is not None:
-            total_rels = sum(len(ids) for ids in casrn_map.values())
-            print("\n--- Mapping Complete ---")
-            print(f"Successfully created map with {len(casrn_map)} unique CASRNs and {total_rels} total relationships.")
-            
-    elif args.command == "inspect-pages":
-        inspect_api_pages(args.num_pages)
+    # print(get_chemical_details())
+    print(json.dumps(get_hazard_details('DTXSID3020596'), indent=2))
