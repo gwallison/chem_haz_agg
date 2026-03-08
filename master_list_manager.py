@@ -209,7 +209,7 @@ def update_DTXSID():
     
 if __name__ == '__main__':
     # add_from_build_nb()
-    save_temp_csv()
+    # save_temp_csv()
     
     # update_DTXSID()
     
@@ -228,13 +228,15 @@ if __name__ == '__main__':
     
     ## ---------------- new from CSV ---------------
     ## EDIT: new_csv, and name of source, and name of column
-    # new_csv = r"G:\My Drive\Info_home\Projects\Project_Homes\FF Chem Info\SUMMA_canisters_PA_Dave_Brown.csv"
-    # tmpdf = pd.read_csv(new_csv)
-    # tmpfn = r"C:\MyDocs\integrated\gwa_local\tmp\new_chem_for_chemhaz.parquet"
-    # tmpdf.to_parquet(tmpfn)
-    # add_casrns_from_file(tmpfn,
-    #                      'Dave Brown PA SUMMA canister list',
-    #                      'CASRN')
-    # print_summary()
+    new_csv = r"G:\My Drive\Info_home\Projects\Project_Homes\FF Chem Info\SUMMA_canisters_PA_Dave_Brown.csv"
+    new_csv = r"G:\My Drive\Info_home\Projects\Project_Homes\FF Chem Info\Weisner_2025_supplement.csv"
+    tmpdf = pd.read_csv(new_csv)
+    tmpfn = r"C:\MyDocs\integrated\gwa_local\tmp\new_chem_for_chemhaz.parquet"
+    tmpdf.to_parquet(tmpfn)
+    add_casrns_from_file(tmpfn,
+                         'Weisner 2025 appendix chem',
+                         'CASRN')
+    save_temp_csv()
+    print_summary()
     # -------------- ----------------------------------
     

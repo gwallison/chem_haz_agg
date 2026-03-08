@@ -122,6 +122,24 @@ def get_ECHA_infocard(cas):
     except:
         return '',''
 
+def get_ECHA_substance_ID(cas):
+    t = pd.read_parquet(config.ECHA_SUBSTANCE_LINKS)
+    t = t[t.CASRN==cas]
+    try:
+        return t.substance_ID.tolist()[0], t.Name.tolist()[0]
+    except:
+        return '',''
+
+def get_ECHA_data_page(cas):
+    t = pd.read_parquet(config.ECHA_SUBSTANCE_LINKS)
+    t = t[t.CASRN==cas]
+    try:
+        subID = t.substance_ID.tolist()[0]
+        url = f'https://chem.echa.europa.eu/{subID}/overview'
+        return url, t.Name.tolist()[0]
+    except:
+        return '',''
+
 def getNJ_RTK_info(cas):
     # NJ RTK datasheets
     t = pd.read_parquet(config.NJ_RTK_DATASHEET_PATH)
@@ -176,10 +194,10 @@ def getPPRTV_info(cas):
     # PPRTV
     fn = config.PPRTV_PROCESSED
     t = pd.read_parquet(fn)
-    print(len(t))
+    # print(len(t))
     t = t[t.CASRN==cas]
-    print(len(t))
-    print(f'in getPPRTV {cas}')
+    # print(len(t))
+    # print(f'in getPPRTV {cas}')
     try:
         return t.URL.tolist()[0], t.Chemical_Name.tolist()[0]
     except:

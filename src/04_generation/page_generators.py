@@ -77,6 +77,8 @@ def _get_echa_text(cas):
                 s = s.replace('Additionally', '\n\n    **Additionally**')
                 s = s.replace('Danger! ', '**DANGER!** ')
                 s = s.replace('Warning', '**Warning**')
+                # add note about change
+                s += '<br><br>**(Update 3/2026)** In the recent reorganization of their website, ECHA has retired these "summaries".  See detailed data in ECHA CHEM data pages'
                 return s
     except FileNotFoundError:
         return ""

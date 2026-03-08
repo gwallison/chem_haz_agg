@@ -49,6 +49,7 @@ EPA_CHEM_MASTER = os.path.join(PROCESSED_DATA,'epa_chem_master.parquet')
 CASRN_DTXSID_MAP_OUTPUT = os.path.join(RAW_DATA,'epa_cas_dtxsid_map.parquet')
 TEMP_CASRN_CSV = os.path.join(RAW_DATA,'temp_casrn_list.csv')
 EPA_HAZ_TOXVAL_JSON_DIR = os.path.join(RAW_DATA,'epa_haz_toxval_json')
+EPA_CHEM_API_JSON_DIR = os.path.join(RAW_DATA,'epa_chem_api_json')
 
 SCIFINDER_OUTPUT_PATH = os.path.join(PROCESSED_DATA,'scifinder_df.parquet')
 

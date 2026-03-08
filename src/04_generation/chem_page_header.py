@@ -28,6 +28,41 @@ PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..'))
 imgdir = os.path.join(PROJECT_ROOT, 'mkdocs', 'docs', 'images')
 # --- END MODIFICATION ---
 
+def getTierImg(cas):
+    """
+    Reads an SVG file, makes it scalable, and returns the HTML block 
+    for inline display without tooltip data.
+    """
+    imgfn = os.path.join(imgdir, f'{cas}.svg')
+    if not os.path.exists(imgfn):
+        return f"<p>Error: SVG file not found for {cas}</p>"
+
+    try:
+        # Register namespaces to ensure XML integrity
+        ET.register_namespace('', "http://www.w3.org/2000/svg")
+        ET.register_namespace('xlink', "http://www.w3.org/1999/xlink")
+        
+        tree = ET.parse(imgfn)
+        root = tree.getroot()
+
+        # Ensure scalability by removing fixed dimensions
+        if 'width' in root.attrib:
+            del root.attrib['width']
+        if 'height' in root.attrib:
+            del root.attrib['height']
+        
+        root.set('width', '100%')
+
+        # Convert the XML tree back into a string
+        svg_content = ET.tostring(root, encoding='unicode')
+
+    except ET.ParseError as e:
+        return f"<p>Error parsing SVG file for {cas}: {e}</p>"
+
+    # Wrap in the same container used by the tooltip version for visual consistency
+    return f'<div class="svg-container" style="width: 400px;">{svg_content}</div>'
+
+
 def getTierImg_with_tooltips(cas, tooltip_data):
     """
     Reads an SVG file, parses it as XML to robustly inject data-tooltip attributes,
@@ -127,7 +162,79 @@ def _chem_def_text(infosrv,name,cas,class1,class2,img,
 # def _component_desc(caslst):
 #     if caslst == []:
 #         return ""
+
+def _get_tier_icon(tier):
+    idic = {'Tier 1': ' :red_square: ',
+            'Tier 2': ' :orange_square: ',
+            'Tier 3': ' :blue_square: ',
+            'Tier 4': ' :white_medium_square: '}
+    return idic[tier]
     
+def _get_tier_evidence_detail(evid_dict):
+    content = ''
+    for item in evid_dict.keys():
+        tier = evid_dict[item][1]
+        tier_icon = _get_tier_icon(tier)
+        # print(f'\n\nEv item: {item}: contents: {evid_dict[item]}')
+        content += f'=== "{tier_icon} {item}"\n\n'
+        content += f'    <b><h4>{tier_icon} {evid_dict[item][0]} - {tier}</b></h2>\n\n'
+        for ev in evid_dict[item][2]:
+            content += f'    * {ev}\n'            
+    if content != '':
+        # return  '??? "Evidence for Tier levels"\n\n' + content 
+        return  '### Evidence for Tier levels\n(Select category below for more detail)\n\n' + content 
+    return '<center> <b>No Evidence?</b> </center> \n\n'
+
+def _construct_evidence_dict(evid_data,final_tiers,ing_name):
+    # dictionary {haz_code: (title,tier,[ev1,ev2,etc])}
+    hazard_full_names = {
+        'CMR': 'Carcinogenic, Mutagenic, or Reproductive Toxicity',
+        'EDC': 'Endocrine Disruption',
+        'ENV': 'Environmental Hazard',
+        'IHL': 'Inhalation Hazard',
+        'ORL': 'Oral Hazard',
+        'SKN': 'Dermal/Eye Hazard',
+        'OGN': 'Organ Hazard' 
+    }
+    lst = []
+    for item in final_tiers.keys():
+        # tier 3 should be the "lowest" level
+        lst.append(final_tiers[item])
+    if len(lst)>0:
+        ov_tier = min(lst)
+        if (ov_tier=='Tier 3') & ('Tier 4' in lst):
+            ov_tier = 'Tier 4'
+    else:
+        ov_tier = 'Tier 4'
+
+    evid_dict = {'Overall': (f"The overall tier level for {ing_name} is based on its most severe hazard class(es):",
+                             ov_tier,[])} 
+ 
+    # Loop through all possible hazard categories
+    for hazard_key, full_name in hazard_full_names.items():
+        
+        # Get the full name and final tier
+        final_tier = final_tiers.get(hazard_key, "Tier 4") # Default to Tier 4 if not found
+        try:  # for those classes with evidence
+            evid_dict[hazard_key] = (full_name,
+                                     final_tier,
+                                     evid_data[hazard_key])
+        except:
+            evid_dict[hazard_key] = (full_name,
+                                     final_tier,
+                                     ['<b> no data found</b>'])
+    #     # Check if we have evidence for this category
+    #     if 'error' not in evid_data and hazard_key in evid_data:
+    #         # We have evidence. Join it with <br>
+    #         evidence_text = '\n        * '.join(evid_data[hazard_key])
+    #         # Combine title and evidence
+    #         evid_dict[hazard_key] = f"{title_str}<br>{evidence_text}"
+    #     else:
+    #         # No evidence found for this category (e.g., Tier 4)
+    #         # Just show the title and a "no data" message
+    #         evid_dict[hazard_key] = f"{title_str}<br>No indicators found for this tier."
+    # # print(evid_dict)
+    return evid_dict
     
 def get_chem_page_header(cas,ing_name,g_dict,
                          lists_of_concern,lists_of_benign,
@@ -144,63 +251,64 @@ def get_chem_page_header(cas,ing_name,g_dict,
     
     s = ''    
     # 1. Get the evidence data AND the final tier data
-    evidence_data, final_tiers = eg.get_evidence_for_casrn(cas)
+    # evidence_data, final_tiers = eg.get_evidence_for_casrn(cas)
+    evid_data, final_tiers = eg.get_evidence_for_casrn(cas)
     
-    # 2. Define mappings for SVG IDs and full names
-    svg_id_map = {
-        'CMR': 'cmr_box',
-        'EDC': 'edc_box',
-        'ENV': 'env_box',
-        'IHL': 'ihl_box',
-        'ORL': 'orl_box',
-        'SKN': 'skn_box',
-        'OGN': 'ogn_box'
-        # Add 'OGN': 'ogn_box' if you have it
-    }
+    # # 2. Define mappings for SVG IDs and full names
+    # svg_id_map = {
+    #     'CMR': 'cmr_box',
+    #     'EDC': 'edc_box',
+    #     'ENV': 'env_box',
+    #     'IHL': 'ihl_box',
+    #     'ORL': 'orl_box',
+    #     'SKN': 'skn_box',
+    #     'OGN': 'ogn_box'
+    #     # Add 'OGN': 'ogn_box' if you have it
+    # }
     
-    hazard_full_names = {
-        'CMR': 'Carcinogenic, Mutagenic, or Reproductive Toxicity',
-        'EDC': 'Endocrine Disruption',
-        'ENV': 'Environmental Hazard',
-        'IHL': 'Inhalation Hazard',
-        'ORL': 'Oral Hazard',
-        'SKN': 'Dermal/Eye Hazard',
-        'OGN': 'Organ Hazard' 
-    }
+    # hazard_full_names = {
+    #     'CMR': 'Carcinogenic, Mutagenic, or Reproductive Toxicity',
+    #     'EDC': 'Endocrine Disruption',
+    #     'ENV': 'Environmental Hazard',
+    #     'IHL': 'Inhalation Hazard',
+    #     'ORL': 'Oral Hazard',
+    #     'SKN': 'Dermal/Eye Hazard',
+    #     'OGN': 'Organ Hazard' 
+    # }
 
 
 
-    # 3. Build the final tooltip dictionary
-    trunc_ing = '???'
-    if ing_name != None:
-        trunc_ing = ing_name
-    trunc_ing = str(trunc_ing)
-    if len(trunc_ing)>20:
-        trunc_ing = trunc_ing[:20]+'... '
-    tooltip_data_for_svg = {
-        'overall_tier_box': f"The <b>overall tier profile </b> for {ing_name} is based on its most severe hazard class."
-    } 
+    # # 3. Build the final tooltip dictionary
+    # trunc_ing = '???'
+    # if ing_name != None:
+    #     trunc_ing = ing_name
+    # trunc_ing = str(trunc_ing)
+    # if len(trunc_ing)>20:
+    #     trunc_ing = trunc_ing[:20]+'... '
+    # tooltip_data_for_svg = {
+    #     'overall_tier_box': f"The <b>overall tier profile </b> for {ing_name} is based on its most severe hazard class."
+    # } 
 
-    # Loop through all possible hazard categories
-    for hazard_key, element_id in svg_id_map.items():
+    # # Loop through all possible hazard categories
+    # for hazard_key, element_id in svg_id_map.items():
         
-        # Get the full name and final tier
-        full_name = hazard_full_names.get(hazard_key, f"{hazard_key} Hazard")
-        final_tier = final_tiers.get(hazard_key, "Tier 4") # Default to Tier 4 if not found
+    #     # Get the full name and final tier
+    #     full_name = hazard_full_names.get(hazard_key, f"{hazard_key} Hazard")
+    #     final_tier = final_tiers.get(hazard_key, "Tier 4") # Default to Tier 4 if not found
         
-        # Create the title string
-        title_str = f"<b>{full_name}: {final_tier}</b>"
+    #     # Create the title string
+    #     title_str = f"<b>{full_name}: {final_tier}</b>"
 
-        # Check if we have evidence for this category
-        if 'error' not in evidence_data and hazard_key in evidence_data:
-            # We have evidence. Join it with <br>
-            evidence_text = '<br>'.join(evidence_data[hazard_key])
-            # Combine title and evidence
-            tooltip_data_for_svg[element_id] = f"{title_str}<br>{evidence_text}"
-        else:
-            # No evidence found for this category (e.g., Tier 4)
-            # Just show the title and a "no data" message
-            tooltip_data_for_svg[element_id] = f"{title_str}<br>No indicators found for this tier."
+    #     # Check if we have evidence for this category
+    #     if 'error' not in evidence_data and hazard_key in evidence_data:
+    #         # We have evidence. Join it with <br>
+    #         evidence_text = '<br>'.join(evidence_data[hazard_key])
+    #         # Combine title and evidence
+    #         tooltip_data_for_svg[element_id] = f"{title_str}<br>{evidence_text}"
+    #     else:
+    #         # No evidence found for this category (e.g., Tier 4)
+    #         # Just show the title and a "no data" message
+    #         tooltip_data_for_svg[element_id] = f"{title_str}<br>No indicators found for this tier."
             
     # --- Build the info about data completeness
     # is_unspecified = 'unspec' in infosrv.get_scifinder_molecule(cas).lower()
@@ -235,7 +343,10 @@ def get_chem_page_header(cas,ing_name,g_dict,
     
     
  
-    tiertxt = getTierImg_with_tooltips(cas, tooltip_data_for_svg)
+    # tiertxt = getTierImg_with_tooltips(cas, tooltip_data_for_svg)
+    tiertxt = getTierImg(cas)
+
+
     s+= '## HAZARD EVIDENCE\n\n'
 
     s += """### Hazard Tiers
@@ -261,8 +372,12 @@ def get_chem_page_header(cas,ing_name,g_dict,
     else:
         answer = 'no summary generated yet'
     s += f'**Our Tier Summary**: {answer}\n\n'
-    s += '<center> <i>Tap or hover over each box for evidence of Tier designation.</i> </center>\n\n'
+    # s += '<center> <i>Tap or hover over each box for evidence of Tier designation.</i> </center>\n\n'
     s += f'<center>{tiertxt}</center>\n\n'    
+
+    ## tier evidence collapsible
+    evid_dict = _construct_evidence_dict(evid_data, final_tiers,ing_name)
+    s+= _get_tier_evidence_detail(evid_dict)
 
     s += separator
     s+= '### Lists of Concern and/or Low Hazard\n'
@@ -314,11 +429,11 @@ def get_chem_page_header(cas,ing_name,g_dict,
     else:
         s+=  ':octicons-x-16: ~~EPA CompTox~~ \n\n'
 
-    lnk,name = common.get_ECHA_infocard(cas)
+    lnk,name = common.get_ECHA_data_page(cas)
     if len(lnk)>0:
-        s+= f':material-check: [ECHA InfoCard]({lnk}){new_tab} (as {name}) \n\n'
+        s+= f':material-check: [ECHA Chem substance]({lnk}){new_tab} (as {name}) \n\n'
     else:
-        s+=  ':octicons-x-16: ~~ECHA InfoCard~~ \n\n'
+        s+=  ':octicons-x-16: ~~ECHA Chem substance~~ \n\n'
 
     lnk,name = common.getNJ_RTK_info(cas)
     if len(lnk)>0:
