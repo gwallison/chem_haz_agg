@@ -66,7 +66,7 @@ def process_sdf_files(source_dir: str, output_path: str):
 
 def get_summary_from_xls(filepath: str) -> pd.DataFrame:
     """Reads a single ChemInformatics hazard Excel file."""
-    cols = ['DTXSID','CASRN','Name','SMILES','HH: Oral','HH: Inhalation','HH: Dermal','HH: Carcinogenicity',
+    cols = ['DTXSID','CASRN','Name','SMILES','InChIKey','HH: Oral','HH: Inhalation','HH: Dermal','HH: Carcinogenicity',
             'HH: Genotoxicity Mutagenicity','HH: Endocrine Disruption','HH: Reproductive','HH: Developmental',
             'HH: Neurotoxicity: Repeat Exposure','HH: Neurotoxicity: Single Exposure',
             'HH: Systemic Toxicity: Repeat Exposure','HH: Systemic Toxicity: Single Exposure',
@@ -191,4 +191,4 @@ if __name__ == '__main__':
         )
         if summary is not None:
             print("\n--- Hazard Summary Preview ---")
-            print(summary.head(10))
+            print(summary.head(100))

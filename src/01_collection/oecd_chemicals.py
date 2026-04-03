@@ -262,7 +262,7 @@ if __name__ == "__main__":
     
     # _ = scrape_oecd_chemicals()
 
-    get_all_oecd_chem_details()
+    # get_all_oecd_chem_details()
     
-    # _ = scrape_oecd_groups()
+    _ = scrape_oecd_groups()
     

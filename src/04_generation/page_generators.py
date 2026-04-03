@@ -29,7 +29,7 @@ opt.buttons=['pageLength', "copyHtml5", "csvHtml5", ]
 opt.maxBytes = 0
 opt.allow_html = True
 
-outsize = None # set to None for full run
+outsize = 10 # set to None for full run
 
 
 # --- Helper functions for markdown generation ---
@@ -319,6 +319,9 @@ hide:
         content += '#### Affirmative data showing low concern\n\n'
         content += _get_tier_3_text(t, cas, ci_df)
 
+        content += '\n\n--8<-- "includes/source_desc_1.md"\n'
+        
+        
         # Write the file
         out_path = os.path.join(config.CHEMICAL_MD_OUT_DIR, f'{cas}.md')
         with open(out_path, 'w', encoding='utf-8') as f:

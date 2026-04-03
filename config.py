@@ -27,7 +27,7 @@ FF_WORKING_DATA = os.path.join(FF_REPO_DIR,'working_df.parquet')
 
 TSCA_RAW_CSV = os.path.join(RAW_DATA,'TSCAINV_052024.csv')
 TEDX_RAW = os.path.join(RAW_DATA,'TEDX_EDC_trimmed.xls')
-PROP65_RAW = os.path.join(RAW_DATA,'prop65_2025_01_03.csv')
+PROP65_RAW = os.path.join(RAW_DATA,'prop65_2025_12_05.csv')
 
 # --- Input Data Paths ---
 # This assumes your data files are in the 'data/' directory

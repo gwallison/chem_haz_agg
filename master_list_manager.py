@@ -216,6 +216,7 @@ if __name__ == '__main__':
     # ## ---------------- new from ECMC? ---------------
     # ## in ECMC dashboard, download the "CAS Number"... table
     # new_in_ECMC = r"C:\Users\Gary\Downloads\ECMC_summary_dashboard (2).csv"
+    
     # tmpdf = pd.read_csv(new_in_ECMC)
     # tmpfn = r"C:\MyDocs\integrated\gwa_local\tmp\ecmc_new_chem.parquet"
     # tmpdf.to_parquet(tmpfn)
@@ -225,18 +226,29 @@ if __name__ == '__main__':
     # save_temp_csv()
     # print_summary()
     # ## -------------- ----------------------------------
-    
-    ## ---------------- new from CSV ---------------
-    ## EDIT: new_csv, and name of source, and name of column
-    new_csv = r"G:\My Drive\Info_home\Projects\Project_Homes\FF Chem Info\SUMMA_canisters_PA_Dave_Brown.csv"
-    new_csv = r"G:\My Drive\Info_home\Projects\Project_Homes\FF Chem Info\Weisner_2025_supplement.csv"
-    tmpdf = pd.read_csv(new_csv)
-    tmpfn = r"C:\MyDocs\integrated\gwa_local\tmp\new_chem_for_chemhaz.parquet"
-    tmpdf.to_parquet(tmpfn)
-    add_casrns_from_file(tmpfn,
-                         'Weisner 2025 appendix chem',
+
+    ## ---------------- new from parquet ---------------
+    ## EDIT: new_parq, and name of source, and name of column
+    new_parq = r"C:\MyDocs\integrated\chem_profiles\data\02_intermediate\Compounds_of_Concern.parquet"
+    add_casrns_from_file(new_parq,
+                         'Compounds of Concern (EHP)',
                          'CASRN')
     save_temp_csv()
     print_summary()
-    # -------------- ----------------------------------
+    # # -------------- ----------------------------------
+
+    
+    ## ---------------- new from CSV ---------------
+    ## EDIT: new_csv, and name of source, and name of column
+    # new_csv = r"G:\My Drive\Info_home\Projects\Project_Homes\FF Chem Info\SUMMA_canisters_PA_Dave_Brown.csv"
+    # new_csv = r"G:\My Drive\Info_home\Projects\Project_Homes\FF Chem Info\Weisner_2025_supplement.csv"
+    # tmpdf = pd.read_csv(new_csv)
+    # tmpfn = r"C:\MyDocs\integrated\gwa_local\tmp\new_chem_for_chemhaz.parquet"
+    # tmpdf.to_parquet(tmpfn)
+    # add_casrns_from_file(tmpfn,
+    #                      'Weisner 2025 appendix chem',
+    #                      'CASRN')
+    # save_temp_csv()
+    # print_summary()
+    # # -------------- ----------------------------------
     
