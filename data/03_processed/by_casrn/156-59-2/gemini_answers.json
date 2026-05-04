@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical presents known hazards (Tier 1) for carcinogenicity, mutagenicity, reproductive toxicity, environmental impacts, oral exposure, and organ/systemic effects. It also has expanded perspectives (Tier 2) for inhalation and dermal/eye hazards, with a data deficiency (Tier 4) noted for endocrine disruption.",
+  "Q2": "This chemical is listed on significant \"Lists of Concern,\" specifically the EPA's Drinking Water Standard and Acute Exposure Guidelines, indicating recognized potential hazards. It is not found on any lists indicating low hazard.",
+  "Q3": "Despite a lack of available SciFinder information regarding its molecular formula and number of references, this chemical's hazard profile is notably well-characterized by the EPA, having undergone both IRIS and PPRTV evaluations. However, it shows sparse aggregated toxicity data, with zero records in the ToxValDB, and a data deficiency for endocrine disruption."
+}

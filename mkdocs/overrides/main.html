@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 
+
+{#  - this is a jinja comment
+{% block announce %}
+   <strong>New Update:</strong> We just released the 2026 Chemical Hazard Catalog!
+{% endblock %}
+#}
+
 {% block footer %}
   {{ super() }}
 
@@ -10,7 +17,7 @@
         <div style="display: inline-flex; justify-content: center; align-items: center; gap: 15px;">
         
           <a href="https://open-ff.org/" target="_blank" rel="noopener noreferrer">
-            <img src="https://storage.googleapis.com/open-ff-common/openFF_logo.png" alt="Open-FF Logo" style="height: 80px;">
+            <img src="https://storage.googleapis.com/open-ff-common/openFF_logo.png" alt="Open-FF Logo" style="height: 80px; width: 80px;">
           </a>
         
           <span>
@@ -18,7 +25,7 @@
           </span>
         
           <a href="https://www.fractracker.org/" target="_blank" rel="noopener noreferrer">
-            <img src="https://storage.googleapis.com/open-ff-common/2025_FT_logo_icon.png" alt="FracTracker Alliance Logo" style="height: 70px;">
+            <img src="https://storage.googleapis.com/open-ff-common/2025_FT_logo_icon.png" alt="FracTracker Alliance Logo" style="height: 70px; width: 70px;">
           </a>
         
         </div>

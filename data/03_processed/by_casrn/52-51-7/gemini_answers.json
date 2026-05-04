@@ -1,5 +1,5 @@
 {
-  "Q1": "Bronopol's hazard profile includes internationally recognized (GHS Tier 1) concerns for environmental impact, inhalation, oral exposure, dermal and eye contact, and organ/systemic toxicity. Additionally, an expanded perspective (Tier 2) indicates potential hazards related to carcinogenicity, mutagenicity, reproductive toxicity, and endocrine disruption.",
-  "Q2": "Bronopol is recognized as a potential endocrine disruptor, being listed by the Endocrine Disruption Exchange (TEDX list). No lists classifying this chemical as having generally low hazard were identified.",
-  "Q3": "Bronopol is well-characterized, possessing a specific molecular formula (C3H6BrNO4) and being classified as a \"Small Molecule.\" It is extensively documented with 3299 scientific literature references, which is significantly above the median for the evaluated fracking and petrochemical chemicals dataset, and its hazard profile does not show any data-deficient (Tier 4) classifications."
+  "Q1": "This chemical exhibits a range of known hazards (Tier 1) based on GHS classifications for environmental, inhalation, oral, dermal/eye, and organ/systemic effects. Additionally, it shows expanded perspectives (Tier 2) for carcinogenicity, mutagenicity, or reproductive hazards and endocrine disruption.",
+  "Q2": "Bronopol is listed on the TEDX list, indicating its potential as an endocrine disruptor. There are no recognized lists classifying it as a low hazard chemical.",
+  "Q3": "Bronopol is well-characterized structurally and is extensively studied, with over 3,000 scientific literature references and a good number of toxicity records. However, it has not undergone the most rigorous EPA hazard assessments, such as those by IRIS or PPRTV."
 }

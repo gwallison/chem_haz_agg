@@ -28,6 +28,8 @@ PROJECT_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..'))
 imgdir = os.path.join(PROJECT_ROOT, 'mkdocs', 'docs', 'images')
 # --- END MODIFICATION ---
 
+
+
 def getTierImg(cas):
     """
     Reads an SVG file, makes it scalable, and returns the HTML block 
@@ -321,11 +323,13 @@ def get_chem_page_header(cas,ing_name,g_dict,
     # numref = infosrv.get_scifinder_numref(cas)
 
     # --- Start building the header string
-    s+= '#### Looking for a different chemical?  [To Chemical Index](../index.md){ .md-button .md-button--primary } {: style="text-align: right" } \n\n'
-    s += separator
+
+    # s+= '#### Looking for a different chemical?  [To Chemical Index](../index.md){ .md-button .md-button--primary } {: style="text-align: right" } \n\n'
+    # s += separator
     
+    # s += getProlog()
  
-    s+= '## BASICS\n\n'
+    # s+= '## BASICS\n\n'
     # ---  Chem Definition Admonition
     try:
         class1 = repodic["eh_Class_L1"].strip()
@@ -371,6 +375,7 @@ def get_chem_page_header(cas,ing_name,g_dict,
         answer = g_dict['Q1']
     else:
         answer = 'no summary generated yet'
+
     s += f'**Our Tier Summary**: {answer}\n\n'
     # s += '<center> <i>Tap or hover over each box for evidence of Tier designation.</i> </center>\n\n'
     s += f'<center>{tiertxt}</center>\n\n'    
@@ -391,10 +396,10 @@ def get_chem_page_header(cas,ing_name,g_dict,
         s+= '??? danger "List of Concerns: Details"\n'
         s+= f'{lists_of_concern}\n\n'
         
-    # ECHA summary   
-    if len(echasum[2])>0: # the text is non zero
-        admonition_type, echatitle, echa_text = echasum         
-        s += f'??? {admonition_type} "{echatitle}"\n\n    {echa_text}\n\n'
+    # # ECHA summary - NOW OBSOLETE
+    # if len(echasum[2])>0: # the text is non zero
+    #     admonition_type, echatitle, echa_text = echasum         
+    #     s += f'??? {admonition_type} "{echatitle}"\n\n    {echa_text}\n\n'
         
     
     if len(lists_of_benign)>0:
@@ -403,6 +408,7 @@ def get_chem_page_header(cas,ing_name,g_dict,
     s += separator
     
     s+= '### How complete is the understanding of this chemical? \n'
+
     if 'Q3' in g_dict.keys():
         answer = g_dict['Q3']
     else:
@@ -414,8 +420,9 @@ def get_chem_page_header(cas,ing_name,g_dict,
 
  
     s+= '### Links to Profiles and Data Sheets\n'
-    new_tab = '{: target="_blank" rel="noopener" }'
+    s+= """These links, when active, connect you directly to original resources about this chemical.  If the resource is crossed out, that resource does not assess this chemical\n\n"""
 
+    new_tab = '{: target="_blank" rel="noopener" }'
         
     lnk,name = common.getATSDR_info(cas)
     if len(lnk)>0:

@@ -29,8 +29,61 @@ opt.buttons=['pageLength', "copyHtml5", "csvHtml5", ]
 opt.maxBytes = 0
 opt.allow_html = True
 
-outsize = 10 # set to None for full run
+outsize = None # set to None for full run
 
+
+def getProlog():
+    s = """
+### FAQ
+??? info "Click to read..."
+    __What is the Chemical Hazard Information Aggregator?__
+    
+    The Chemical Hazard Information Aggregator is a specialized data tool designed to centralize and harmonize complex toxicological information. By pulling from diverse sources—such as the EPA, ECHA, and international GHS databases—it provides a single, searchable interface for understanding the intrinsic properties of chemicals used in industrial processes. This platform eliminates the need to manually cross-reference multiple disparate registries, allowing users to quickly identify high-priority chemicals like PFAS or those with specific GHS classifications.
+    
+    __How does "hazard" differ from "risk"?__
+    
+    Understanding the distinction between these two terms is fundamental to chemical safety and regulatory analysis:
+
+    * **Hazard** refers to the inherent property of a substance that makes it capable of causing harm. For example, a chemical may be "hazardous" because it is toxic to aquatic life, flammable, or carcinogenic. This status does not change based on how the chemical is used.
+
+    * **Risk** is the likelihood that harm will occur from **exposure** to that hazard. Risk is a function of both the hazard and the exposure (Risk = Hazard × Exposure).
+
+    In short: A shark in the ocean is a hazard. If you stay on the beach, the risk is low. If you go for a swim, the risk increases, even though the shark’s "hazard" level remains the same.  __This website can only provide information about Hazard.__
+    
+    __Where does the data on this site come from?__
+    
+    The aggregator compiles data from authoritative national and international bodies. This includes GHS (Globally Harmonized System) classifications, chemical inventories from the European Chemicals Agency (ECHA), and specific hazard lists from the U.S. Environmental Protection Agency (EPA). We prioritize datasets that offer peer-reviewed or regulatory-cleared information.
+    
+    __What is the Hazard Tier Summary?__
+    
+    The Hazard Tier Summary is a classification system used to simplify complex toxicological data into four distinct categories. This allows users to quickly assess the level of known or suspected harm associated with a specific chemical based on the strength and type of available evidence.  The Tier Graphic provides a summary of several hazard classes at a glance.
+
+    * __Tier 1: High Certainty Hazards__ This tier includes chemicals with well-documented, severe hazards. These classifications are based on the official Globally Harmonized System (GHS) and represent recognized dangers such as carcinogenicity, mutagenicity, reproductive toxicity, or high acute toxicity.
+
+    * __Tier 2: Potential or Emerging Hazards__ This tier provides an expanded perspective by including chemicals that may not yet have a formal GHS "Category 1" status but show significant evidence of concern. This includes data from peer-reviewed scientific literature, predictive models (such as QSAR), and regulatory watchlists from agencies that go beyond standard GHS conclusions.
+
+    * __Tier 3: Low to Moderate Hazard__ Tier 3 is assigned to chemicals that have been robustly studied and demonstrated to have a low or moderate hazard profile. These substances generally do not meet the criteria for the more severe classifications found in Tiers 1 and 2.
+
+    * __Tier 4: Data Deficient__ This tier indicates that there is insufficient information to make a confident hazard assessment. It is important to note that a Tier 4 designation does not imply that a chemical is "safe"; rather, it highlights a lack of public testing or reporting, suggesting a precautionary approach is necessary.
+    
+    __How does the Aggregator address the lack of information?__
+    
+    For many chemicals on the list, the lack of available information is a critical issue. While it is often difficult to assess the true safety of a substance when data is sparse, the Aggregator is specifically designed to address this "information gap" in the following ways:
+
+    * Multi-Source Synthesis: Rather than relying on a single regulatory body, the Aggregator looks across dozens of sources—including the EPA, ECHA, and international GHS databases—to compile many existing fragments of evidence. If a chemical is missing from one database, the tool seeks it out in others to paint a more complete picture.
+
+    * The "Data Deficient" Designation (Tier 4): One of the most important functions of the Aggregator is to explicitly label chemicals where information is missing. By categorizing these as Tier 4, the tool ensures that "no data" is never mistaken for "no hazard." This transparency allows researchers to identify which substances require urgent testing.
+
+    * Harmonizing Discrepancies: Sometimes one agency may classify a chemical while another does not. The Aggregator highlights these discrepancies, showing users exactly what is known by some and ignored by others.
+
+    * Visualizing the Unknown: By centralizing what is available and what is not, the Aggregator provides a "landscape" of chemical knowledge. This helps users understand the weight of evidence (or the lack thereof) behind the materials they are researching, making it easier to apply the precautionary principle where data is thin.
+    
+    
+    
+    
+    
+"""
+    return s
 
 # --- Helper functions for markdown generation ---
 
@@ -85,7 +138,7 @@ def _get_echa_text(cas):
     return ""
 
 def _add_echa_summary(cas):
-    # ECHA summary
+    # ECHA summary - OBSOLETE: ECHA stop posting it
     echa_text = _get_echa_text(cas)
     echatitle = 'ECHA summary'
     first_word = echa_text.split(' ')[0]
@@ -240,6 +293,7 @@ def create_summary_table(df):
         f.write(html + custom_css)
     print(f"HTML summary table saved to {config.HTML_TABLE_OUT}")
 
+separator = '\n--- \n'
 
 def create_chemical_pages(chem_df, ghs_df):
     """Generates a markdown page for each chemical."""
@@ -267,7 +321,11 @@ hide:
   - navigation
 ---
 """
-        
+        content += getProlog()
+
+        content += '#### Looking for a different chemical?  [To Chemical Index](../index.md){ .md-button .md-button--primary } {: style="text-align: right" } \n\n'
+        content += separator
+
         # Start building markdown content
         content += f'# {row.casrn}: {row.chem_name}\n\n'
         
@@ -275,7 +333,8 @@ hide:
         llcc = lists_of_lists.get_markdown_list_by_type(cas,"concern")
         llb = lists_of_lists.get_markdown_list_by_type(cas,"benign")
         llg = lists_of_lists.get_markdown_list_by_type(cas,"group")
-        echa_sum = _add_echa_summary(cas)
+        # echa_sum = _add_echa_summary(cas)
+        echa_sum = ""  # now obsolete
         content += cph.get_chem_page_header(cas, 
                                             ing_name=row.chem_name,
                                             g_dict = gemini_dict,
@@ -294,7 +353,7 @@ hide:
 
         # Tier summary image
         content += '## SOURCES\n\n'
-        content += '### Source data for tier generation\n'
+        content += '### Chemical-specific data for tier generation\n'
         # content += f'![tier graphic summary]({config.TIER_IMAGE_URL.format(cas_num=cas)})\n\n'
         
         # Tier 1 & 2 Details
@@ -319,7 +378,9 @@ hide:
         content += '#### Affirmative data showing low concern\n\n'
         content += _get_tier_3_text(t, cas, ci_df)
 
+        content += '## GENERAL REFERENCES\n\n'
         content += '\n\n--8<-- "includes/source_desc_1.md"\n'
+        content += '\n\n--8<-- "includes/ghs_hazard_tiers_extended.md"\n'
         
         
         # Write the file

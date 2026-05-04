@@ -1,5 +1,5 @@
 {
-  "Q1": "Tert-Butyl hydroperoxide exhibits a comprehensive hazard profile, with known (Tier 1) risks identified across carcinogenicity, mutagenicity, reproductive hazards (CMR), environmental hazards, inhalation hazards, oral hazards, dermal and eye hazards, and organ/systemic hazards. The only area lacking sufficient data for confident assessment is endocrine disruption (Tier 4).",
-  "Q2": "Based on the provided information, tert-Butyl hydroperoxide is not explicitly listed on any 'Lists of Concern' or 'Lists of Low Hazard'.",
-  "Q3": "This chemical is extensively characterized, with 23,000 literature references, significantly surpassing the median for similar materials within our dataset. Its specific molecular formula (C4H10O2) and classification as a 'Small Molecule' further confirm its well-defined nature, although data for endocrine disruption remains insufficient."
+    "Q1": "The Tier Profile for tert-Butyl hydroperoxide indicates known, significant hazards across most categories, including carcinogenicity, mutagenicity, reproductive, environmental, inhalation, oral, dermal, eye, organ, and systemic effects (all Tier 1). However, data regarding its endocrine disruption potential is currently deficient (Tier 4).",
+    "Q2": "tert-Butyl hydroperoxide is not identified on any major \"Lists of Concern\" or \"Lists of Low Hazard.\"",
+    "Q3": "This chemical appears extensively in the scientific literature, with 23,000 references, and has a well-defined molecular structure. While it has a moderate number of toxicological records (25), it has not undergone the most rigorous hazard evaluations by EPA's IRIS or PPRTV programs, and data for endocrine disruption remains deficient."
 }

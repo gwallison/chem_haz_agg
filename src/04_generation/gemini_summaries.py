@@ -326,10 +326,10 @@ def make_test_prompt(cas='50-00-0'):
 
             
 if __name__ == '__main__':
-    t = pd.read_parquet(config.MASTER_CAS_LIST)
-    caslst = t.CASRN.tolist()
-    make_set(caslst, replace_existing=False)    
+    # t = pd.read_parquet(config.MASTER_CAS_LIST)
+    # caslst = t.CASRN.tolist()
+    # make_set(caslst, replace_existing=False)    
     
-    # make_test_prompt('77-92-9')    
+    make_test_prompt('77-92-9')    
      
     #####   CAREFUL!  clear_all_answers()

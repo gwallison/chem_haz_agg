@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical exhibits known hazards (Tier 1) for carcinogenicity, mutagenicity, or reproductive toxicity, oral toxicity, and organ/systemic toxicity. It also shows expanded perspectives (Tier 2) for endocrine disruption, inhalation, and dermal/eye hazards, with a demonstrated low/moderate environmental hazard (Tier 3).",
+  "Q2": "This chemical is identified on several prominent lists of concern, including California's Proposition 65 for potential cancer/reproductive harm, the TEDX list for potential endocrine disruption, and the IARC 2B list, classifying it as possibly carcinogenic to humans.",
+  "Q3": "While specific literature reference counts and structural details are unavailable, this chemical has undergone rigorous hazard assessment through the EPA's Integrated Risk Information System (IRIS), indicating it is well-characterized from a toxicological standpoint. However, the absence of records in the EPA ToxValDB suggests that broader toxicological data from other programs may be sparse."
+}

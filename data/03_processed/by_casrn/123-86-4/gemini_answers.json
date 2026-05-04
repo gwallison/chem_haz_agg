@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical shows potential hazards for inhalation and dermal/eye exposure (Tier 2), indicating an expanded view of risk beyond GHS. However, there is insufficient data to assess carcinogenicity, mutagenicity, reproductive hazards, environmental impact, endocrine disruption, oral hazards, or organ/systemic hazards (Tier 4).",
+  "Q2": "This chemical is identified as a hazardous substance under the Clean Water Act, indicating potential danger if discharged into navigable waters. Despite its inclusion on the FDA's \"Substances Added to Food\" list, this dual classification suggests its \"low hazard\" status may be conditional on specific, tightly regulated applications or very low quantities.",
+  "Q3": "This chemical is poorly characterized, lacking a readily available molecular formula or substance class in SciFinder and having an unquantified number of references. With no IRIS or PPRTV evaluations and zero toxicity records in the EPA ToxValDB, its hazard profile, as reflected by five Tier 4 data deficiencies, is largely incomplete."
+}

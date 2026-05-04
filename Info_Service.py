@@ -12,6 +12,7 @@ import chem_profiles.config as config
 import re
 import os
 
+
 class Info_Service():
     def __init__(self):
         # set up empty frames.  Only loaded if used.
@@ -127,6 +128,10 @@ class Info_Service():
     #             out.append(lst)
     #     return out
         
+    #  ------------------- CHEM HAZ specific things --------------
+    def get_master_cas_list(self):
+        df = pd.read_parquet(config.MASTER_CAS_LIST)
+        return df.CASRN.tolist()
         
     # --------------------   EPA STUFF --------------------        
     def _load_epa(self):
@@ -198,7 +203,7 @@ class Info_Service():
             return f"An unexpected error occurred: {e}"
 
     def get_number_toxval_records(self,cas):
-        import json
+        # import json
         ddir = r"C:\MyDocs\integrated\chem_profiles\data\01_raw\epa_haz_toxval_json"
         fn = os.path.join(ddir,f'toxval_{cas}.json')
         return self.count_json_records(fn)

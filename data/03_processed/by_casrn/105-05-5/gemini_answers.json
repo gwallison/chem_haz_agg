@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical has known GHS-level hazards for environmental, inhalation, oral, and dermal/eye exposures, along with expanded concerns for endocrine disruption. However, data on carcinogenicity, mutagenicity, reproductive toxicity, and organ/systemic hazards are currently insufficient for assessment.",
+  "Q2": "The chemical does not appear on any lists of concern or low hazard. Given the data deficiency in several hazard classes, this absence from concern lists may reflect a lack of study rather than confirmed safety.",
+  "Q3": "This chemical appears poorly characterized, lacking a defined molecular formula and sufficient literature references. It has no toxicological data in the EPA ToxValDB and has not undergone rigorous evaluations like IRIS or PPRTV, leading to data deficiencies in several hazard classes including carcinogenicity, mutagenicity, reproductive toxicity, and organ/systemic hazards."
+}

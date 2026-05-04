@@ -1,5 +1,5 @@
 {
-    "Q1": "Galanthamine shows known hazards for environmental, inhalation, oral, and organ/systemic toxicity (Tier 1), alongside potential endocrine disruption and dermal/eye hazards based on an expanded perspective (Tier 2). Information on carcinogenicity, mutagenicity, and reproductive toxicity is currently data deficient (Tier 4).",
-    "Q2": "Galanthamine is not explicitly identified on the provided lists of concern or lists of low hazard.",
-    "Q3": "Galanthamine is generally well-characterized, with 5,416 literature references, significantly exceeding the median for the specified dataset, and possesses a specific molecular formula (C17H21NO3). Its classification as a \"Small Molecule\" further indicates a well-defined structure, though a data gap exists for carcinogenicity, mutagenicity, and reproductive hazards."
+  "Q1": "Galanthamine presents known GHS-level hazards for environmental, inhalation, oral, and organ/systemic toxicity. It also shows expanded perspectives on endocrine disruption, dermal, and eye hazards. Carcinogenicity, mutagenicity, and reproductive hazards are currently data deficient.",
+  "Q2": "Galanthamine does not appear on any identified Lists of Concern or Lists of Low Hazard.",
+  "Q3": "With over 5,400 literature references, Galanthamine is a well-studied chemical with a clearly defined molecular structure. However, it lacks comprehensive toxicological evaluation by major programs like IRIS or PPRTV, and has no records in the EPA ToxValDB, indicating a significant gap in structured hazard assessment data despite extensive scientific interest."
 }

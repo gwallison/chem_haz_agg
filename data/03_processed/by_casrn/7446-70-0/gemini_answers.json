@@ -1,5 +1,5 @@
 {
-    "Q1": "Aluminum chloride exhibits multiple known hazards (Tier 1) including carcinogenicity, mutagenicity, or reproductive toxicity (CMR), environmental toxicity (ENV), oral toxicity (ORL), dermal and eye irritation (SKN), and organ/systemic toxicity (OGN). It also shows potential inhalation hazards based on an expanded perspective (Tier 2). Information regarding its endocrine disruption potential is currently data deficient (Tier 4).",
-    "Q2": "Aluminum chloride is not explicitly listed on any 'Lists of Concern' or 'Lists of Low Hazard'.",
-    "Q3": "Aluminum chloride is very well characterized, supported by a substantial 78,000 scientific literature references, far exceeding the median for comparable chemicals in our dataset. Its specific molecular formula (AlCl3) and classification as a Small Molecule further indicate it is a well-defined substance, with only its endocrine disruption potential lacking sufficient data (Tier 4)."
+    "Q1": "Aluminum chloride exhibits several Tier 1 (known) hazards, including carcinogenicity, mutagenicity, and reproductive hazards (CMR), environmental toxicity (ENV), oral toxicity (ORL), dermal and eye hazards (SKN), and organ and systemic hazards (OGN). It also presents Tier 2 (expanded perspective) inhalation hazards. Data regarding endocrine disruption (EDC) is currently deficient (Tier 4).",
+    "Q2": "Aluminum chloride does not appear on any \"Lists of Concern\" or \"Lists of Low Hazard.\"",
+    "Q3": "Aluminum chloride is extensively studied, with 78,000 literature references, and is a well-defined small molecule. It has a moderate number of toxicity records (39), but has not undergone formal, comprehensive toxicological assessments by the EPA's IRIS or PPRTV programs."
 }

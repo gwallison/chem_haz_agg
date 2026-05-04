@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical has known hazards (Tier 1) for environmental, oral, dermal/eye, and organ/systemic effects, as per GHS classifications. It shows a demonstrated low/moderate hazard for endocrine disruption. However, data is deficient (Tier 4) for assessing its carcinogenicity, mutagenicity, reproductive hazards, and inhalation hazards.",
+  "Q2": "This chemical does not appear on any lists of concern or low hazard. Given the presence of data deficient classifications in its tier profile, this absence may reflect a lack of study rather than confirmed safety.",
+  "Q3": "The chemical has a well-defined molecular formula and substance class, and a moderate amount of scientific literature with 311 references. However, its hazard profile is not well characterized by comprehensive toxicological assessments, lacking IRIS or PPRTV evaluations and having no records in the EPA ToxValDB, indicating sparse study and significant data gaps in two hazard classes."
+}

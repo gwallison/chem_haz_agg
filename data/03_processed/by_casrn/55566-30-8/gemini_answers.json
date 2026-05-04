@@ -1,5 +1,5 @@
 {
-  "Q1": "Tetrakis(hydroxymethyl)phosphonium sulfate's hazard profile indicates known, significant hazards (Tier 1) for carcinogenicity, mutagenicity, reproductive, environmental, inhalation, oral, dermal/eye, and organ/systemic categories based on official GHS classifications. Additionally, it shows potential for endocrine disruption (Tier 2) based on an expanded scientific perspective.",
-  "Q2": "This chemical is listed on the TEDX list as a potential endocrine disruptor, indicating a specific area of concern. No lists of low hazard were noted for this substance.",
-  "Q3": "Tetrakis(hydroxymethyl)phosphonium sulfate appears well-characterized, with 1088 scientific references, placing it above the median for materials in its class. Its specific molecular formula and absence of data-deficient (Tier 4) hazard classifications further indicate a comprehensive understanding of its properties."
+  "Q1": "This chemical exhibits significant known hazards, including carcinogenicity, mutagenicity, reproductive, environmental, inhalation, oral, dermal, eye, and organ/systemic effects (Tier 1). It also shows potential for endocrine disruption, as indicated by an expanded perspective assessment (Tier 2).",
+  "Q2": "This chemical is listed on the TEDX list as a potential endocrine disruptor. It is not identified on any lists of low hazard.",
+  "Q3": "With 1088 scientific literature references and 65 toxicity records, this chemical is comparatively well-studied among similar compounds, and its molecular structure is well-defined. However, it has not undergone the rigorous evaluation of the EPA's IRIS or PPRTV programs."
 }
