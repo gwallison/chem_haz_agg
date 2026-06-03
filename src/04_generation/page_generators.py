@@ -330,7 +330,8 @@ def create_chemical_pages(chem_df, ghs_df):
         cas = row.casrn
         print('.',end='')
         gemini_dict = _get_gemini_text(cas)
-        escaped_name = row.chem_name.replace('"', '\\"')
+        chem_name = row.chem_name if isinstance(row.chem_name, str) else "Unnamed Chemical"
+        escaped_name = chem_name.replace('"', '\\"')
 
         # hide left pane
         content = f"""---
@@ -345,7 +346,7 @@ hide:
         content += separator
 
         # Start building markdown content
-        content += f'# {row.casrn}: {row.chem_name}\n\n'
+        content += f'# {row.casrn}: {chem_name}\n\n'
         
         # Show Header
         llcc = lists_of_lists.get_markdown_list_by_type(cas,"concern")
@@ -354,7 +355,7 @@ hide:
         # echa_sum = _add_echa_summary(cas)
         echa_sum = ""  # now obsolete
         content += cph.get_chem_page_header(cas, 
-                                            ing_name=row.chem_name,
+                                            ing_name=chem_name,
                                             g_dict = gemini_dict,
                                             lists_of_concern=llcc,
                                             lists_of_benign=llb,
