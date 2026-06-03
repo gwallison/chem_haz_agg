@@ -3,62 +3,65 @@ hide:
   - navigation
 ---
 
-# Profiles of Fracking and Petrochemical Materials 
+# Open-FF Chemical Hazard Aggregator
 
+<p class="lead" style="font-size: 1.15rem; opacity: 0.85; line-height: 1.6; margin-bottom: 25px;">
+  Making hidden or inaccessible environmental and chemical data visible and usable for researchers, advocates, and the public. This dashboard compiles and simplifies toxicological information from authoritative sources (such as the EPA, ECHA, and international registries) to highlight known risks and expose critical data gaps.
+</p>
 
-??? info "Explanation of table columns"
+## Hazard Dashboard
 
-    **CASRN** - the CAS registration number of the chemical, which is the authoritative
-    identification of the material.  Click on CASRN to see details of this chemicals hazards, etc.
-    
-    **name** - the chemical name (there are often multiple names used for a single chemical)
-    
-    **tier analysis** - a graphic summary of the hazard profile of the chemical, overall and 
-    for individual categories of health or environmental hazards.  Colors indicate classification
-    of hazard level and how much we know about it.
-    
-    - :red_square: *Red* (Level 1 - **Known Hazard**): this material has been declared on an authoritative Global Harmonized System to be a substantial 
-    hazard.
-    
-    - :orange_square: *Orange* (Level 2 - **Treat as a Hazard**): while not yet classified in GHS systems, this material
-    has been found by research to be hazardous.
-    
-    - :blue_square: *Blue* (Level 3 - **Low Hazard**): research has indicated that this material is likely a 
-    a low or moderate hazard.
-    
-    - :white_medium_square: *Gray* (Level 4 - **Unknown Hazard**): Many chemicals on this list are poorly studied or poorly defined.
-    While we cannot place them in other levels, they should not be considered non-hazardous.
-    
+<div class="dashboard-grid">
+  <div class="metric-card tier3-card">
+    <div class="metric-value">3,216</div>
+    <div class="metric-label">Total Materials</div>
+    <div class="metric-desc">Chemicals and components tracked in fracking and petrochemical operations.</div>
+  </div>
+  <div class="metric-card tier1-card">
+    <div class="metric-value">1,731</div>
+    <div class="metric-label">Tier 1: Known Hazards</div>
+    <div class="metric-desc">Chemicals with well-documented, severe hazards officially classified by the GHS.</div>
+  </div>
+  <div class="metric-card tier2-card">
+    <div class="metric-value">854</div>
+    <div class="metric-label">Tier 2: Emerging Concerns</div>
+    <div class="metric-desc">Substances with significant hazard indicators in literature or regulatory watchlists.</div>
+  </div>
+  <div class="metric-card tier4-card">
+    <div class="metric-value">631</div>
+    <div class="metric-label">Tier 4: Data Deficient</div>
+    <div class="metric-desc">Materials lacking public testing. Absence of evidence is not evidence of safety.</div>
+  </div>
+</div>
 
-??? info "Using the table"
+---
 
-    - **Search bar**: Use the search bar at the top of the table (not on the top of page!). Typing here will filter
-    what you see in the table.
-    
-    - **Find specific materials:**   Type parts of the name or CASRN of the chemical of interest. 
-    
-    - **Find members of specific lists:** Type the name of the list (for example, "CWA311HS" for the Clean Water Act) into the search bar. 
-    
-    - **Find groups of materials:**  To find all chemicals that are, say, rated "Tier 1" for 
-    the "ENV" classification, type "ENV1" into the search bar.  All other chemicals
-    will be filtered from the table.
-    
-    - **Sort**: Click on the small gray arrows in the column headings to sort by that column. 
-    
-    - **Paging**: Because this list is long, use the paging buttons at the bottom of the 
-    table to advance through the list.  Use the button at the top of the table to control 
-    how many rows are displayed at one time.
-    
-    - **Copy and CSV**: Using these buttons will copy the table contents to your clipboard or
-    download a CSV version of the table to your computer.  Note that these operations are affected by the 
-    search bar filtering.
+## User Guide
 
-## Table of reported chemicals
+???+ info "Understanding the Tier Summary Graphic"
+    Each chemical profile includes a visual graphic that summarizes several hazard classes at a glance.
+    
+    * <span class="tier-square tier-1"></span> **Tier 1 (Known Hazard)**: Officially classified under the Globally Harmonized System (GHS) as a significant carcinogen, mutagen, reproductive toxin, or high acute toxin.
+    * <span class="tier-square tier-2"></span> **Tier 2 (Emerging Hazard)**: Classified as hazardous in scientific literature, predictive models, or advanced watchlists, though GHS classification is pending.
+    * <span class="tier-square tier-3"></span> **Tier 3 (Low Hazard)**: Direct toxicological studies demonstrate a favorable safety profile for that hazard class.
+    * <span class="tier-square tier-4"></span> **Tier 4 (Data Deficient)**: Insufficient public data exists to draw a scientific conclusion. Treat with precaution.
 
+??? info "How to Use and Filter the Table"
+    * **Search & Filter**: Type chemical names or **CASRN** (e.g. `100-41-4`) directly into the search bar at the top of the table.
+    * **Find Regulatory Lists**: Filter by regulatory list codes (e.g., search `CWA311HS` for Clean Water Act Hazardous Substances).
+    * **Target Specific Tiers**: Filter by specific hazard-class tiers. For example, typing `ENV1` will filter the table to show only chemicals with Tier 1 (Known) Environmental hazards.
+    * **Sort**: Click the arrows on column headers to sort numerically or alphabetically.
+    * **Export Data**: Use the **Copy** or **CSV** buttons to download your filtered search results.
 
-<iframe src="./assets/tables/my_table.html" width="100%" height="800px" frameborder="0">
-  Your browser does not support iframes.
-</iframe>
+---
+
+## Interactive Catalog
+
+<div class="table-container">
+  <iframe src="./assets/tables/my_table.html" width="100%" height="850px" frameborder="0">
+    Your browser does not support iframes.
+  </iframe>
+</div>
 
 
 

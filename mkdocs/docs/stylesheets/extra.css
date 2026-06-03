@@ -1,3 +1,285 @@
+/* G:\My Drive\sandbox\chem_profiles\mkdocs\docs\stylesheets\extra.css */
+
+/* ==========================================================================
+   FracTracker Alliance Brand Colors & Typography
+   ========================================================================== */
+:root {
+  /* Brand Typography */
+  --font-family: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  
+  /* Primary Brand Palette */
+  --fta-blue-light: #E6F4FB;
+  --fta-blue-medium: #80C9EB;
+  --fta-blue: #0287D4;         /* Main Brand Color */
+  --fta-blue-dark: #025687;    /* Dark Accent */
+  --fta-navy: #00253B;         /* Dark Shade */
+  --fta-white: #FDFFFC;        /* Light Shade */
+  
+  /* Brand Accents */
+  --fta-green: #A3CF5F;        /* Light Accent */
+  --fta-green-light: #F3F9E9;
+  
+  /* Secondary Palette */
+  --fta-orange: #FFC857;       /* Yellow-Orange */
+  --fta-rust: #DE541E;         /* Rust-Orange */
+
+  /* MkDocs Material Theme Color Overrides */
+  --md-primary-fg-color: var(--fta-blue);
+  --md-primary-fg-color--light: var(--fta-blue-medium);
+  --md-primary-fg-color--dark: var(--fta-blue-dark);
+  
+  --md-accent-fg-color: var(--fta-green);
+  --md-accent-fg-color--light: #C3E39A;
+  --md-accent-fg-color--dark: #7A9F3E;
+
+  /* Custom Page Backgrounds */
+  --md-default-bg-color: var(--fta-white);
+  --md-default-bg-color--light: #f4f6f8;
+  
+  /* Base Transitions */
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:root[data-md-color-scheme="slate"] {
+  /* Slate Theme Overrides */
+  --md-primary-fg-color: var(--fta-blue);
+  --md-primary-fg-color--light: var(--fta-blue-medium);
+  --md-primary-fg-color--dark: var(--fta-blue-dark);
+  
+  --md-accent-fg-color: var(--fta-green);
+
+  /* Backgrounds */
+  --md-default-bg-color: var(--fta-navy);
+  --md-default-bg-color--light: #022E46;
+  --md-default-bg-color--lighter: #043854;
+}
+
+/* ==========================================================================
+   Base Layout & Typography Adjustments
+   ========================================================================== */
+body, html {
+  font-family: var(--font-family);
+  background-color: var(--md-default-bg-color);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family);
+  font-weight: 700;
+  color: var(--md-typeset-color);
+  letter-spacing: -0.02em;
+}
+
+/* Premium smooth scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--md-default-bg-color--light);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--fta-blue-medium);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--fta-blue);
+}
+
+/* ==========================================================================
+   Dashboard Metrics & Cards (Homepage)
+   ========================================================================== */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin: 30px 0;
+}
+
+.metric-card {
+  position: relative;
+  background: var(--md-default-bg-color--light);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(2, 135, 212, 0.1);
+  transition: var(--transition-smooth);
+  overflow: hidden;
+}
+
+.metric-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(2, 135, 212, 0.15);
+  border-color: var(--fta-blue);
+}
+
+.metric-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--card-color, var(--fta-blue));
+}
+
+.metric-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--md-typeset-color);
+  margin-bottom: 8px;
+}
+
+.metric-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--md-typeset-color);
+  opacity: 0.7;
+}
+
+.metric-desc {
+  font-size: 0.8rem;
+  color: var(--md-typeset-color);
+  opacity: 0.6;
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+/* Colors for specific tiers in dashboard */
+.tier1-card { --card-color: var(--fta-rust); }
+.tier2-card { --card-color: var(--fta-orange); }
+.tier3-card { --card-color: var(--fta-blue); }
+.tier4-card { --card-color: #8c9ba5; }
+
+/* ==========================================================================
+   Admonitions, Collapsibles, and Glassmorphism
+   ========================================================================== */
+.md-typeset details {
+  border-radius: 8px;
+  border: 1px solid rgba(2, 135, 212, 0.15);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: var(--transition-smooth);
+  background: var(--md-default-bg-color);
+}
+
+.md-typeset details:focus-within,
+.md-typeset details[open] {
+  box-shadow: 0 8px 16px rgba(2, 135, 212, 0.08);
+  border-color: var(--fta-blue-medium);
+}
+
+.md-typeset summary {
+  padding: 12px 16px;
+  font-weight: 600;
+  background-color: var(--md-default-bg-color--light);
+  border-radius: 8px;
+  transition: var(--transition-smooth);
+}
+
+.md-typeset details[open] > summary {
+  border-radius: 8px 8px 0 0;
+  border-bottom: 1px solid rgba(2, 135, 212, 0.1);
+  background-color: var(--fta-blue-light);
+}
+:root[data-md-color-scheme="slate"] .md-typeset details[open] > summary {
+  background-color: var(--md-default-bg-color--light);
+}
+
+.md-typeset summary:hover {
+  background-color: var(--fta-blue-light);
+  color: var(--fta-blue-dark);
+}
+
+/* ==========================================================================
+   Table & IFrame Wrappers
+   ========================================================================== */
+.table-container {
+  position: relative;
+  background: var(--md-default-bg-color);
+  border-radius: 12px;
+  border: 1px solid rgba(2, 135, 212, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  padding: 5px;
+  margin-top: 25px;
+  overflow: hidden;
+}
+
+iframe {
+  border-radius: 8px;
+  background: var(--md-default-bg-color);
+}
+
+/* ==========================================================================
+   Chemical Details & Badge Styles
+   ========================================================================== */
+.ref-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: var(--transition-smooth);
+  margin: 4px;
+}
+
+.ref-badge-active {
+  background-color: var(--fta-green-light);
+  color: var(--fta-blue-dark);
+  border: 1px solid var(--fta-green);
+}
+.ref-badge-active:hover {
+  background-color: var(--fta-green);
+  transform: translateY(-2px);
+}
+
+.ref-badge-inactive {
+  background-color: var(--md-default-bg-color--light);
+  color: var(--md-typeset-color);
+  opacity: 0.5;
+  border: 1px solid #ddd;
+  text-decoration: line-through !important;
+}
+
+/* Custom SVG image alignments and overlays */
+.svg-container {
+  display: inline-block;
+  padding: 10px;
+  background: var(--md-default-bg-color--light);
+  border-radius: 10px;
+  border: 1px solid rgba(2, 135, 212, 0.1);
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Custom GHS & Info Icons */
 .gray_square {
   color: #A6A09B;
+}
+
+/* Custom Tier Squares to replace/emulate emojis consistently */
+.tier-square {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border-radius: 3px;
+  vertical-align: middle;
+  margin-top: -3px; /* Align with text baseline */
+}
+.tier-square.tier-1 {
+  background-color: var(--fta-rust);
+}
+.tier-square.tier-2 {
+  background-color: var(--fta-orange);
+}
+.tier-square.tier-3 {
+  background-color: var(--fta-blue);
+}
+.tier-square.tier-4 {
+  background-color: #8c9ba5; /* Custom slate grey to match Tier 4 in graphic and dashboard */
+  border: 1px solid rgba(0, 0, 0, 0.15); /* Border to ensure visibility on light backgrounds */
 }

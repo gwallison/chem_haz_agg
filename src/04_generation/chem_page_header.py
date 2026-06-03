@@ -126,11 +126,7 @@ def getTierImg_with_tooltips(cas, tooltip_data):
 
 def _chem_def_text(infosrv,name,cas,class1,class2,img,
                    subs_class,oecd_grps,complst):
-    opttext = f"""
-    * :file_folder: [E&H Chemical Class](https://open-ff.org/fracfocus-chemical-classification-index/) L1: __{class1}__ ; L2: __{class2}__  
-"""
-#    * :file_folder: [E&H Chemical Class](https://open-ff.org/fracfocus-chemical-classification-index/) level 2: __{class2}__
-
+    opttext = f"    * :file_folder: [E&H Chemical Class](https://open-ff.org/fracfocus-chemical-classification-index/) L1: __{class1}__ ; L2: __{class2}__\n"
 
     if class1=='':
         opttext = ''
@@ -142,20 +138,28 @@ def _chem_def_text(infosrv,name,cas,class1,class2,img,
     comptxt = ''
     for comp in complst:
         compname = infosrv.get_epa_pref_name(comp)
-        comptxt += f'    * :id: CASRN: {comp} ; :octicons-beaker-16:  {compname}\n'
+        comptxt += f'      * :id: CASRN: {comp} ; :octicons-beaker-16:  {compname}\n'
     if len(comptxt)>0:
-        comptxt = f'    ### Components of {cas}\n'+comptxt
+        comptxt = f'    <div style="margin-top: 15px; border-top: 1px solid rgba(2, 135, 212, 0.1); padding-top: 15px;" markdown="1">\n\n    ### Components of {cas}\n\n'+comptxt+'\n    </div>'
         
     text = f"""
-??? info "Chemical details of {name}"
+???+ info "Chemical details of {name}"
+    <div style="display: flex; flex-wrap: wrap; gap: 25px; align-items: flex-start;">
+      <div style="flex: 2 1 350px;" markdown="1">
+
     ### Chemical Identity
-    * :octicons-beaker-16:  {name}
-    * :id: CASRN: {cas}
-    * :file_folder: [Substance Class(s) (from SciFinder)](https://open-ff.org/the-substance-classes-of-fracfocus-materials/): __{subs_class}__
-{opttext}
-{oecdtext}
-    ### Chemical Structure
+    * :octicons-beaker-16:  **Preferred Name**: {name}
+    * :id: **CASRN**: {cas}
+    * :file_folder: [Substance Class(es) (from SciFinder)](https://open-ff.org/the-substance-classes-of-fracfocus-materials/): __{subs_class}__
+{opttext}{oecdtext}
+      </div>
+      <div style="flex: 1 1 200px; text-align: center; background: rgba(2, 135, 212, 0.03); padding: 15px; border-radius: 8px; border: 1px solid rgba(2, 135, 212, 0.1);" markdown="1">
+
+    ### Molecular Structure
     {img}
+
+      </div>
+    </div>
 {comptxt}
 
 """
@@ -166,10 +170,10 @@ def _chem_def_text(infosrv,name,cas,class1,class2,img,
 #         return ""
 
 def _get_tier_icon(tier):
-    idic = {'Tier 1': ' :red_square: ',
-            'Tier 2': ' :orange_square: ',
-            'Tier 3': ' :blue_square: ',
-            'Tier 4': ' :white_medium_square: '}
+    idic = {'Tier 1': "<span class='tier-square tier-1'></span>",
+            'Tier 2': "<span class='tier-square tier-2'></span>",
+            'Tier 3': "<span class='tier-square tier-3'></span>",
+            'Tier 4': "<span class='tier-square tier-4'></span>"}
     return idic[tier]
     
 def _get_tier_evidence_detail(evid_dict):
@@ -357,10 +361,10 @@ def get_chem_page_header(cas,ing_name,g_dict,
 <div class="annotate" markdown>Tier levels(1) Hazard classes(2) </div>
 
 1.    __Open-FF's Compiled Hazard Summary:__\n
-      **Tier 1**: :red_square: Authoritative GHS record of substantial hazard\n
-      **Tier 2**: :orange_square: Expanded perspective\n
-      **Tier 3**: :blue_square: Demonstrated Low Hazard\n
-      **Tier 4**: :white_medium_square: Data Deficient \n
+      **Tier 1**: <span class='tier-square tier-1'></span> Authoritative GHS record of substantial hazard\n
+      **Tier 2**: <span class='tier-square tier-2'></span> Expanded perspective\n
+      **Tier 3**: <span class='tier-square tier-3'></span> Demonstrated Low Hazard\n
+      **Tier 4**: <span class='tier-square tier-4'></span> Data Deficient \n
 2.    __Hazard classes:__ \n
       **CMR**: Carcinogen, Mutagen or Reproductive hazard\n
       **IHL**: Inhalation hazards\n
@@ -420,72 +424,84 @@ def get_chem_page_header(cas,ing_name,g_dict,
 
  
     s+= '### Links to Profiles and Data Sheets\n'
-    s+= """These links, when active, connect you directly to original resources about this chemical.  If the resource is crossed out, that resource does not assess this chemical\n\n"""
-
-    new_tab = '{: target="_blank" rel="noopener" }'
-        
-    lnk,name = common.getATSDR_info(cas)
+    s+= """These badges connect you directly to original chemical profile sheets. Active resources are highlighted in green, while unassessed resources are greyed out and crossed out.\n\n"""
+    
+    s+= '<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px;">\n'
+    
+    new_tab = 'target="_blank" rel="noopener"'
+    
+    # 1. ATSDR
+    lnk, name = common.getATSDR_info(cas)
     if len(lnk)>0:
-        s+= f':material-check: [ATSDR]({lnk}){new_tab} (as {name}) \n\n'
+        s+= f'  <a href="{lnk}" {new_tab} class="ref-badge ref-badge-active" title="ATSDR profile as {name}">ATSDR</a>\n'
     else:
-        s+=  ':octicons-x-16: ~~ATSDR~~ \n\n'
+        s+= '  <span class="ref-badge ref-badge-inactive" title="Not assessed by ATSDR">ATSDR</span>\n'
 
-    lnk,name = common.getCompTox_ref(cas)
+    # 2. EPA CompTox
+    lnk, name = common.getCompTox_ref(cas)
     if len(lnk)>0:
-        s+= f':material-check: [EPA CompTox]({lnk}){new_tab} (as {name}) \n\n'
+        s+= f'  <a href="{lnk}" {new_tab} class="ref-badge ref-badge-active" title="EPA CompTox profile as {name}">EPA CompTox</a>\n'
     else:
-        s+=  ':octicons-x-16: ~~EPA CompTox~~ \n\n'
+        s+= '  <span class="ref-badge ref-badge-inactive" title="Not assessed by EPA CompTox">EPA CompTox</span>\n'
 
-    lnk,name = common.get_ECHA_data_page(cas)
+    # 3. ECHA Chem
+    lnk, name = common.get_ECHA_data_page(cas)
     if len(lnk)>0:
-        s+= f':material-check: [ECHA Chem substance]({lnk}){new_tab} (as {name}) \n\n'
+        s+= f'  <a href="{lnk}" {new_tab} class="ref-badge ref-badge-active" title="ECHA Chem substance profile as {name}">ECHA Chem</a>\n'
     else:
-        s+=  ':octicons-x-16: ~~ECHA Chem substance~~ \n\n'
+        s+= '  <span class="ref-badge ref-badge-inactive" title="Not assessed by ECHA Chem">ECHA Chem</span>\n'
 
-    lnk,name = common.getNJ_RTK_info(cas)
+    # 4. NJ Right-to-Know
+    lnk, name = common.getNJ_RTK_info(cas)
     if len(lnk)>0:
-        s+= f':material-check: [NJ Right-to-Know datasheet]({lnk}){new_tab} (as {name}) \n\n'
+        s+= f'  <a href="{lnk}" {new_tab} class="ref-badge ref-badge-active" title="NJ Right-to-Know datasheet as {name}">NJ RTK</a>\n'
     else:
-        s+=  ':octicons-x-16: ~~NJ Right-to-Know datasheet~~ \n\n'
+        s+= '  <span class="ref-badge ref-badge-inactive" title="Not assessed by NJ Right-to-Know">NJ RTK</span>\n'
 
-    lnk,name = common.getIRIS_info(cas)
+    # 5. IRIS
+    lnk, name = common.getIRIS_info(cas)
     if len(lnk)>0:
-        s+= f':material-check: [IRIS]({lnk}){new_tab} (as {name}) \n\n'
+        s+= f'  <a href="{lnk}" {new_tab} class="ref-badge ref-badge-active" title="IRIS assessment as {name}">EPA IRIS</a>\n'
     else:
-        s+=  ':octicons-x-16: ~~IRIS~~ \n\n'
+        s+= '  <span class="ref-badge ref-badge-inactive" title="Not assessed by IRIS">EPA IRIS</span>\n'
 
-    lnk,name = common.getPPRTV_info(cas)
+    # 6. PPRTV
+    lnk, name = common.getPPRTV_info(cas)
     if len(lnk)>0:
-        s+= f':material-check: [PPRTV]({lnk}){new_tab} (as {name}) \n\n'
+        s+= f'  <a href="{lnk}" {new_tab} class="ref-badge ref-badge-active" title="PPRTV assessment as {name}">EPA PPRTV</a>\n'
     else:
-        s+=  ':octicons-x-16: ~~PPRTV~~ \n\n'
+        s+= '  <span class="ref-badge ref-badge-inactive" title="Not assessed by PPRTV">EPA PPRTV</span>\n'
 
+    # 7. EHP Compounds of Concern
     name = common.get_Cmpd_of_Concern_info(cas)
     if len(name)>0:
-        s+= f':material-check: [EHP Compounds of Concern](https://environmentalhealthproject.shinyapps.io/compounds/){new_tab} (as {name}) \n\n'
+        s+= f'  <a href="https://environmentalhealthproject.shinyapps.io/compounds/" {new_tab} class="ref-badge ref-badge-active" title="EHP Compounds of Concern as {name}">EHP Concern</a>\n'
     else:
-        s+=  ':octicons-x-16: ~~EHP Compounds of Concern~~ \n\n'
+        s+= '  <span class="ref-badge ref-badge-inactive" title="Not assessed by EHP Compounds of Concern">EHP Concern</span>\n'
 
-    lnk,name = common.get_niosh_pocket_info(cas)
+    # 8. NIOSH Pocket Guide
+    lnk, name = common.get_niosh_pocket_info(cas)
     if len(lnk)>0:
-        s+= f':material-check: [NIOSH Pocket Guide]({lnk}){new_tab} (as {name}) \n\n'
+        s+= f'  <a href="{lnk}" {new_tab} class="ref-badge ref-badge-active" title="NIOSH Pocket Guide as {name}">NIOSH Guide</a>\n'
     else:
-        s+=  ':octicons-x-16: ~~NIOSH Pocket Guide~~ \n\n'
+        s+= '  <span class="ref-badge ref-badge-inactive" title="Not assessed by NIOSH Pocket Guide">NIOSH Guide</span>\n'
 
+    # 9. CAMEO
     res = common.get_cameo_info(cas)
     if len(res)>0:
-        for row in res:
-            s+= f':material-check: [CAMEO]({row[0]}){new_tab} (as {row[1]}) \n\n'
+        for idx, row in enumerate(res):
+            suffix = f" {idx+1}" if len(res)>1 else ""
+            s+= f'  <a href="{row[0]}" {new_tab} class="ref-badge ref-badge-active" title="CAMEO profile as {row[1]}">CAMEO{suffix}</a>\n'
     else:
-        s+=  ':octicons-x-16: ~~CAMEO~~ \n\n'
-        
-    lnk,name = common.get_oecd_chemical_page(cas)
+        s+= '  <span class="ref-badge ref-badge-inactive" title="Not assessed by CAMEO">CAMEO</span>\n'
+
+    # 10. OECD
+    lnk, name = common.get_oecd_chemical_page(cas)
     if len(lnk)>0:
-        s+= f':material-check: [OECD reference page]({lnk}){new_tab} (as {name}) \n\n'
+        s+= f'  <a href="{lnk}" {new_tab} class="ref-badge ref-badge-active" title="OECD reference page as {name}">OECD Reference</a>\n'
     else:
-        s+=  ':octicons-x-16: ~~OECD reference page~~ \n\n'
-               
- 
-    
+        s+= '  <span class="ref-badge ref-badge-inactive" title="Not assessed by OECD">OECD Reference</span>\n'
+
+    s+= '</div>\n\n'
 
     return s

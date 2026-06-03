@@ -1,10 +1,21 @@
+# Python bytecache and environment
+__pycache__/
 *.pyc
+*.pyo
+*.pyd
 .ipynb_checkpoints/
 .spyproject/
+.pytest_cache/
+.vscode/
+.DS_Store
+
+# Large Raw and Intermediate Data
+data/01_raw/
+data/02_intermediate/
+
+# Generated Site & Output Assets
 mkdocs/site/
 mkdocs/docs/chemicals/
-data/01_raw
-data/02_intermediate
-mkdocs/docs/assets/images
-mkdocs/docs/images
+mkdocs/docs/images/
+mkdocs/docs/assets/images/
 mkdocs/docs/assets/tables/my_table.html

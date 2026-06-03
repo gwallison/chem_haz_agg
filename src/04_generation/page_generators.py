@@ -33,57 +33,7 @@ outsize = None # set to None for full run
 
 
 def getProlog():
-    s = """
-### FAQ
-??? info "Click to read..."
-    __What is the Chemical Hazard Information Aggregator?__
-    
-    The Chemical Hazard Information Aggregator is a specialized data tool designed to centralize and harmonize complex toxicological information. By pulling from diverse sources—such as the EPA, ECHA, and international GHS databases—it provides a single, searchable interface for understanding the intrinsic properties of chemicals used in industrial processes. This platform eliminates the need to manually cross-reference multiple disparate registries, allowing users to quickly identify high-priority chemicals like PFAS or those with specific GHS classifications.
-    
-    __How does "hazard" differ from "risk"?__
-    
-    Understanding the distinction between these two terms is fundamental to chemical safety and regulatory analysis:
-
-    * **Hazard** refers to the inherent property of a substance that makes it capable of causing harm. For example, a chemical may be "hazardous" because it is toxic to aquatic life, flammable, or carcinogenic. This status does not change based on how the chemical is used.
-
-    * **Risk** is the likelihood that harm will occur from **exposure** to that hazard. Risk is a function of both the hazard and the exposure (Risk = Hazard × Exposure).
-
-    In short: A shark in the ocean is a hazard. If you stay on the beach, the risk is low. If you go for a swim, the risk increases, even though the shark’s "hazard" level remains the same.  __This website can only provide information about Hazard.__
-    
-    __Where does the data on this site come from?__
-    
-    The aggregator compiles data from authoritative national and international bodies. This includes GHS (Globally Harmonized System) classifications, chemical inventories from the European Chemicals Agency (ECHA), and specific hazard lists from the U.S. Environmental Protection Agency (EPA). We prioritize datasets that offer peer-reviewed or regulatory-cleared information.
-    
-    __What is the Hazard Tier Summary?__
-    
-    The Hazard Tier Summary is a classification system used to simplify complex toxicological data into four distinct categories. This allows users to quickly assess the level of known or suspected harm associated with a specific chemical based on the strength and type of available evidence.  The Tier Graphic provides a summary of several hazard classes at a glance.
-
-    * __Tier 1: High Certainty Hazards__ This tier includes chemicals with well-documented, severe hazards. These classifications are based on the official Globally Harmonized System (GHS) and represent recognized dangers such as carcinogenicity, mutagenicity, reproductive toxicity, or high acute toxicity.
-
-    * __Tier 2: Potential or Emerging Hazards__ This tier provides an expanded perspective by including chemicals that may not yet have a formal GHS "Category 1" status but show significant evidence of concern. This includes data from peer-reviewed scientific literature, predictive models (such as QSAR), and regulatory watchlists from agencies that go beyond standard GHS conclusions.
-
-    * __Tier 3: Low to Moderate Hazard__ Tier 3 is assigned to chemicals that have been robustly studied and demonstrated to have a low or moderate hazard profile. These substances generally do not meet the criteria for the more severe classifications found in Tiers 1 and 2.
-
-    * __Tier 4: Data Deficient__ This tier indicates that there is insufficient information to make a confident hazard assessment. It is important to note that a Tier 4 designation does not imply that a chemical is "safe"; rather, it highlights a lack of public testing or reporting, suggesting a precautionary approach is necessary.
-    
-    __How does the Aggregator address the lack of information?__
-    
-    For many chemicals on the list, the lack of available information is a critical issue. While it is often difficult to assess the true safety of a substance when data is sparse, the Aggregator is specifically designed to address this "information gap" in the following ways:
-
-    * Multi-Source Synthesis: Rather than relying on a single regulatory body, the Aggregator looks across dozens of sources—including the EPA, ECHA, and international GHS databases—to compile many existing fragments of evidence. If a chemical is missing from one database, the tool seeks it out in others to paint a more complete picture.
-
-    * The "Data Deficient" Designation (Tier 4): One of the most important functions of the Aggregator is to explicitly label chemicals where information is missing. By categorizing these as Tier 4, the tool ensures that "no data" is never mistaken for "no hazard." This transparency allows researchers to identify which substances require urgent testing.
-
-    * Harmonizing Discrepancies: Sometimes one agency may classify a chemical while another does not. The Aggregator highlights these discrepancies, showing users exactly what is known by some and ignored by others.
-
-    * Visualizing the Unknown: By centralizing what is available and what is not, the Aggregator provides a "landscape" of chemical knowledge. This helps users understand the weight of evidence (or the lack thereof) behind the materials they are researching, making it easier to apply the precautionary principle where data is thin.
-    
-    
-    
-    
-    
-"""
-    return s
+    return ""
 
 # --- Helper functions for markdown generation ---
 
@@ -264,7 +214,7 @@ def create_summary_table(df):
  
     # Use a 2-level relative path for the table in docs/assets/tables/
     table_df['tier_analysis'] = table_df['casrn'].apply(
-            lambda x: f'<img src="../../images/{x}.svg" alt="Tier summary" width="150">'
+            lambda x: f'<a href="../../chemicals/{x}.html" target="_top"><img src="../../images/{x}.svg" alt="Tier summary" width="150"></a>'
     )
 
     table_df = table_df.rename(
@@ -277,13 +227,79 @@ def create_summary_table(df):
         **config.ITABLES_SETTINGS
     )
     
-    # Custom CSS for consistent styling
+    # Custom CSS for consistent styling matching FracTracker brand guidelines
     custom_css = """
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap">
     <style>
-      body, table {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      body {
+        font-family: "Lato", -apple-system, sans-serif;
         font-size: 0.9rem;
-        color: #333;
+        color: #00253B;
+        background-color: #FDFFFC;
+        margin: 10px;
+      }
+      table.dataTable {
+        border-collapse: collapse !important;
+        border: 1px solid #E1E8ED !important;
+        border-radius: 8px;
+        overflow: hidden;
+        width: 100% !important;
+      }
+      table.dataTable thead th {
+        background-color: #0287D4 !important;
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 0.05em;
+        padding: 12px 10px !important;
+        border-bottom: 2px solid #025687 !important;
+      }
+      table.dataTable tbody td {
+        padding: 10px 10px !important;
+        border-bottom: 1px solid #E1E8ED !important;
+      }
+      table.dataTable tbody tr:hover {
+        background-color: #E6F4FB !important;
+      }
+      a {
+        color: #0287D4;
+        font-weight: 700;
+        text-decoration: none;
+        transition: color 0.2s ease-in-out;
+      }
+      a:hover {
+        color: #025687;
+        text-decoration: underline;
+      }
+      /* Dark mode support inside iframe based on browser media query */
+      @media (prefers-color-scheme: dark) {
+        body {
+          color: #E1E8ED;
+          background-color: #00253B;
+        }
+        table.dataTable {
+          border: 1px solid #0B2E44 !important;
+        }
+        table.dataTable thead th {
+          background-color: #025687 !important;
+          border-bottom: 2px solid #00253B !important;
+        }
+        table.dataTable tbody td {
+          border-bottom: 1px solid #0B2E44 !important;
+        }
+        table.dataTable tbody tr {
+          background-color: #00253B !important;
+        }
+        table.dataTable tbody tr:hover {
+          background-color: #022E46 !important;
+        }
+        a {
+          color: #80C9EB;
+        }
+        a:hover {
+          color: #FFFFFF;
+        }
       }
     </style>
     """
@@ -314,9 +330,11 @@ def create_chemical_pages(chem_df, ghs_df):
         cas = row.casrn
         print('.',end='')
         gemini_dict = _get_gemini_text(cas)
+        escaped_name = row.chem_name.replace('"', '\\"')
 
         # hide left pane
-        content = """---
+        content = f"""---
+title: "{cas} ({escaped_name})"
 hide:
   - navigation
 ---
@@ -377,11 +395,6 @@ hide:
         # Example for Tier 3
         content += '#### Affirmative data showing low concern\n\n'
         content += _get_tier_3_text(t, cas, ci_df)
-
-        content += '## GENERAL REFERENCES\n\n'
-        content += '\n\n--8<-- "includes/source_desc_1.md"\n'
-        content += '\n\n--8<-- "includes/ghs_hazard_tiers_extended.md"\n'
-        
         
         # Write the file
         out_path = os.path.join(config.CHEMICAL_MD_OUT_DIR, f'{cas}.md')
