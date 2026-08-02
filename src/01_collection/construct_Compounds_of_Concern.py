@@ -8,20 +8,26 @@ Currently there is no offical list of the chemicals at CoC, so
 we must construct it by hand.
 """
 import os
+import sys
 import pandas as pd
 
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
 import re
 import time
 import numpy as np
-import config
 
-options = webdriver.ChromeOptions()
-driver = webdriver.Chrome(options=options)
+# Add the project root to the Python path to resolve the 'config' module
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+import config
 
 
 # in_lst = [
@@ -77,6 +83,8 @@ driver = webdriver.Chrome(options=options)
 
 
 def scrape_CofC():
+    options = webdriver.ChromeOptions()
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     try:
         driver.get("https://environmentalhealthproject.shinyapps.io/compounds/")
         wait = WebDriverWait(driver, 20)

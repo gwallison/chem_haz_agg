@@ -1,3 +1,6 @@
+# Pipeline app run state
+pipeline_app/pipeline_state.json
+
 # Python bytecache and environment
 __pycache__/
 *.pyc

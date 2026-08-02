@@ -13,6 +13,7 @@ if project_root not in sys.path:
 import config
 import data_processing as dp
 import page_generators as pg
+import make_graphics
 
 def main():
     """Main function to build the mkdocs site content."""
@@ -36,14 +37,19 @@ def main():
     
     # 1. Load and process all chemical data
     chem_summary_df = dp.load_and_prepare_data()
-    
+
     # 2. Get GHS codes
     ghs_codes_df = dp.get_ghs_codes()
-    
-    # 3. Generate the main interactive HTML table
+
+    # 3. Regenerate tier graphics (skipped in --dev: full mode only, keeps fast preview fast)
+    if not args.dev:
+        print("Regenerating tier SVGs...")
+        make_graphics.generate_all_tier_graphics()
+
+    # 4. Generate the main interactive HTML table
     pg.create_summary_table(chem_summary_df)
-    
-    # 4. Generate individual markdown pages for each chemical
+
+    # 5. Generate individual markdown pages for each chemical
     pg.create_chemical_pages(chem_summary_df, ghs_codes_df)
     
     print("\n--- Site generation complete! ---")

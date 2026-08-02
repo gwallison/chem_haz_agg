@@ -5,6 +5,9 @@ Created on Wed Dec 31 13:42:38 2025
 @author: Gary
 """
 
+import argparse
+import os
+import sys
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
@@ -17,6 +20,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
+
+# Add the project root to the Python path to resolve the 'config' module
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 
 import config
 
@@ -189,7 +198,7 @@ def scrape_oecd_groups():
     
     chrome_options = Options()
     # chrome_options.add_argument("--headless") # Recommended: Keep visible to ensure JS triggers
-    driver = webdriver.Chrome(options=chrome_options)
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
     
     try:
         driver.get(url)
@@ -258,11 +267,30 @@ def scrape_oecd_groups():
         
     
 
-if __name__ == "__main__":
-    
-    # _ = scrape_oecd_chemicals()
+def main():
+    parser = argparse.ArgumentParser(
+        description="Collect OECD HPV chemical data (chemicals list, per-chemical details, and chemical groups)."
+    )
+    sub = parser.add_subparsers(dest='command', required=True)
 
-    # get_all_oecd_chem_details()
-    
-    _ = scrape_oecd_groups()
-    
+    sub.add_parser('chemicals', help='Scrape the full OECD chemicals list (CASRN, name, detail link).')
+
+    p_details = sub.add_parser('details',
+                                help='Fetch per-chemical detail pages (HPV status, SIDS status, PDFs) for master-list CASRNs.')
+    p_details.add_argument('--all', action='store_true',
+                            help='Re-fetch every matching CASRN, not just ones missing from the details file.')
+
+    sub.add_parser('groups', help='Scrape the OECD chemical groups page (Selenium).')
+
+    args = parser.parse_args()
+
+    if args.command == 'chemicals':
+        scrape_oecd_chemicals()
+    elif args.command == 'details':
+        get_all_oecd_chem_details(only_new=not args.all)
+    elif args.command == 'groups':
+        scrape_oecd_groups()
+
+
+if __name__ == "__main__":
+    main()

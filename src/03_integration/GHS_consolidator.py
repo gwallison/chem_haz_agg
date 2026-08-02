@@ -6,6 +6,12 @@ Created on Tue Sep  9 19:56:18 2025
 """
 import pandas as pd
 import os
+import sys
+
+# Add the project root to the Python path to resolve the 'config' module
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 
 from config import PUBCHEM_OUTPUT_PATH, CHEMINFO_GHS_OUTPUT_PATH
 from config import ECHA_HARM_OUTPUT_PATH, ECHA_INDUS_OUTPUT_PATH

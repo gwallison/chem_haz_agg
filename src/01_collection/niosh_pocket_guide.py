@@ -1,6 +1,17 @@
 import pandas as pd
 from bs4 import BeautifulSoup
-import requests
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
+import os
+import sys
+
+# Add the project root to the Python path to resolve the 'config' module
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 import config
 import re
 
@@ -8,9 +19,16 @@ import re
 def scrape_niosh_cas_index(source_path, is_url=True):
     # 1. Fetch the HTML content
     if is_url:
-        headers = {'User-Agent': 'Mozilla/5.0'}
-        response = requests.get(source_path, headers=headers)
-        html_content = response.text
+        # NOTE: cdc.gov's Akamai WAF returns a 403 to plain `requests` traffic
+        # (confirmed even with full browser headers), but allows a real browser.
+        # Selenium is required here, not just a nicer User-Agent.
+        options = Options()
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        try:
+            driver.get(source_path)
+            html_content = driver.page_source
+        finally:
+            driver.quit()
     else:
         with open(source_path, 'r', encoding='utf-8') as f:
             html_content = f.read()

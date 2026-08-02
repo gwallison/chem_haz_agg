@@ -22,10 +22,12 @@ MASTER_CAS_LIST = os.path.join(PROCESSED_DATA,'master_cas_list.parquet')
 
 FF_REPO_DIR = r"G:\My Drive\production\repos\openFF_data_2025_10_07"
 FF_WORKING_DATA = os.path.join(FF_REPO_DIR,'working_df.parquet')
+OPENFF_BUILD_NEW_CAS = r"C:\MyDocs\integrated\openFF\build\sandbox\work_dir\new_cas_added.parquet"
+MOLECULE_PIC_DIR = r"C:\MyDocs\integrated\openFF\images\pic_dir"
 
 
 
-TSCA_RAW_CSV = os.path.join(RAW_DATA,'TSCAINV_052024.csv')
+TSCA_RAW_CSV = os.path.join(RAW_DATA,'TSCAINV_072025.csv')
 TEDX_RAW = os.path.join(RAW_DATA,'TEDX_EDC_trimmed.xls')
 PROP65_RAW = os.path.join(RAW_DATA,'prop65_2025_12_05.csv')
 
@@ -40,6 +42,8 @@ RAW_CAS_DIR = os.path.join(RAW_DATA, 'by_casrn') # Directory for cas specific fi
 PROCESSED_CAS_DIR = os.path.join(PROCESSED_DATA, 'by_casrn') # Directory for cas specific files, like scifinder
 ECHA_PAGES = os.path.join(RAW_DATA,'echa_pages')
 ECHA_SUBSTANCE_LINKS = os.path.join(INTERMED_DATA,'echa_substance_links.parquet')
+ECHA_SELF_CLASSIFIED_PATH = os.path.join(INTERMED_DATA,'echa_self_classifications.parquet')
+ECHA_SELF_SUMMARY_PATH = os.path.join(INTERMED_DATA,'echa_self_summary.parquet')
 
 # NOT_USED_COMPTOX_CASRN_DTXSID_MASTER = os.path.join(RAW_DATA,'comp_tox_casrn_dtxsid_master.csv')
 
@@ -48,6 +52,9 @@ CHEMINFO_REF_DIR = os.path.join(RAW_DATA,'ChemInfo_ref_files')
 EPA_CHEM_MASTER = os.path.join(PROCESSED_DATA,'epa_chem_master.parquet')
 CASRN_DTXSID_MAP_OUTPUT = os.path.join(RAW_DATA,'epa_cas_dtxsid_map.parquet')
 TEMP_CASRN_CSV = os.path.join(RAW_DATA,'temp_casrn_list.csv')
+QUARANTINE_CASRN_CSV = os.path.join(PROCESSED_DATA,'master_cas_list_quarantine.csv')
+REMOVED_CASRN_LOG = os.path.join(PROCESSED_DATA,'master_cas_list_removed.csv')
+MASTER_CAS_LIST_BACKUP_DIR = os.path.join(PROCESSED_DATA,'backups')
 EPA_HAZ_TOXVAL_JSON_DIR = os.path.join(RAW_DATA,'epa_haz_toxval_json')
 EPA_CHEM_API_JSON_DIR = os.path.join(RAW_DATA,'epa_chem_api_json')
 
@@ -92,6 +99,7 @@ IRIS_PROCESSED = os.path.join(INTERMED_DATA,"iris_data.parquet")
 PPRTV_EXCEL_FILE_PATH = os.path.join(RAW_DATA,'pprtv_chemicals.xls')
 PPRTV_PROCESSED = os.path.join(INTERMED_DATA,"pprtv_data.parquet")
 NJ_RTK_DATASHEET_PATH = os.path.join(INTERMED_DATA,"nj_hazardous_substances.parquet")
+ATSDR_OUTPUT_PATH = os.path.join(INTERMED_DATA,'atsdr_casrn.parquet')
 NIOSH_POCKET_PATH = os.path.join(INTERMED_DATA,'niosh_pocket_datasheets.parquet')
 CAMEO_RAW = os.path.join(RAW_DATA,"cameo_links_master_v3.csv")
 CAMEO_PROCESSED = os.path.join(INTERMED_DATA,'cameo_datasheets.parquet')

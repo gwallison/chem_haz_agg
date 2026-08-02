@@ -9,6 +9,13 @@ import requests
 import pandas as pd
 import re
 import os
+import sys
+
+# Add the project root to the Python path to resolve the 'config' module
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 import config
 
 def download_and_extract_gras():
@@ -76,4 +83,5 @@ def download_and_extract_gras():
         print(f"Error processing the CSV file: {e}")
 
 # Usage assumes a config object with RAW_GRAS_DETAILS and GRAS_DETAILS paths
-download_and_extract_gras()
+if __name__ == "__main__":
+    download_and_extract_gras()

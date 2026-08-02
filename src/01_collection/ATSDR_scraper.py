@@ -3,7 +3,15 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import os
+import sys
 import re
+
+# Add the project root to the Python path to resolve the 'config' module
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+import config
 
 def get_toxprofile_links(base_url):
     """
@@ -82,10 +90,9 @@ if __name__ == "__main__":
             # print(df.head())
             # print(df.columns)
             
-            output_dir = r"C:/MyDocs/integrated/chem_profiles/data/02_intermediate"
-            os.makedirs(output_dir, exist_ok=True)
-            output_path = os.path.join(output_dir, "atsdr_casrn.parquet")
-            
+            output_path = config.ATSDR_OUTPUT_PATH
+            os.makedirs(os.path.dirname(output_path), exist_ok=True)
+
             try:
                 df = df[['Chemical_Name', 'CASRN', 'ATSDR_link']]
                 df.to_parquet(output_path, engine='pyarrow')

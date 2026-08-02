@@ -1,7 +1,15 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import os
+import sys
 import pandas as pd
+
+# Add the project root to the Python path to resolve the 'config' module
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+import config
 from config import FINAL_TIERED_OUTPUT_PATH
 
 # --- Reusable Color Map ---
@@ -16,14 +24,16 @@ TIER_COLOR_MAP = {
 def create_tier_graphic(
     data: dict,
     label_positions: list[tuple[str, int, int]] = None,
-    filename: str = 'tier_graphic.svg', 
-    # output_dir: str = r"C:/MyDocs/integrated/chem_profiles/mkdocs/docs/assets/images"
-    output_dir: str = r"C:/MyDocs/integrated/chem_profiles/mkdocs/docs/images"
+    filename: str = 'tier_graphic.svg',
+    output_dir: str = None,
 ):
     """
     Generates a graphic with squares based on input data and explicitly defined positions.
     Adds unique 'gid' attributes to squares for web interactivity.
     """
+    if output_dir is None:
+        output_dir = os.path.join(config.DOCS_DIR, 'images')
+
     # 1. Setup the plot (Unchanged)
     fig, ax = plt.subplots(figsize=(4, 1.5), dpi=50)
     fig.patch.set_facecolor('black')
@@ -92,21 +102,21 @@ def create_tier_graphic(
 
 
 
-if __name__ == '__main__':
-
-    # Example 1: Custom positions matching your attached figure
-    print("--- Generating graphic with specific custom positions ---")
+def generate_all_tier_graphics(output_dir: str = None):
+    """
+    Regenerates the per-CASRN tier SVG for every chemical in the final
+    tiered classification output.
+    """
     custom_positions = [
-        ('CMR', 1, 0), # Label A in Top Row, Column 0 (first column)
-        ('EDC', 1, 1), # Label C in Top Row, Column 3 (fourth column)
-        ('ENV', 1, 3), # Label G in Bottom Row, Column 2
-        ('IHL', 0, 0), # Label A in Top Row, Column 0 (first column)
-        ('ORL', 0, 1), # Label C in Top Row, Column 3 (fourth column)
-        ('SKN', 0, 2), # Label G in Bottom Row, Column 2
-        ('OGN', 0, 3), # Label G in Bottom Row, Column 2
+        ('CMR', 1, 0),
+        ('EDC', 1, 1),
+        ('ENV', 1, 3),
+        ('IHL', 0, 0),
+        ('ORL', 0, 1),
+        ('SKN', 0, 2),
+        ('OGN', 0, 3),
     ]
-    
-    # tierfn = r"C:\MyDocs\integrated\chem_profiles_old\code\data\final_tier_classifications.parquet"
+
     tierdf = pd.read_parquet(FINAL_TIERED_OUTPUT_PATH)
     tierdf['CMR'] = tierdf.CMR_Tier.str[-1].astype('int')
     tierdf['EDC'] = tierdf.EDC_Tier.str[-1].astype('int')
@@ -115,13 +125,11 @@ if __name__ == '__main__':
     tierdf['ORL'] = tierdf.ORL_Tier.str[-1].astype('int')
     tierdf['SKN'] = tierdf.SKN_Tier.str[-1].astype('int')
     tierdf['OGN'] = tierdf.OGN_Tier.str[-1].astype('int')
-    # tierdf = tierdf.replace('Tier ','')
-    # print(tierdf.head())
-    for i,row in tierdf.iterrows():
-        # print(row)
-        tierval = min([row.CMR,row.ENV,row.EDC,row.IHL,row.ORL,row.SKN,row.OGN])
+
+    for i, row in tierdf.iterrows():
+        tierval = min([row.CMR, row.ENV, row.EDC, row.IHL, row.ORL, row.SKN, row.OGN])
         if tierval == 3:
-            if max([row.CMR,row.ENV,row.EDC,row.IHL,row.ORL,row.SKN,row.OGN])==4:
+            if max([row.CMR, row.ENV, row.EDC, row.IHL, row.ORL, row.SKN, row.OGN]) == 4:
                 tierval = 4
         graphic_data = {'Tier': tierval,
                         'CMR': row.CMR,
@@ -132,10 +140,14 @@ if __name__ == '__main__':
                         'SKN': row.SKN,
                         'OGN': row.OGN,
                         }
-    
-    
-    
-        create_tier_graphic(graphic_data, 
-                            label_positions=custom_positions, 
-                            filename=f'{row.CASRN}.svg')
-    
+
+        create_tier_graphic(graphic_data,
+                            label_positions=custom_positions,
+                            filename=f'{row.CASRN}.svg',
+                            output_dir=output_dir)
+
+
+if __name__ == '__main__':
+    print("--- Generating graphic with specific custom positions ---")
+    generate_all_tier_graphics()
+

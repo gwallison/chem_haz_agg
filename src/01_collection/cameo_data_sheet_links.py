@@ -5,6 +5,13 @@ import time
 import random
 import re
 import os
+import sys
+
+# Add the project root to the Python path to resolve the 'config' module
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 import config
 
 def scrape_cameo_with_high_frequency_save(output_file="cameo_links_master_v3.csv", save_interval=10):

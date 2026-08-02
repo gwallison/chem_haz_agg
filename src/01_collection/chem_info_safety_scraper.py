@@ -6,8 +6,15 @@ Created on Tue Nov 18 18:44:50 2025
 """
 import pandas as pd
 import os
-import config
+import sys
 import numpy as np
+
+# Add the project root to the Python path to resolve the 'config' module
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+import config
 
 ref_dir = config.CHEMINFO_REF_DIR
 

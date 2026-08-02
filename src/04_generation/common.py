@@ -12,7 +12,7 @@ import Info_Service
 infosvc = Info_Service.Info_Service()
 
 pic_base_url = "https://storage.googleapis.com/open-ff-browser/images/"
-local_pic_dir = r"C:\MyDocs\integrated\openFF\images\pic_dir"
+local_pic_dir = config.MOLECULE_PIC_DIR
 
 def getMoleculeImg(cas,size=120,#use_remote=False,link_up_level=0,
                    alt=None,
@@ -96,10 +96,10 @@ def getChemStructureInfo(cas):
 
 def getATSDR_info(cas):
     # ATSDR
-    fn = r"C:/MyDocs/integrated/chem_profiles/data/02_intermediate/atsdr_casrn.parquet"
-    t = pd.read_parquet(fn)
-    t = t[t.CASRN==cas]
+    fn = config.ATSDR_OUTPUT_PATH
     try:
+        t = pd.read_parquet(fn)
+        t = t[t.CASRN==cas]
         return t.ATSDR_link.tolist()[0], t.Chemical_Name.tolist()[0]
     except:
         return '',''

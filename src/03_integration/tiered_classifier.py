@@ -1,7 +1,13 @@
 import pandas as pd
 import numpy as np
 import os
-import re 
+import sys
+import re
+
+# Add the project root to the Python path to resolve the 'config' module
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 
 from config import MASTER_CAS_LIST
 from config import HAZARD_MAP
