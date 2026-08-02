@@ -196,8 +196,13 @@ for stage in stages_ordered:
 
                 elif status == "pending" and satisfied:
                     if step.category == "AUTO":
-                        if st.button("▶ Run", key=f"run_{step.id}", type="primary"):
-                            run_step(step)
+                        c1, c2 = st.columns(2)
+                        with c1:
+                            if st.button("▶ Run", key=f"run_{step.id}", type="primary"):
+                                run_step(step)
+                        with c2:
+                            if st.button("⏭ Skip", key=f"skip_{step.id}"):
+                                mark_step(step.id, "skipped")
 
                     elif step.category in ("MANUAL-FETCH", "HUMAN-LOOP"):
                         c1, c2 = st.columns(2)

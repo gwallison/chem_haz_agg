@@ -41,6 +41,50 @@ class Step:
 
 
 STEPS = [
+    # ── Gateway — Master List Update ──────────────────────────────────────────
+    Step(
+        id="gateway-fracfocus",
+        name="Add CASRNs from FracFocus",
+        category="AUTO",
+        stage="Gateway — Master List Update",
+        description=(
+            "Add any new CASRNs surfaced by the latest FracFocus working_df. "
+            "Skip if FracFocus data has not been updated since the last refresh."
+        ),
+        cmd=["python", "master_list_manager.py", "add-fracfocus"],
+    ),
+    Step(
+        id="gateway-build-nb",
+        name="Add CASRNs from Open-FF build",
+        category="AUTO",
+        stage="Gateway — Master List Update",
+        description=(
+            "Add CASRNs newly surfaced by the Open-FF build notebook. "
+            "Skip if no new Open-FF build has been run since the last refresh."
+        ),
+        cmd=["python", "master_list_manager.py", "add-build-nb"],
+    ),
+    Step(
+        id="gateway-add-file",
+        name="Add CASRNs from a custom file",
+        category="HUMAN-LOOP",
+        stage="Gateway — Master List Update",
+        description=(
+            "Add CASRNs from any other one-off source (CSV or parquet). "
+            "Skip if no additional sources are needed this cycle."
+        ),
+        instructions=(
+            "Run from the project root, substituting your file path:\n\n"
+            "```\n"
+            "python master_list_manager.py add-file <path/to/file.csv>\n"
+            "```\n\n"
+            "The file must contain a `CASRN` column. "
+            "Accepts `.csv` or `.parquet`. "
+            "Skipped and quarantined CASRNs are logged automatically.\n\n"
+            "Skip if no additional file sources are needed this cycle."
+        ),
+    ),
+
     # ── Preparation ───────────────────────────────────────────────────────────
     Step(
         id="prep-summary",
