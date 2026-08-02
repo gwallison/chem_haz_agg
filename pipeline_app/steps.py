@@ -142,8 +142,9 @@ STEPS = [
             "4. Click **Cart** icon → generate report (takes a few minutes)\n"
             "5. Export to XLSX → move to `ChemInfo_ref_files/` (`safety*.xlsx`)\n"
             "6. Export to SDF → move to `ChemInfo_ref_files/`\n"
-            "7. Click **Cart** again → generate second report for the same CASRNs\n"
-            "8. Export to XLSX → move to `ChemInfo_ref_files/` (`haza*.xlsx`)\n\n"
+            "7. Click **SAFETY** module → safety glasses icon\n"
+            "8. Click **Cart** again → generate second report for the same CASRNs\n"
+            "9. Export to XLSX → move to `ChemInfo_ref_files/` (`haza*.xlsx`)\n\n"
             "Repeat for all ~7 chunks (~3,221 CASRNs total). Mark done when all chunks complete."
         ),
     ),
