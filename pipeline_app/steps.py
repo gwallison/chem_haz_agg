@@ -298,6 +298,7 @@ STEPS = [
         stage="Automated Collection",
         description="Scrape ATSDR ToxProfiles list.",
         cmd=["python", "src/01_collection/ATSDR_scraper.py"],
+        extra_env={"PYTHONUTF8": "1"},
     ),
     Step(
         id="run-coc",
