@@ -265,7 +265,7 @@ STEPS = [
     ),
     Step(
         id="run-epa2",
-        name="EPA 2 — EPA Chem Master (multi-hour)",
+        name="EPA 2 — EPA Chem Master",
         category="AUTO",
         stage="Automated Collection",
         description="Fetch chemical details from the EPA CompTox API. Incremental and resumable.",
