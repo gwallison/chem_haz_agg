@@ -13,6 +13,13 @@ pulls the link, chemical name, and CASRN out to a dataframe.
 import pandas as pd
 import openpyxl
 import os
+import sys
+
+# Add the project root to the Python path to resolve the 'config' module
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 import config
 # --- Please update these variables if needed ---
 #EXCEL_FILE_PATH = r"C:\MyDocs\integrated\chem_profiles\data\01_raw\simple_list_alpha.xlsx"
