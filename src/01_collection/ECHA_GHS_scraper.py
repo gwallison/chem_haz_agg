@@ -7,6 +7,7 @@ The source data is a Excel Export from
 
 # import time
 import os
+import sys
 # import re
 # from datetime import datetime
 import pandas as pd
@@ -17,6 +18,12 @@ import pandas as pd
 # from selenium.webdriver.support.ui import WebDriverWait
 # from selenium.webdriver.support import expected_conditions as EC
 # from selenium.common.exceptions import TimeoutException, JavascriptException, NoSuchElementException
+
+# Add the project root to the Python path to resolve the 'config' module
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 import config
 
 def get_input_file():

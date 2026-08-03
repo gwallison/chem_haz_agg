@@ -73,6 +73,7 @@ def run_step(step):
     ss["status"] = "done" if return_code == 0 else "failed"
     ss["completed_at"] = datetime.now().isoformat()
     save_state(state)
+    st.session_state.active_run_id = None
     st.rerun()
 
 def mark_step(step_id, status):
@@ -199,7 +200,8 @@ for stage in stages_ordered:
                         c1, c2 = st.columns(2)
                         with c1:
                             if st.button("▶ Run", key=f"run_{step.id}", type="primary"):
-                                run_step(step)
+                                st.session_state.active_run_id = step.id
+                                st.rerun()
                         with c2:
                             if st.button("⏭ Skip", key=f"skip_{step.id}"):
                                 mark_step(step.id, "skipped")
@@ -216,6 +218,11 @@ for stage in stages_ordered:
                 # Retry button for failed AUTO steps
                 if status == "failed" and step.category == "AUTO" and satisfied:
                     if st.button("▶ Retry", key=f"retry_{step.id}", type="primary"):
-                        run_step(step)
+                        st.session_state.active_run_id = step.id
+                        st.rerun()
+
+            # Run at full expander width, not squeezed into the narrow button column.
+            if st.session_state.get("active_run_id") == step.id:
+                run_step(step)
 
     st.divider()
