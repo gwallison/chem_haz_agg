@@ -17,6 +17,7 @@ The summary includes:
 import pandas as pd
 import sys
 import os
+import time
 
 # Add the project root to the Python path to resolve the 'config' module
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
@@ -39,6 +40,32 @@ TAB_PERC_COL = 'tab_percentage'
 # Processing parameters
 PERCENTAGE_THRESHOLD = 90.0
 # ----------------------------------------
+
+def build_indus_bridge(final_summary_df, output_path):
+    """
+    Derives the classifier-ready per-CASRN GHS_H_Codes file
+    (config.ECHA_INDUS_OUTPUT_PATH) from the detailed per-(CASRN,
+    ec_number) summary, matching the plain comma-separated GHS_H_Codes
+    string schema every other GHS source (PubChem, Australia, Japan,
+    ChemInformatics) uses.
+    """
+    def flatten_codes(codes_lists):
+        all_codes = set()
+        for lst in codes_lists:
+            all_codes.update(lst)
+        return ', '.join(sorted(all_codes)) if all_codes else 'N/A'
+
+    indus_df = final_summary_df.groupby('CASRN', as_index=False).agg(
+        GHS_H_Codes=('unique_hcodes', flatten_codes)
+    )
+    indus_df['GHS_Pictograms'] = 'N/A'
+    indus_df['GHS_Signals'] = 'N/A'
+    indus_df['GHS_P_Codes'] = 'N/A'
+    indus_df['Download_Date'] = time.strftime("%Y-%m-%d")
+
+    indus_df.to_parquet(output_path, index=False)
+    print(f"Also wrote classifier-ready bridge file ({len(indus_df)} CASRN) to: {output_path}")
+
 
 def main():
     """
@@ -214,6 +241,11 @@ def main():
         else:
             final_summary_df['unique_hcodes'] = fill_list_na(final_summary_df['unique_hcodes'])
 
+        # pandas 3.0's default Arrow-backed string dtype can't infer a type
+        # for cells holding numpy arrays (from the 'unique' aggregation) mixed
+        # with plain Python lists; normalize both list columns to plain lists.
+        final_summary_df['all_hcodes'] = final_summary_df['all_hcodes'].apply(list)
+        final_summary_df['unique_hcodes'] = final_summary_df['unique_hcodes'].apply(list)
 
         # --- 5. Write Output ---
         print(f"Writing summary to: {OUTPUT_PATH}")
@@ -222,7 +254,8 @@ def main():
         print(final_summary_df.columns)
         
         final_summary_df.to_parquet(OUTPUT_PATH, engine='pyarrow', index=False)
-        
+        build_indus_bridge(final_summary_df, config.ECHA_INDUS_OUTPUT_PATH)
+
         print("\n--- Success! ---")
         print(f"Processing finished. Summary saved to {OUTPUT_PATH}")
         print("\nOutput DataFrame preview (first 5 rows):")
