@@ -6,6 +6,7 @@ Created on Sun Jan 25 14:40:12 2026
 """
 
 import os
+import sys
 import time
 import re
 import pandas as pd
@@ -17,6 +18,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from bs4 import BeautifulSoup
+
+# Add the project root to the Python path to resolve the 'config' module
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 
 import config
 
