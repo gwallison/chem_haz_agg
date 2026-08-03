@@ -297,7 +297,7 @@ if __name__ == "__main__":
                     print("  Substance already processed. Skipping.")
                     continue
                 
-                url = f"https://chem.echa.europa.eu/{substance_id}/self-classified"
+                url = f"https://chem.echa.europa.eu/{substance_id}/industry"
                 
                 substance_df_or_flag = scrape_echa_substance(driver, url, casrn, ec_num)
                 

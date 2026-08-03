@@ -292,6 +292,16 @@ STEPS = [
         dependencies=["fetch-echa1"],
     ),
     Step(
+        id="run-echa3",
+        name="ECHA 3 — Substance Links",
+        category="AUTO",
+        stage="Automated Collection",
+        description="Consolidate per-CASRN ECHA search-result CSVs into the substance links lookup table.",
+        cmd=["python", "src/01_collection/ECHA_substance_links_consolidator.py"],
+        use_scrape_env=True,
+        extra_env={"PYTHONUTF8": "1"},
+    ),
+    Step(
         id="run-atsdr",
         name="ATSDR",
         category="AUTO",
