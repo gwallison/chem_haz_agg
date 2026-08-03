@@ -1,6 +1,14 @@
 # Import the specific functions you need from your client script.
+import os
+import sys
 import pandas as pd
 import time
+
+# Add the project root to the Python path to resolve the 'config' module
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 import epa_api_client as eac
 import config
 import master_list_manager as mlm
