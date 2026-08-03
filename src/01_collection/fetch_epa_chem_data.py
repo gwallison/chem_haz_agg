@@ -60,8 +60,8 @@ def update_epa_chem_df():
                 epadf = pd.concat([epadf,new])
                 epadf.to_parquet(config.EPA_CHEM_MASTER)
                 
-        except:
-            print(f'\nBad response for DTXSID: {dtxsid}')
+        except Exception as e:
+            print(f'\nBad response for DTXSID: {dtxsid}: {e}')
         time.sleep(4)
     print(len(workdic))    
     # print(f'\n ****  wrote dataframe to {outfn}')
