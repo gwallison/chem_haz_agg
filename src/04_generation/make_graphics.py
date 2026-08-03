@@ -102,10 +102,11 @@ def create_tier_graphic(
 
 
 
-def generate_all_tier_graphics(output_dir: str = None):
+def generate_all_tier_graphics(output_dir: str = None, casrns: list = None):
     """
     Regenerates the per-CASRN tier SVG for every chemical in the final
-    tiered classification output.
+    tiered classification output. If casrns is given, only those CASRNs
+    are regenerated instead of the full set.
     """
     custom_positions = [
         ('CMR', 1, 0),
@@ -118,6 +119,8 @@ def generate_all_tier_graphics(output_dir: str = None):
     ]
 
     tierdf = pd.read_parquet(FINAL_TIERED_OUTPUT_PATH)
+    if casrns is not None:
+        tierdf = tierdf[tierdf.CASRN.isin(casrns)]
     tierdf['CMR'] = tierdf.CMR_Tier.str[-1].astype('int')
     tierdf['EDC'] = tierdf.EDC_Tier.str[-1].astype('int')
     tierdf['ENV'] = tierdf.ENV_Tier.str[-1].astype('int')
