@@ -449,6 +449,7 @@ STEPS = [
         description="Generate per-chemical GHS hazard classifications across all categories.",
         cmd=["python", "src/03_integration/hazard_classifier.py"],
         dependencies=["run-ghs-consolidator", "run-epa5"],
+        extra_env={"PYTHONUTF8": "1"},
     ),
     Step(
         id="run-tiered-classifier",
