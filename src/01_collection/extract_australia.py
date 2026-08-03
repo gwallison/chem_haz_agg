@@ -20,28 +20,16 @@ import config
 # This assumes your 'data' folder is a child of the 'code' folder.
 
 
-def parse_pictograms_and_signals(text):
-    """
-    Parses a string containing GHS pictograms and signal words separated by semicolons.
-    
-    Args:
-        text (str): The string from the 'Pictogram Codes and Signal Word' column.
+def get_input_file():
+    lst = os.listdir(config.RAW_DATA)
+    aus_files = []
+    for fn in lst:
+        if fn.startswith('HCIS_Chemical_Data_'):
+            if fn.endswith('.xlsx'):
+                aus_files.append(fn)
+    aus_files.sort()
+    return os.path.join(config.RAW_DATA, aus_files[-1])
 
-    Returns:
-        tuple: A tuple containing two strings: a comma-separated list of pictograms
-               and a comma-separated list of signal words.
-    """
-    if not isinstance(text, str):
-        return "N/A", "N/A"
-
-    parts = [part.strip() for part in text.split(';')]
-    pictograms = sorted([p for p in parts if p.startswith('GHS')])
-    signals = sorted([s for s in parts if s in ['Danger', 'Warning']])
-
-    pictograms_str = ', '.join(pictograms) if pictograms else "N/A"
-    signals_str = ', '.join(signals) if signals else "N/A"
-    
-    return pictograms_str, signals_str
 
 def process_australia_data():
     """
@@ -49,24 +37,33 @@ def process_australia_data():
     format, and saves it as a Parquet file.
     """
     print("--- Starting Safe Work Australia data processing ---")
-    if not os.path.exists(config.AUS_INPUT_XLSX):
-        print(f"❌ Error: Input file not found at '{config.AUS_INPUT_XLSX}'")
+    input_file = get_input_file()
+    if not os.path.exists(input_file):
+        print(f"❌ Error: Input file not found at '{input_file}'")
         return None
 
-    print(f"Reading data from: {config.AUS_INPUT_XLSX}")
-    df = pd.read_excel(config.AUS_INPUT_XLSX)
+    print(f"Reading data from: {input_file}")
+    df = pd.read_excel(input_file, skiprows=4)
 
     # 1. Clean up CASRN and filter out records without one.
-    df.rename(columns={'Cas No': 'CASRN'}, inplace=True)
+    df.rename(columns={'CAS': 'CASRN'}, inplace=True)
     df.dropna(subset=['CASRN'], inplace=True)
     df['CASRN'] = df['CASRN'].astype(str).str.strip()
-    
-    # 2. Extract H-Codes, ensuring they are clean strings.
-    df['GHS_H_Codes'] = df['Hazard Statement Codes'].astype(str).str.strip()
 
-    # 3. Parse the combined pictogram and signal word column.
-    parsed_data = df['Pictogram Codes and Signal Word'].apply(parse_pictograms_and_signals)
-    df[['GHS_Pictograms', 'GHS_Signals']] = pd.DataFrame(parsed_data.tolist(), index=df.index)
+    # 2. Combine Health + Physical hazard statement codes into one field.
+    def combine_h_codes(row):
+        codes = []
+        for col in ['Health Hazard Statement Codes', 'Physical Hazard Statement Codes']:
+            val = row[col]
+            if isinstance(val, str) and val.strip():
+                codes.extend(p.strip() for p in val.replace(';', ',').split(','))
+        return ', '.join(codes) if codes else 'N/A'
+
+    df['GHS_H_Codes'] = df.apply(combine_h_codes, axis=1)
+
+    # 3. Pictogram codes and signal word are now their own columns.
+    df['GHS_Pictograms'] = df['Pictogram Codes'].astype(str).str.strip().replace('nan', 'N/A')
+    df['GHS_Signals'] = df['Signal Word'].astype(str).str.strip().replace('nan', 'N/A')
 
     # 4. Add placeholder columns to match the PubChem schema.
     df['GHS_P_Codes'] = 'N/A'

@@ -170,7 +170,8 @@ STEPS = [
         description="Download California PROP 65 list if newer than Jan 2025.",
         url="https://oehha.ca.gov/proposition-65/proposition-65-list",
         instructions=(
-            "1. Check the 'last updated' date (current saved: Jan 2025).\n"
+            "1. Compare the dates for the 'Documents' on the website with the "
+            "latest saved version in RAW.\n"
             "2. If newer, download the CSV.\n"
             "3. Remove the header row so column names are the first row.\n"
             "4. Save as `data/01_raw/prop65_YYYY_MM.csv`.\n"
@@ -201,6 +202,7 @@ STEPS = [
         description="Download the Japan NITE GHS classification database.",
         url="https://www.chem-info.nite.go.jp/chem/english/ghs/ghs_nite_download_e.html",
         instructions=(
+            "**Download link:** https://www.chem-info.nite.go.jp/chem/english/ghs/files/list_nite_all_e.xlsx\n\n"
             "1. Download the most recent English classification file.\n"
             "2. Save as `data/01_raw/list_nite_all_e.xlsx`."
         ),
@@ -210,14 +212,14 @@ STEPS = [
         name="Australia Safe Work GHS",
         category="MANUAL-FETCH",
         stage="Manual Fetches",
-        description="Download Safe Work Australia hazardous chemicals database if updated since 2021.",
-        url="https://hcis.safeworkaustralia.gov.au/HazardousChemical",
+        description="Download Safe Work Australia hazardous chemicals database.",
+        url="https://hcis.safeworkaustralia.gov.au/",
         instructions=(
-            "1. Check if the database has been updated since 2021 (7,070 materials).\n"
-            "2. If updated: go to the Search Page, press Search with no filters, "
-            "click **Download Search Results as Excel file**.\n"
-            "3. Rename to `HCResults.xlsx` and move to `data/01_raw/`.\n\n"
-            "If not updated since 2021, click **Skip**."
+            "1. On the landing page, click the link to download the Excel sheet.\n"
+            "2. The downloaded file will be named like "
+            "`HCIS_Chemical_Data_YYYY-MM-DD.xlsx`.\n"
+            "3. Move it to `data/01_raw/` (keep the original filename).\n\n"
+            "Script auto-selects the most recent matching file — no `config.py` edit needed."
         ),
     ),
     Step(

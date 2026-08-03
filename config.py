@@ -75,7 +75,6 @@ CHEMINFO_SDF_OUTPUT_PATH = os.path.join(INTERMED_DATA,'cheminfo_sdf_summary.parq
 ECHA_HARM_OUTPUT_PATH= os.path.join(INTERMED_DATA,'echa_harmonized_ghs_hazards.parquet')
 ECHA_INDUS_OUTPUT_PATH= os.path.join(INTERMED_DATA,'echa_industrial_ghs_hazards.parquet')
 
-AUS_INPUT_XLSX = os.path.join(RAW_DATA,'HCResults.xlsx')
 AUS_OUTPUT_PATH =os.path.join(INTERMED_DATA,'australia_ghs_hazards.parquet')
 
 JAPAN_INPUT_XLSX = os.path.join(RAW_DATA,'list_nite_all_e.xlsx')
