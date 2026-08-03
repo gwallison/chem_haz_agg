@@ -391,6 +391,7 @@ STEPS = [
         description="Translate Japan NITE GHS categories to H-codes.",
         cmd=["python", "src/01_collection/Japan_GHS_Translator.py"],
         dependencies=["fetch-japan"],
+        extra_env={"PYTHONUTF8": "1"},
     ),
     Step(
         id="run-australia",
@@ -400,6 +401,7 @@ STEPS = [
         description="Process Safe Work Australia GHS data into standardised format.",
         cmd=["python", "src/01_collection/extract_australia.py"],
         dependencies=["fetch-australia"],
+        extra_env={"PYTHONUTF8": "1"},
     ),
     Step(
         id="run-iris",
