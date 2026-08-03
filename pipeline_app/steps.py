@@ -480,6 +480,7 @@ STEPS = [
         description="Generate all chemical markdown pages and tier SVGs.",
         cmd=["python", "src/04_generation/build_site.py"],
         dependencies=["run-tiered-classifier", "run-list-of-lists"],
+        extra_env={"PYTHONUTF8": "1"},
     ),
     Step(
         id="run-mkdocs",
