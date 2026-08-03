@@ -459,6 +459,7 @@ STEPS = [
         description="Generate final tiered hazard classifications.",
         cmd=["python", "src/03_integration/tiered_classifier.py"],
         dependencies=["run-hazard-classifier"],
+        extra_env={"PYTHONUTF8": "1"},
     ),
 
     # ── Generation ────────────────────────────────────────────────────────────
