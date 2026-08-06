@@ -273,6 +273,19 @@ STEPS = [
         dependencies=["run-epa1"],
     ),
     Step(
+        id="run-epa-images",
+        name="EPA — Molecule Structure Images",
+        category="AUTO",
+        stage="Automated Collection",
+        description=(
+            "Fetch molecule structure images from EPA CompTox for CASRNs missing "
+            "one locally. Uses the hasStructureImage flag from EPA Chem Master to "
+            "skip chemicals known to have no image. Incremental and resumable."
+        ),
+        cmd=["python", "src/01_collection/fetch_molecule_images.py"],
+        dependencies=["run-epa2"],
+    ),
+    Step(
         id="run-pubchem",
         name="PubChem GHS",
         category="AUTO",

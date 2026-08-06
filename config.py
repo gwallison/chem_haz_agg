@@ -23,7 +23,18 @@ MASTER_CAS_LIST = os.path.join(PROCESSED_DATA,'master_cas_list.parquet')
 FF_REPO_DIR = r"G:\My Drive\production\repos\openFF_data_2025_10_07"
 FF_WORKING_DATA = os.path.join(FF_REPO_DIR,'working_df.parquet')
 OPENFF_BUILD_NEW_CAS = r"C:\MyDocs\integrated\openFF\build\sandbox\work_dir\new_cas_added.parquet"
-MOLECULE_PIC_DIR = r"C:\MyDocs\integrated\openFF\images\pic_dir"
+
+# One-time backfill source only (legacy sibling-project image cache); not used
+# once data/03_processed/by_casrn/{cas}/comptoxid.png has been seeded from it.
+LEGACY_MOLECULE_PIC_DIR = r"C:\MyDocs\integrated\openFF\images\pic_dir"
+
+# Molecule structure images: canonical copy lives in PROCESSED_CAS_DIR
+# (data/03_processed/by_casrn/{cas}/comptoxid.png) -- the filesystem hub other
+# projects can point at. build_site.py copies these into MOLECULE_IMAGES_SITE_DIR
+# so they ship as static assets with the built site too.
+MOLECULE_IMAGE_FILENAME = 'comptoxid.png'
+MOLECULE_IMAGES_SITE_DIR = os.path.join(DOCS_DIR, 'images', 'molecules')
+MOLECULE_IMAGE_SITE_URL = '../images/molecules/{cas_num}/comptoxid.png'
 
 
 

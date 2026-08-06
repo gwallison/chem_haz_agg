@@ -15,6 +15,33 @@ import data_processing as dp
 import page_generators as pg
 import make_graphics
 
+
+def sync_molecule_images(casrns):
+    """
+    Copies molecule structure images from the per-CAS asset hub
+    (config.PROCESSED_CAS_DIR) into the mkdocs docs tree so they ship as
+    static assets with the built site. `casrns` is the list of CAS to sync,
+    or None to sync every CAS that has a local image.
+    """
+    if casrns is None:
+        casrns = [
+            d for d in os.listdir(config.PROCESSED_CAS_DIR)
+            if os.path.isdir(os.path.join(config.PROCESSED_CAS_DIR, d))
+        ]
+
+    copied = 0
+    for cas in casrns:
+        src = os.path.join(config.PROCESSED_CAS_DIR, cas, config.MOLECULE_IMAGE_FILENAME)
+        if not os.path.exists(src) or os.path.getsize(src) == 0:
+            continue
+        dst_dir = os.path.join(config.MOLECULE_IMAGES_SITE_DIR, cas)
+        dst = os.path.join(dst_dir, config.MOLECULE_IMAGE_FILENAME)
+        os.makedirs(dst_dir, exist_ok=True)
+        shutil.copy2(src, dst)
+        copied += 1
+    print(f"Synced {copied} molecule image(s) to the site.")
+
+
 def main():
     """Main function to build the mkdocs site content."""
     parser = argparse.ArgumentParser(description="Build the mkdocs site content.")
@@ -52,6 +79,8 @@ def main():
     if not args.dev:
         print("Regenerating tier SVGs...")
         make_graphics.generate_all_tier_graphics(casrns=target_casrns)
+        print("Syncing molecule images...")
+        sync_molecule_images(casrns=target_casrns)
 
     # 4. Generate the main interactive HTML table (always covers every chemical,
     #    even in scoped mode, so the searchable index stays complete)

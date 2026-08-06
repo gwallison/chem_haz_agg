@@ -85,6 +85,24 @@ def get_chemical_details(dtxsid: str = 'DTXSID7020182'):
     return _make_request('GET', endpoint, headers=headers)
 
 
+def get_chemical_image(dtxsid: str):
+    """
+    Fetches the molecule structure image (PNG) from EPA CompTox for a given
+    DTXSID. Returns the raw PNG bytes, or None if the request itself failed.
+    An empty bytes response means EPA has no structure image for this
+    DTXSID -- that's a valid result, not an error.
+    """
+    endpoint = f"/chemical/file/image/search/by-dtxsid/{dtxsid}"
+    headers = {'accept': 'image/png'}
+    api_key = os.environ.get("EPA_API_KEY")
+    if api_key:
+        headers['x-api-key'] = api_key
+    response = _make_request('GET', endpoint, headers=headers, stream=True)
+    if response is None:
+        return None
+    return response.content
+
+
 # def get_dtxsid_by_casrn(casrn: str):
 #     """
 #     Fetches chemical details from the EPA CompTox API for a given CASRN.
