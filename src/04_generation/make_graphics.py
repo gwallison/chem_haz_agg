@@ -1,3 +1,8 @@
+import matplotlib
+# Fixed hashsalt makes the SVG clip-path/id hashes deterministic instead of
+# random-per-run, so re-generating an unchanged chemical produces a
+# byte-identical file (see also the metadata={'Date': None} in savefig below).
+matplotlib.rcParams['svg.hashsalt'] = 'chemhaz-tier-svg'
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import os
@@ -96,10 +101,29 @@ def create_tier_graphic(
     # 4. Save the final graphic (Unchanged)
     os.makedirs(output_dir, exist_ok=True)
     full_path = os.path.join(output_dir, filename)
-    plt.savefig(full_path, bbox_inches='tight', pad_inches=0.1, facecolor='black')
+    plt.savefig(full_path, bbox_inches='tight', pad_inches=0.1, facecolor='black',
+                metadata={'Date': None})
     plt.close(fig)
     print(f"✅ Successfully created '{full_path}' with interactive IDs.")
 
+
+
+def find_casrns_missing_tier_svg(output_dir: str = None) -> list:
+    """
+    Returns CASRNs in the final tiered classification output that don't yet
+    have a tier SVG on disk — i.e. chemicals new since the last full build.
+    """
+    if output_dir is None:
+        output_dir = os.path.join(config.DOCS_DIR, 'images')
+
+    all_casrns = set(pd.read_parquet(FINAL_TIERED_OUTPUT_PATH).CASRN.astype(str))
+    existing = set()
+    if os.path.isdir(output_dir):
+        existing = {
+            os.path.splitext(f)[0] for f in os.listdir(output_dir)
+            if f.endswith('.svg')
+        }
+    return sorted(all_casrns - existing)
 
 
 def generate_all_tier_graphics(output_dir: str = None, casrns: list = None):

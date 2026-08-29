@@ -1,13 +1,15 @@
 import subprocess
 
 
-def run_step_streaming(step):
+def run_step_streaming(step, extra_args=None):
     """
     Run a step's command as a subprocess.
     Yields (line: str, returncode: int | None) tuples.
     returncode is None for every line except the final sentinel.
     """
     cmd = step.resolved_cmd()
+    if cmd and extra_args:
+        cmd = cmd + list(extra_args)
     if not cmd:
         yield ("[No command defined for this step]\n", 1)
         return

@@ -64,7 +64,8 @@ def run_step(step):
     lines = []
     return_code = 1  # default to failure until process reports otherwise
 
-    for line, rc in run_step_streaming(step):
+    extra_args = st.session_state.get("active_run_extra_args")
+    for line, rc in run_step_streaming(step, extra_args=extra_args):
         lines.append(line.rstrip("\n"))
         output_area.code("\n".join(lines[-100:]), language=None)
         if rc is not None:
@@ -74,6 +75,7 @@ def run_step(step):
     ss["completed_at"] = datetime.now().isoformat()
     save_state(state)
     st.session_state.active_run_id = None
+    st.session_state.active_run_extra_args = None
     st.rerun()
 
 def mark_step(step_id, status):
@@ -196,11 +198,25 @@ for stage in stages_ordered:
                         reset_step(step.id)
 
                 elif status == "pending" and satisfied:
-                    if step.category == "AUTO":
+                    if step.id == "run-build-site":
+                        if st.button("▶ Run (new chemicals only)", key=f"run_{step.id}_new", type="primary"):
+                            st.session_state.active_run_id = step.id
+                            st.session_state.active_run_extra_args = ["--new-only"]
+                            st.rerun()
+                        st.caption("Regenerates tier SVGs and pages only for chemicals that don't have one yet.")
+                        st.warning("Regenerating ALL tier SVGs takes a long time — only needed if the image structure itself changed.")
+                        if st.button("⚠ Regenerate ALL (slow)", key=f"run_{step.id}_all"):
+                            st.session_state.active_run_id = step.id
+                            st.session_state.active_run_extra_args = None
+                            st.rerun()
+                        if st.button("⏭ Skip", key=f"skip_{step.id}"):
+                            mark_step(step.id, "skipped")
+                    elif step.category == "AUTO":
                         c1, c2 = st.columns(2)
                         with c1:
                             if st.button("▶ Run", key=f"run_{step.id}", type="primary"):
                                 st.session_state.active_run_id = step.id
+                                st.session_state.active_run_extra_args = None
                                 st.rerun()
                         with c2:
                             if st.button("⏭ Skip", key=f"skip_{step.id}"):

@@ -47,9 +47,17 @@ def main():
     parser = argparse.ArgumentParser(description="Build the mkdocs site content.")
     parser.add_argument("--dev", action="store_true", help="Run in dev mode (build only 10 chemical pages for fast preview)")
     parser.add_argument("--casrns", help="Comma-separated CASRNs to regenerate, leaving all other existing pages untouched")
+    parser.add_argument("--new-only", action="store_true", help="Regenerate only chemicals that don't yet have a tier SVG (new since the last full build)")
     args = parser.parse_args()
 
-    target_casrns = [c.strip() for c in args.casrns.split(",")] if args.casrns else None
+    if args.new_only:
+        target_casrns = make_graphics.find_casrns_missing_tier_svg()
+        print(f"--new-only: {len(target_casrns)} chemical(s) have no existing tier SVG.")
+        if not target_casrns:
+            print("Nothing new to generate.")
+            return
+    else:
+        target_casrns = [c.strip() for c in args.casrns.split(",")] if args.casrns else None
 
     if args.dev:
         print("--- Starting site generation (DEV mode: 10 pages) ---")
