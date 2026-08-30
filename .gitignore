@@ -16,6 +16,9 @@ __pycache__/
 data/01_raw/
 data/02_intermediate/
 
+# Auto-generated master list backups (unbounded, timestamped, local-only)
+data/03_processed/backups/
+
 # Generated Site & Output Assets
 mkdocs/site/
 mkdocs/docs/chemicals/
