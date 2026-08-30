@@ -38,7 +38,7 @@ MOLECULE_IMAGE_SITE_URL = '../images/molecules/{cas_num}/comptoxid.png'
 
 
 
-TSCA_RAW_CSV = os.path.join(RAW_DATA,'TSCAINV_072025.csv')
+TSCA_RAW_CSV = os.path.join(RAW_DATA,'TSCAINV_072026.csv')
 TEDX_RAW = os.path.join(RAW_DATA,'TEDX_EDC_trimmed.xls')
 PROP65_RAW = os.path.join(RAW_DATA,'prop65_2025_12_05.csv')
 

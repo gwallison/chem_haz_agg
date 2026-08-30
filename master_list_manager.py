@@ -366,14 +366,32 @@ def update_DTXSID():
     
 def main():
     parser = argparse.ArgumentParser(
-        description="Manage the ChemHaz master CASRN list (data/03_processed/master_cas_list.parquet)."
+        description="Manage the ChemHaz master CASRN list (data/03_processed/master_cas_list.parquet).",
+        epilog="All arguments are flags -- none are positional. Example:\n"
+               "  python master_list_manager.py add-file --path \"C:\\path\\to\\file.parquet\" "
+               "--source \"my_source_label\" --column CASRN\n"
+               "Run `python master_list_manager.py <command> -h` for a command's full argument list.",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     sub = parser.add_subparsers(dest='command', required=True)
 
-    p_add = sub.add_parser('add-file', help='Add CASRNs from a one-off CSV or parquet file.')
-    p_add.add_argument('--path', required=True, help='Path to the source file (.csv or .parquet).')
-    p_add.add_argument('--source', required=True, help="Label to record as 'orig_source'.")
-    p_add.add_argument('--column', default='CASRN', help="Column containing CASRNs (default: 'CASRN').")
+    p_add = sub.add_parser(
+        'add-file',
+        help='Add CASRNs from a one-off CSV or parquet file.',
+        description="Add CASRNs from a one-off CSV or parquet file. --path and --source "
+                     "are both required flags (not positional).",
+        epilog="Example:\n"
+               "  python master_list_manager.py add-file --path \"C:\\path\\to\\file.parquet\" "
+               "--source \"my_source_label\" --column CASRN",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    p_add.add_argument('--path', required=True, help='Path (as a flag, not positional) to the source file (.csv or .parquet).')
+    p_add.add_argument('--source', required=True,
+                        help="Required. Short label recorded in the 'orig_source' column for every row added "
+                             "this run, e.g. 'gwa_local_all_prod' (used later to trace where a CASRN came from).")
+    p_add.add_argument('--column', default='CASRN',
+                        help="Name of the column in the source file containing the CASRNs (default: 'CASRN'). "
+                             "Only needed if the file uses a different column name.")
 
     p_ff = sub.add_parser('add-fracfocus',
                            help='Add CASRNs from the current FracFocus working_df (bgCAS column).')

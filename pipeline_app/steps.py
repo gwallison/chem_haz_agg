@@ -74,12 +74,15 @@ STEPS = [
             "Skip if no additional sources are needed this cycle."
         ),
         instructions=(
-            "Run from the project root, substituting your file path:\n\n"
+            "Run from the project root, substituting your file path and a source label:\n\n"
             "```\n"
-            "python master_list_manager.py add-file <path/to/file.csv>\n"
+            "python master_list_manager.py add-file --path \"path/to/file.csv\" --source \"my_source_label\"\n"
             "```\n\n"
-            "The file must contain a `CASRN` column. "
-            "Accepts `.csv` or `.parquet`. "
+            "`--path` and `--source` are both required flags (not positional args). "
+            "`--source` is a short label recorded in the `orig_source` column for every row "
+            "added this run, e.g. `gwa_local_all_prod`.\n\n"
+            "The file must contain a `CASRN` column by default -- pass `--column <name>` "
+            "if it uses a different column name. Accepts `.csv` or `.parquet`. "
             "Skipped and quarantined CASRNs are logged automatically.\n\n"
             "Skip if no additional file sources are needed this cycle."
         ),
