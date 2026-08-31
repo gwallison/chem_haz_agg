@@ -99,6 +99,26 @@ STEPS = [
     ),
 
     # ── Manual Fetches ────────────────────────────────────────────────────────
+    # SciFinder runs first: verify_all_components_are_local() can surface new
+    # CASRNs, which would otherwise mean re-running the other Manual Fetch
+    # steps below (they all pull from temp_casrn_list.csv, built off the
+    # master list).
+    Step(
+        id="scifinder",
+        name="SciFinder",
+        category="HUMAN-LOOP",
+        stage="Manual Fetches",
+        description="Run SciFinder extractor — requires 2 manual login pauses.",
+        instructions=(
+            "Run `src/01_collection/SciFinder_extractor.py` functions in order:\n"
+            "1. `update_from_master_list()` — requires OSU proxy login\n"
+            "2. `check_all_for_download_errors()`\n"
+            "3. `verify_all_components_are_local()` — may surface new CASRNs; "
+            "if so, add to master list and re-run steps 1–3\n"
+            "4. `make_full_SciFinder_output_set()` (optional)\n\n"
+            "Requires 2 login pauses: OSU proxy + CAS."
+        ),
+    ),
     Step(
         id="fetch-tsca",
         name="TSCA Inventory",
@@ -239,23 +259,6 @@ STEPS = [
             "If count unchanged, click **Skip**."
         ),
     ),
-    Step(
-        id="scifinder",
-        name="SciFinder",
-        category="HUMAN-LOOP",
-        stage="Manual Fetches",
-        description="Run SciFinder extractor — requires 2 manual login pauses.",
-        instructions=(
-            "Run `src/01_collection/SciFinder_extractor.py` functions in order:\n"
-            "1. `update_from_master_list()` — requires OSU proxy login\n"
-            "2. `check_all_for_download_errors()`\n"
-            "3. `verify_all_components_are_local()` — may surface new CASRNs; "
-            "if so, add to master list and re-run steps 1–3\n"
-            "4. `make_full_SciFinder_output_set()` (optional)\n\n"
-            "Requires 2 login pauses: OSU proxy + CAS."
-        ),
-    ),
-
     # ── Automated Collection ──────────────────────────────────────────────────
     Step(
         id="run-epa1",

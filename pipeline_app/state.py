@@ -6,7 +6,7 @@ STATE_FILE = Path(__file__).parent / "pipeline_state.json"
 
 
 def _fresh_step():
-    return {"status": "pending", "started_at": None, "completed_at": None}
+    return {"status": "pending", "started_at": None, "completed_at": None, "output": None}
 
 
 def load_state(steps):

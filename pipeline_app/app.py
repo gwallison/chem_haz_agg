@@ -73,6 +73,7 @@ def run_step(step):
 
     ss["status"] = "done" if return_code == 0 else "failed"
     ss["completed_at"] = datetime.now().isoformat()
+    ss["output"] = "\n".join(lines)
     save_state(state)
     st.session_state.active_run_id = None
     st.session_state.active_run_extra_args = None
@@ -236,6 +237,11 @@ for stage in stages_ordered:
                     if st.button("▶ Retry", key=f"retry_{step.id}", type="primary"):
                         st.session_state.active_run_id = step.id
                         st.rerun()
+
+            # Persisted output from the last run, so it doesn't vanish on rerun.
+            if ss.get("output"):
+                with st.expander("Output", expanded=(status == "failed")):
+                    st.code(ss["output"], language=None)
 
             # Run at full expander width, not squeezed into the narrow button column.
             if st.session_state.get("active_run_id") == step.id:

@@ -53,9 +53,15 @@ def update_epa_chem_df():
         return 0
             
     inchemdf = mastcasdf[mastcasdf.CASRN.isin(workcas)].copy()
-    print(len(inchemdf))
-    
-    for dtxsids in inchemdf[inchemdf.DTXSIDs.notna()].DTXSIDs.tolist():
+    has_dtxsid = inchemdf.DTXSIDs.notna()
+    missing = inchemdf[~has_dtxsid]
+    if len(missing) > 0:
+        print(f'{len(missing)} of {len(inchemdf)} CAS have no DTXSID yet and will be '
+              f'skipped this run (re-run "EPA 1" CompTox DTXSID batch + ingest to pick them up):')
+        print(missing.CASRN.tolist())
+    print(f'Fetching EPA chem details for {has_dtxsid.sum()} CAS with a DTXSID.')
+
+    for dtxsids in inchemdf[has_dtxsid].DTXSIDs.tolist():
         try:
             for dtxsid in dtxsids:
                 workdic = make_fresh_chem_dictionary()
@@ -67,11 +73,10 @@ def update_epa_chem_df():
                 new = pd.DataFrame(workdic)
                 epadf = pd.concat([epadf,new])
                 epadf.to_parquet(config.EPA_CHEM_MASTER)
-                
+
         except Exception as e:
             print(f'\nBad response for DTXSID: {dtxsid}: {e}')
         time.sleep(4)
-    print(len(workdic))    
     # print(f'\n ****  wrote dataframe to {outfn}')
 
 def main():

@@ -11,10 +11,7 @@ The two major functions of this set of routines:
     2) Scrape those individual pages to produce a single data frame of all
         the variables of interest.
 """
-# import sys
-# sys.path.insert(0,'c:/MyDocs/integrated/') # adjust to your setup
-
-from selenium import webdriver 
+from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -24,13 +21,20 @@ from selenium.common.exceptions import WebDriverException
 from selenium.common.exceptions import TimeoutException  # Import TimeoutException
 import pandas as pd
 import os
+import sys
 import time
 import datetime
 # import numpy  as np
-from io import StringIO 
+from io import StringIO
 from bs4 import BeautifulSoup
 import requests
 import SciFinder_support as sfs
+
+# Add the project root to the Python path to resolve 'master_list_manager'/'config'
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 import master_list_manager as mlm
 import config
 
@@ -538,42 +542,61 @@ def scrape_to_local_library(chemlist=[]):
         
     try:
         outcaslst = []
+        skipped = []
         for i,cas_from_list in enumerate(worklist):
             cas = cas_from_list.strip()
-  
-            
-            print(f'\n\n**** {i+1} of {len(worklist)}:  {cas} ****\n')
-            perform_advanced_search(driver,cas)
-            
-            try:
-                WebDriverWait(driver, 5).until(EC.title_contains("Substance Detail"))
-                print("Advanced search led directly to the Substance Detail page.")
-                
-            except TimeoutException:
-                print("On a results page, attempting to find and click the CASRN link.")
-                click_casrn_link(driver, cas)
-                wait_for_substance_detail_page(driver)
 
-            time.sleep(1)
-            print('next click expand all')
-            click_first_expand_all(driver)
-            time.sleep(1)
-            click_other_names_view_all(driver)
-            click_regulatory_expand_all(driver)
-            time.sleep(1)
-            click_regulatory_view_all(driver)
-            click_GHS_view_all(driver)
-            
-            # save_html_page(cas, driver.page_source)
-            
-            rendered_html = driver.execute_script("return document.documentElement.outerHTML;")
-            save_html_page(cas, rendered_html)
-            outcaslst.append(cas)
-            
+
+            print(f'\n\n**** {i+1} of {len(worklist)}:  {cas} ****\n')
+
+            try:
+                perform_advanced_search(driver,cas)
+
+                try:
+                    WebDriverWait(driver, 5).until(EC.title_contains("Substance Detail"))
+                    print("Advanced search led directly to the Substance Detail page.")
+
+                except TimeoutException:
+                    print("On a results page, attempting to find and click the CASRN link.")
+                    click_casrn_link(driver, cas)
+                    wait_for_substance_detail_page(driver)
+
+                time.sleep(1)
+                print('next click expand all')
+                click_first_expand_all(driver)
+                time.sleep(1)
+                click_other_names_view_all(driver)
+                click_regulatory_expand_all(driver)
+                time.sleep(1)
+                click_regulatory_view_all(driver)
+                click_GHS_view_all(driver)
+
+                # save_html_page(cas, driver.page_source)
+
+                rendered_html = driver.execute_script("return document.documentElement.outerHTML;")
+                save_html_page(cas, rendered_html)
+                outcaslst.append(cas)
+
+            except (WebDriverException, TimeoutException) as e:
+                # Distinguish a per-chemical miss (e.g. the text search didn't
+                # return an exact CASRN match) from the browser session itself
+                # having died. Only the latter should abort the whole batch.
+                try:
+                    driver.current_url
+                except WebDriverException:
+                    print(f"Browser session appears disconnected: {e}")
+                    raise
+                print(f"Skipping {cas} after error: {e}")
+                skipped.append(cas)
+                continue
+
     except (WebDriverException, TimeoutException)  as e:
         print(f"Disconnection or Timeout error: {e}")
-        driver.quit()       
-        
+        driver.quit()
+
+    if skipped:
+        print(f"\nSkipped {len(skipped)} CASRN (no exact match / error): {skipped}")
+
     add_to_SciFinder_output_set(outcaslst)
         
     
@@ -680,7 +703,7 @@ def check_all_for_download_errors():
     errorfn = []
     for i,row in chemdf.iterrows():
         if i%100==0: print(f'{i+1} ',end='')
-        with open(row.filename,'r') as f:
+        with open(row.filename,'r', encoding='utf-8') as f:
             alltxt = f.read()
         if "unexpected error has occurred" in alltxt:
             print(f'{row.CASRN} ERROR FOUND')
@@ -790,21 +813,21 @@ def add_to_SciFinder_output_set(chemlst=[],outdir=outdir,
         c = origdf.CASRN.isin(chemlst)
         if c.sum()>0:
             print(f'Overwriting: {origdf[c].CASRN.tolist()}')
-            concatdf = pd.concat([origdf[~c],outdf])
+        concatdf = pd.concat([origdf[~c],outdf])
     else:  #only include those not in original
         origcas = origdf.CASRN.tolist()
         c = outdf.CASRN.isin(origcas)
         if c.sum()>0:
             print(f'Already in origin: {outdf[c].CASRN.tolist()}')
-            concatdf = pd.concat([origdf,outdf[~c]])
-    print(concatdf)            
+        concatdf = pd.concat([origdf,outdf[~c]])
+    print(concatdf)
     concatdf.to_parquet(config.SCIFINDER_OUTPUT_PATH)
             
 if __name__ == '__main__':
     # update_from_master_list(bySource='')
     # errorlst = check_all_for_download_errors()
     # missing = verify_all_components_are_local()
-    # make_full_SciFinder_output_set()
+    make_full_SciFinder_output_set()
 
 
 
