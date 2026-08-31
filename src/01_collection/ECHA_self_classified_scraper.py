@@ -1,3 +1,5 @@
+import os
+import sys
 import time
 import pandas as pd
 from io import StringIO
@@ -11,6 +13,11 @@ from selenium.common.exceptions import TimeoutException, StaleElementReferenceEx
 # Import webdriver_manager and Service
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+
+# Add the project root to the Python path to resolve the 'config' module
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 
 # --- Selectors ---
 ECL_COOKIE_HOST_SELECTOR = (By.TAG_NAME, "ecl-cookie-consent-banner")
