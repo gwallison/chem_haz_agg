@@ -34,6 +34,13 @@ SAVE_DIRECTORY = config.ECHA_PAGES
 # DEBUG_DIRECTORY = "debug_output"
 DELAY_BETWEEN_REQUESTS = 3
 
+# On the results page, exactly one of these ends up visible once ECHA's search
+# resolves: the CSV export button (results found) or this banner (confirmed
+# zero results). Racing both means we don't have to sit through a full
+# timeout just to learn a CASRN genuinely has no ECHA registrations.
+CSV_BUTTON_ID = "_disssimplesearch_WAR_disssearchportlet_exportButtonCSV"
+NO_RESULTS_MSG_ID = "_disssimplesearch_WAR_disssearchportlet_rmlSearchResultVOsSearchContainerEmptyResultsMessage"
+
 def initialize_driver():
     """Initializes and returns a Selenium WebDriver."""
     options = webdriver.ChromeOptions()
@@ -62,6 +69,39 @@ def is_timeout_placeholder_csv(csv_path):
         return line_count < 3
     except OSError:
         return False
+
+def _no_results_message_visible(driver):
+    """
+    True if ECHA's "No results were found." banner is currently shown.
+    The results page always contains this element; ECHA toggles a "hide"
+    class on it (and the opposite on the results table) once the search
+    resolves, so its absence just means the search hasn't resolved yet.
+    """
+    try:
+        el = driver.find_element(By.ID, NO_RESULTS_MSG_ID)
+    except NoSuchElementException:
+        return False
+    classes = (el.get_attribute("class") or "").split()
+    return "hide" not in classes
+
+def write_confirmed_no_results_csv(cas):
+    """
+    Writes a zero-row placeholder matching the real ECHA export's header
+    format for a CASRN ECHA has confirmed has no registrations. Using the
+    real header (instead of an empty pd.DataFrame) means it parses cleanly
+    downstream and doesn't get flagged by is_timeout_placeholder_csv as a
+    candidate to retry -- ECHA already gave us a definitive answer.
+    """
+    dfn = os.path.join(SAVE_DIRECTORY, f'{cas}_search_res.csv')
+    content = (
+        "﻿Registered Substances\n"
+        f"Export date: {{0}} {time.strftime('%m/%d/%Y %H:%M:%S')}\n"
+        "\n"
+        '"Name"\t"EC / List Number"\t"Cas Number"\t"Substance Information Page"\t'
+        '"exported-column-briefProfileLink"\t"exported-column-obligationsLink"\t\n'
+    )
+    with open(dfn, 'w', encoding='utf-8') as f:
+        f.write(content)
 
 def has_been_crawled(cas_number, save_dir):
     """Checks if any page for a given CAS number has already been saved."""
@@ -107,11 +147,9 @@ def click_and_download_csv(driver, cas,
     import shutil
     try:
         # --- 1. Locate and click the CSV download button ---
-        csv_button_id = "_disssimplesearch_WAR_disssearchportlet_exportButtonCSV"
-        # print(f"Waiting for CSV button with ID: {csv_button_id}")
-
+        # search_and_save_details already confirmed this is clickable before calling us.
         wait = WebDriverWait(driver, 20)
-        csv_button = wait.until(EC.element_to_be_clickable((By.ID, csv_button_id)))
+        csv_button = wait.until(EC.element_to_be_clickable((By.ID, CSV_BUTTON_ID)))
 
         # Get a list of files in the download directory *before* clicking
         files_before = os.listdir(download_path)
@@ -169,10 +207,21 @@ def search_and_save_details(driver, cas_number):
         search_box.clear()
         search_box.send_keys(cas_number)
         driver.find_element(By.ID, "_disssimplesearchhomepage_WAR_disssearchportlet_searchButton").click()
-        
+
         # input('waiting on user input >> ')
-        # --- Navigate from search results to substance page ---
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "tbody.table-data")))
+        # --- Race results-found against confirmed-no-results, whichever resolves first ---
+        WebDriverWait(driver, 20).until(
+            EC.any_of(
+                EC.element_to_be_clickable((By.ID, CSV_BUTTON_ID)),
+                _no_results_message_visible,
+            )
+        )
+
+        if _no_results_message_visible(driver):
+            print(f"  - ECHA confirms no results for {cas_number}.")
+            write_confirmed_no_results_csv(cas_number)
+            return True
+
         click_and_download_csv(driver,cas_number)
 
     except Exception as e:
