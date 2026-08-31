@@ -53,6 +53,10 @@ RAW_CAS_DIR = os.path.join(RAW_DATA, 'by_casrn') # Directory for cas specific fi
 PROCESSED_CAS_DIR = os.path.join(PROCESSED_DATA, 'by_casrn') # Directory for cas specific files, like scifinder
 ECHA_PAGES = os.path.join(RAW_DATA,'echa_pages')
 ECHA_SUBSTANCE_LINKS = os.path.join(INTERMED_DATA,'echa_substance_links.parquet')
+# CASRNs whose search_res.csv is the empty-DataFrame placeholder ECHA_substance_scraper_1.py
+# writes when the CSV download timed out (a network hiccup, not necessarily "no results").
+# Written by ECHA_substance_links_consolidator.py; consumed manually / by --retry-timeouts.
+ECHA_SEARCH_TIMEOUT_RETRIES = os.path.join(INTERMED_DATA,'echa_search_timeout_retries.txt')
 ECHA_SELF_CLASSIFIED_PATH = os.path.join(INTERMED_DATA,'echa_self_classifications.parquet')
 ECHA_SELF_SUMMARY_PATH = os.path.join(INTERMED_DATA,'echa_self_summary.parquet')
 

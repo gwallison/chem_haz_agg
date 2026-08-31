@@ -5,6 +5,7 @@ Created on Sun Jan 25 14:40:12 2026
 @author: Gary
 """
 
+import argparse
 import os
 import sys
 import time
@@ -46,6 +47,21 @@ def initialize_driver():
 
 # def save_output_df(df):
 #     df.to_parquet(OUT_DF)
+
+def is_timeout_placeholder_csv(csv_path):
+    """
+    True if this search_res.csv is the empty-DataFrame fallback written by
+    click_and_download_csv() when the CSV download button couldn't be found in
+    time (a network/UI hiccup, not necessarily a real "no results" from ECHA).
+    Real ECHA exports always have a title row, a blank/meta row, and a header
+    row before any data, so they're never fewer than 3 lines.
+    """
+    try:
+        with open(csv_path, 'r', encoding='utf-8') as f:
+            line_count = sum(1 for _ in f)
+        return line_count < 3
+    except OSError:
+        return False
 
 def has_been_crawled(cas_number, save_dir):
     """Checks if any page for a given CAS number has already been saved."""
@@ -94,7 +110,7 @@ def click_and_download_csv(driver, cas,
         csv_button_id = "_disssimplesearch_WAR_disssearchportlet_exportButtonCSV"
         # print(f"Waiting for CSV button with ID: {csv_button_id}")
 
-        wait = WebDriverWait(driver, 10)
+        wait = WebDriverWait(driver, 20)
         csv_button = wait.until(EC.element_to_be_clickable((By.ID, csv_button_id)))
 
         # Get a list of files in the download directory *before* clicking
@@ -130,7 +146,7 @@ def click_and_download_csv(driver, cas,
         return False
 
     except TimeoutException:
-        print("Error: Could not find the CSV download button within 10 seconds.")
+        print("Error: Could not find the CSV download button within 20 seconds.")
         print("Saving an empty dataframe.")
         dfn = os.path.join(SAVE_DIRECTORY,f'{cas}_search_res.csv')
         tmp = pd.DataFrame()
@@ -184,16 +200,34 @@ def main(cas_numbers):
         print("\nScraping finished.")
 
 if __name__ == "__main__":
-    
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--retry-timeouts', action='store_true',
+        help="Re-attempt CASRNs whose search_res.csv is the empty-dataframe placeholder "
+             "written when the CSV download timed out, instead of skipping them as "
+             "already-crawled. A successful re-download overwrites the placeholder."
+    )
+    args = parser.parse_args()
+
     mastercas = pd.read_parquet(config.MASTER_CAS_LIST)
     cas_list_to_process = mastercas.CASRN.tolist()
-    
 
     dlst = os.listdir(SAVE_DIRECTORY)
+    retry_count = 0
     for fn in dlst:
+        cas = fn.split('_')[0]
+        if args.retry_timeouts and fn.endswith('_search_res.csv'):
+            full_path = os.path.join(SAVE_DIRECTORY, fn)
+            if is_timeout_placeholder_csv(full_path):
+                retry_count += 1
+                continue  # leave it in cas_list_to_process so it gets re-attempted
         try:
-            cas_list_to_process.remove(fn.split('_')[0])
-        except:
+            cas_list_to_process.remove(cas)
+        except ValueError:
             pass
+
+    if args.retry_timeouts:
+        print(f"--retry-timeouts: {retry_count} timed-out placeholder CSVs will be re-attempted.")
 
     main(cas_list_to_process)
