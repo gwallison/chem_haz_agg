@@ -18,6 +18,17 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 import config
 
+# ECHA exports search results under at least two different column-name schemas
+# depending on which search UI produced them ("Registered Substances" vs.
+# "Search for Chemicals" title row). Normalize the alternate names to the
+# canonical ones used everywhere downstream (filter_appropriate_rows, the
+# consolidator's record fields) so rows from either schema are recognized.
+ALT_COLUMN_NAMES = {
+    'Substance Name': 'Name',
+    'CAS Number': 'Cas Number',
+    'EC Number': 'EC / List Number',
+}
+
 def load_chem_links_from_local_csv(file_path: str) -> pd.DataFrame | None:
     """
     Loads a specific, tab-delimited CSV file where the header is on the 3rd row.
@@ -26,7 +37,7 @@ def load_chem_links_from_local_csv(file_path: str) -> pd.DataFrame | None:
         file_path (str): The full path to the CSV file.
 
     Returns:
-        pd.DataFrame or None: A DataFrame containing the data from the CSV, 
+        pd.DataFrame or None: A DataFrame containing the data from the CSV,
                                or None if an error occurs.
     """
     # Check if the file exists before trying to read it.
@@ -35,12 +46,16 @@ def load_chem_links_from_local_csv(file_path: str) -> pd.DataFrame | None:
         return None
 
     print(f"Attempting to load file: {file_path}")
-    
+
     try:
         # Read the CSV file using pandas.
         # 'sep=\t' specifies that the file is tab-delimited.
         # 'header=2' tells pandas that the column names are in the 3rd row (since it's 0-indexed).
         df = pd.read_csv(file_path, sep='\t', header=2)
+        rename_map = {old: new for old, new in ALT_COLUMN_NAMES.items()
+                      if old in df.columns and new not in df.columns}
+        if rename_map:
+            df = df.rename(columns=rename_map)
         print("✅ File successfully loaded!")
         return df
     except Exception as e:
