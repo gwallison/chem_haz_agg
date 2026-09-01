@@ -183,7 +183,7 @@ def scrape_echa_substance(driver, url, casrn, ec_number):
 
     except TimeoutException:
         print("  Error: Main page content did not load.")
-        return None 
+        return 'MAIN_CONTENT_TIMEOUT'
     except Exception as e:
         print(f"  An unexpected error occurred: {e}")
         return None 
@@ -224,6 +224,14 @@ if __name__ == "__main__":
         try:
             existing_df = pd.read_parquet(output_path)
             if 'CASRN' in existing_df.columns and 'ec_number' in existing_df.columns:
+                # Rows that only ever timed out on the main content load aren't a
+                # real result -- drop them so they're retried this run instead of
+                # being treated as permanently done.
+                stale_mask = existing_df.get('scrape_status') == 'Main page timeout'
+                stale_count = int(stale_mask.sum())
+                if stale_count:
+                    print(f"  {stale_count} rows previously timed out loading the main page; retrying them this run.")
+                    existing_df = existing_df.loc[~stale_mask].reset_index(drop=True)
                 processed_keys = set(zip(existing_df['CASRN'], existing_df['ec_number']))
                 print(f"  Found {len(existing_df)} existing records.")
                 print(f"  Resuming. {len(processed_keys)} (CAS, EC) pairs already processed.")
@@ -323,6 +331,19 @@ if __name__ == "__main__":
                         'scrape_status': 'No associated classifications'
                     }])
                 
+                elif substance_df_or_flag == 'MAIN_CONTENT_TIMEOUT':
+                    # The page never loaded within the wait -- likely transient
+                    # (rate-limiting / slow response), not a real "no data" result.
+                    # The startup resume logic above drops rows with this status,
+                    # so this gets retried automatically next time the script runs.
+                    print(f"  Main page content did not load for {casrn}. Will retry on next run.")
+                    substance_df = pd.DataFrame([{
+                        'CASRN': casrn,
+                        'ec_number': ec_num,
+                        'source_url': url,
+                        'scrape_status': 'Main page timeout'
+                    }])
+
                 elif substance_df_or_flag is None:
                     print(f"  Tabs found but no tables scraped for {casrn}. Creating 'Empty' entry.")
                     substance_df = pd.DataFrame([{
