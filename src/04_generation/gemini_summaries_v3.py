@@ -15,6 +15,7 @@ Authentication: Uses Application Default Credentials (ADC).
 
 import pandas as pd
 import os
+import sys
 import json
 import time
 import datetime
@@ -25,6 +26,12 @@ from google.genai.types import (
     Content,
     Part,
 )
+
+# Add the project root to the Python path to resolve the 'config' and
+# 'Info_Service' modules (both live at the project root, not here).
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 
 import config
 import Info_Service as infoserv
@@ -629,11 +636,40 @@ def make_test_prompt(cas='50-00-0'):
 
 
 if __name__ == '__main__':
-    # t = pd.read_parquet(config.MASTER_CAS_LIST)
-    # caslst = t.CASRN.tolist()
-    # run_batch(caslst, replace_existing=False)
+    import argparse
 
-    make_test_prompt('77-92-9')
+    parser = argparse.ArgumentParser(
+        description="Generate Gemini Q1/Q2/Q3 hazard-summary answers via a Vertex AI batch job."
+    )
+    parser.add_argument(
+        "--casrns",
+        help="Comma-separated CASRNs to process (default: the full master CAS list)",
+    )
+    parser.add_argument(
+        "--replace-existing", action="store_true",
+        help="Regenerate even chemicals that already have a gemini_answers.json "
+             "(default: skip them, i.e. new-chemicals-only)",
+    )
+    parser.add_argument(
+        "--test-prompt", metavar="CAS",
+        help="Print the prompt for a single CAS and exit, without submitting a batch job",
+    )
+    parser.add_argument(
+        "--retrieve", nargs=2, metavar=("RUN_ID", "JOB_NAME"),
+        help="Retrieve and save results from a previously submitted batch job "
+             "instead of submitting a new one",
+    )
+    args = parser.parse_args()
 
-    ##### To retrieve results from a job submitted in a previous session:
-    # retrieve_batch_results(run_id='20260415_143000', job_name='projects/.../batchPredictionJobs/...')
+    if args.test_prompt:
+        make_test_prompt(args.test_prompt)
+    elif args.retrieve:
+        run_id, job_name = args.retrieve
+        retrieve_batch_results(run_id=run_id, job_name=job_name)
+    else:
+        if args.casrns:
+            caslist = [c.strip() for c in args.casrns.split(",")]
+        else:
+            t = pd.read_parquet(config.MASTER_CAS_LIST)
+            caslist = t.CASRN.tolist()
+        run_batch(caslist, replace_existing=args.replace_existing)

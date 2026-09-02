@@ -511,13 +511,27 @@ STEPS = [
         dependencies=["fetch-tsca", "fetch-prop65", "fetch-epa-lists", "run-gras"],
     ),
     Step(
+        id="run-gemini-summaries",
+        name="Gemini Hazard Summaries",
+        category="AUTO",
+        stage="Generation",
+        description=(
+            "Generate the Q1/Q2/Q3 narrative hazard summaries via a Vertex AI Gemini "
+            "batch job, saved to data/03_processed/by_casrn/{cas}/gemini_answers.json. "
+            "Incremental: only chemicals missing this file are submitted. Submits a "
+            "real, billed batch job and blocks until it completes."
+        ),
+        cmd=["python", "src/04_generation/gemini_summaries_v3.py"],
+        dependencies=["run-tiered-classifier", "run-list-of-lists", "scifinder", "run-iris"],
+    ),
+    Step(
         id="run-build-site",
         name="Build Site",
         category="AUTO",
         stage="Generation",
         description="Generate all chemical markdown pages and tier SVGs.",
         cmd=["python", "src/04_generation/build_site.py"],
-        dependencies=["run-tiered-classifier", "run-list-of-lists"],
+        dependencies=["run-tiered-classifier", "run-list-of-lists", "run-gemini-summaries"],
         extra_env={"PYTHONUTF8": "1"},
     ),
     Step(
