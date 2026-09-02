@@ -176,7 +176,16 @@ class List_of_list():
         
     def _get_prop56_lists(self,sources):
         print('  -- get PROP65 list')
-        t = pd.read_csv(config.PROP65_RAW, 
+        # OEHHA's export sometimes leads with several rows of title/notice
+        # text before the real header row ("Chemical,Type of Toxicity,...").
+        # Detect that row instead of assuming the header is row 0, so the
+        # parse doesn't break when OEHHA changes the preamble length.
+        with open(config.PROP65_RAW, encoding='utf-8-sig', errors='replace') as f:
+            header_row = next(
+                i for i, line in enumerate(f) if line.startswith('Chemical,')
+            )
+        t = pd.read_csv(config.PROP65_RAW,
+                        skiprows=header_row,
                         usecols=['CAS No.'])
         t['CASRN'] = t['CAS No.']
         sources_names = list(sources.keys())
