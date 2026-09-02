@@ -1,0 +1,5 @@
+{
+    "Q1": "No specific hazard tier classifications are available for this chemical. This indicates a high degree of data deficiency across all hazard classes, meaning that its potential dangers are largely unknown.",
+    "Q2": "This chemical does not appear on any lists of concern or low hazard. Given the absence of hazard tier classifications, its omission from concern lists likely reflects a lack of study rather than confirmed safety.",
+    "Q3": "This chemical is very poorly characterized. It has no literature references, an unspecified molecular formula, and is classified as a 'Manual Registration' substance, all of which suggest an undefined or poorly defined structure. Furthermore, it has not undergone rigorous toxicological assessments by IRIS or PPRTV, and no toxicity values are available in the EPA's ToxValDB."
+}

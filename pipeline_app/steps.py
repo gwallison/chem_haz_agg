@@ -523,6 +523,7 @@ STEPS = [
         ),
         cmd=["python", "src/04_generation/gemini_summaries_v3.py"],
         dependencies=["run-tiered-classifier", "run-list-of-lists", "scifinder", "run-iris"],
+        extra_env={"PYTHONUTF8": "1"},
     ),
     Step(
         id="run-build-site",

@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical's hazard profile is entirely data deficient, with all assessed categories — including carcinogenicity, mutagenicity, reproductive hazards, environmental hazards, endocrine disruption, and toxicity via inhalation, oral, dermal, and organ/systemic routes — lacking sufficient information for confident assessment.",
+  "Q2": "This chemical does not appear on any lists of concern or low hazard. Given its entirely data-deficient hazard profile, its absence from concern lists likely reflects a lack of study rather than confirmed safety.",
+  "Q3": "This chemical is exceptionally poorly characterized, with no literature references, an \"Unspecified\" molecular formula, and no toxicology records in the EPA ToxValDB. It has also not undergone rigorous assessment by IRIS or PPRTV, and all its hazard categories are data deficient."
+}

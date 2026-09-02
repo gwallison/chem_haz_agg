@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical lacks specific hazard classifications within the tiered system, indicating that hazard assessments have not been determined for any hazard class (e.g., Carcinogenicity, Mutagenicity and Reproductive hazards, Environmental, Inhalation, Oral, Dermal and eye, or Organ and Systemic hazards). This typically points to a data deficient status across all hazard classes.",
+  "Q2": "This chemical is identified on the EPA PFAS 2024 list, signifying that it structurally meets the definition of a per- and polyfluoroalkyl substance (PFAS), which are chemicals of significant regulatory concern. It is not listed as a low hazard chemical.",
+  "Q3": "While this chemical possesses a defined molecular structure and a moderate number of scientific literature references (201), its toxicological profile is poorly characterized. It has not undergone rigorous evaluation by programs like EPA IRIS or PPRTV, and there are no toxicity records in the EPA ToxValDB, suggesting a significant lack of comprehensive hazard assessment."
+}

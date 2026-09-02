@@ -1,0 +1,5 @@
+{
+  "Q1": "The tier profile for this chemical is not available.",
+  "Q2": "This chemical is identified as a hazardous substance under the Clean Water Act (Section 311-HS), indicating potential danger to public health or welfare if discharged into navigable waters. It is not listed on any 'Low Hazard' lists.",
+  "Q3": "This chemical is very poorly characterized. Its molecular formula and substance class are not available from SciFinder, suggesting an unknown or undefined structure. It has not undergone rigorous evaluation by programs like EPA's IRIS or PPRTV, and there are no toxicity records available in the EPA ToxValDB, indicating a severe lack of toxicological data."
+}

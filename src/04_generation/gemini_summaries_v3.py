@@ -532,7 +532,7 @@ def save_batch_results(gcs_output_uri, manifest, run_id):
             out_dir = os.path.join(config.PROCESSED_CAS_DIR, cas)
             os.makedirs(out_dir, exist_ok=True)
             fn = os.path.join(out_dir, "gemini_answers.json")
-            with open(fn, "w") as f:
+            with open(fn, "w", encoding="utf-8") as f:
                 f.write(clean_json)
             n_saved += 1
         except Exception as e:

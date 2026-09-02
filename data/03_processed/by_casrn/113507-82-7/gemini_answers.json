@@ -1,0 +1,5 @@
+{
+  "Q1": "The hazard tier profile for this chemical is not available.",
+  "Q2": "This chemical is included on the EPA PFAS 2024 list, which identifies substances meeting the structural definition of PFAS, indicating it is a chemical of concern.",
+  "Q3": "This is a well-defined small molecule with a specific molecular formula. While it has a moderate number of scientific literature references (236), suggesting some study, there is a complete absence of toxicological data in the EPA's ToxValDB, and it has not undergone comprehensive evaluations by IRIS or PPRTV. This indicates that despite being structurally characterized, its hazard profile is not well-established."
+}

@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical lacks an assigned Tier Profile, indicating that comprehensive hazard classification data, even at the lowest assessment levels, is unavailable across all hazard categories (e.g., Carcinogenicity, Mutagenicity, Reproductive Hazards; Endocrine Disruption; Environmental; Inhalation; Oral; Dermal and Eye; and Organ and Systemic hazards). This significant data gap means its potential risks are largely unknown.",
+  "Q2": "This chemical does not appear on any lists of concern or low hazard. The absence from such lists, combined with a lack of hazard tier data, suggests a significant gap in study rather than confirmed safety.",
+  "Q3": "This chemical is a well-defined small molecule. However, it is poorly characterized regarding its hazard profile, with a very low number of scientific literature references (31) and no toxicity values recorded in the EPA ToxValDB. It has not been evaluated by rigorous programs like IRIS or PPRTV."
+}

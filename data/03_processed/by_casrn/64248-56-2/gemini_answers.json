@@ -1,0 +1,5 @@
+{
+  "Q1": "A hazard tier profile is not available for this chemical, indicating a lack of comprehensive hazard classification data across all categories.",
+  "Q2": "This chemical does not appear on any Lists of Concern or Lists of Low Hazard. Given the absence of hazard classification data, its exclusion from lists of concern may be due to a lack of study rather than confirmed safety.",
+  "Q3": "This chemical has a moderate number of literature references (713) and a well-defined molecular structure. However, it lacks comprehensive hazard characterization, with no toxicity values in the EPA ToxValDB and no evaluations by rigorous programs like IRIS or PPRTV, suggesting significant data gaps regarding its potential hazards."
+}

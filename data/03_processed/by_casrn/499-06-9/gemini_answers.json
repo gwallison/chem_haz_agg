@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical is entirely data deficient across all hazard classes. There is insufficient information to make confident hazard assessments, meaning its risks are currently unknown and a precautionary approach is warranted.",
+  "Q2": "This chemical does not appear on any lists of concern or low hazard. Given the absence of hazard classifications, its absence from lists of concern likely reflects a lack of study rather than confirmed safety.",
+  "Q3": "This chemical has a well-defined molecular structure and a relatively high number of scientific literature references (1,518) compared to similar chemicals. However, it lacks formal toxicological evaluations from programs like IRIS or PPRTV, and there are no entries in the EPA's aggregated toxicity database, indicating a significant lack of hazard-specific characterization."
+}

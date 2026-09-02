@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical has no defined hazard tier profile, meaning there is insufficient information to make a confident hazard assessment for any hazard class. All potential hazards are currently categorized as Data Deficient (Tier 4), warranting a precautionary approach.",
+  "Q2": "This chemical appears on the EPA PFAS 2024 list, indicating it is considered a substance of concern due to its classification as a Per- and Polyfluoroalkyl Substance.",
+  "Q3": "With a specific molecular formula and substance class, and a number of scientific literature references slightly above the median for the database, this chemical has some general characterization. However, it lacks formal hazard assessments from programs like IRIS or PPRTV, and there are no recorded toxicity values, indicating sparse specific toxicological data for a comprehensive hazard profile."
+}

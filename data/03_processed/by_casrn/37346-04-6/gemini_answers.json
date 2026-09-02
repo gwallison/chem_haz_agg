@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical has no recorded hazard tier information for any class. All hazard classes are therefore considered data deficient, meaning there is insufficient information to make a confident assessment of potential hazards such as carcinogenicity, reproductive toxicity, endocrine disruption, or environmental impacts.",
+  "Q2": "This chemical is not found on any lists of concern or low hazard. Given the complete lack of hazard tier information, its absence from concern lists likely reflects a lack of study rather than confirmed safety.",
+  "Q3": "This chemical is very poorly characterized. It has only one literature reference and no toxicity records, and has not undergone rigorous toxicological assessments like IRIS or PPRTV. The complete absence of hazard tier information further indicates significant data deficiency across all potential hazard classes, leaving its overall hazard profile largely undefined."
+}

@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical has no defined hazard tier profile. All hazard classes are considered data deficient (Tier 4), indicating a lack of information to make a confident assessment of its potential dangers.",
+  "Q2": "This chemical is not found on any lists of concern or lists of low hazard. Given the absence of hazard classification data, its omission from lists of concern likely reflects a lack of study rather than confirmed safety.",
+  "Q3": "While its molecular structure is well-defined and it has a moderate number of scientific literature references (186), this chemical is poorly characterized regarding its hazards. There are no records in the EPA's ToxValDB, and it has not undergone comprehensive evaluations by IRIS or PPRTV, leading to a complete absence of classified hazard data."
+}

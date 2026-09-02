@@ -1,0 +1,5 @@
+{
+  "Q1": "A Hazard Tier Profile is not available for this chemical.",
+  "Q2": "This chemical does not appear on any Lists of Concern or Lists of Low Hazard. Given the lack of available data, this absence likely reflects a lack of study rather than confirmed safety.",
+  "Q3": "This chemical is structurally well-defined, with a specific molecular formula and classification as a Small Molecule. However, it is poorly characterized toxicologically, with a very low number of scientific references and no records in the EPA's ToxValDB. It has also not been evaluated by major EPA programs like IRIS or PPRTV."
+}

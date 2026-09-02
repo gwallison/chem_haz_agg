@@ -1,0 +1,5 @@
+{
+  "Q1": "This chemical's Tier Profile is entirely data deficient, with no specific hazard classifications or tier levels reported across any hazard class. This indicates a complete lack of available data to assess its potential dangers.",
+  "Q2": "This chemical does not appear on any Lists of Concern or Low Hazard. Given the complete absence of a Tier Profile, this likely reflects a lack of study and available hazard data rather than confirmed safety.",
+  "Q3": "While this is a structurally defined small molecule with a moderate number of scientific literature references (455), its hazard profile is extremely poorly characterized. There are no toxicity values in the EPA ToxValDB, and it has not undergone comprehensive evaluations by IRIS or PPRTV, indicating a significant data deficiency for hazard assessment."
+}

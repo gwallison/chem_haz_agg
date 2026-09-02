@@ -1,0 +1,5 @@
+{
+  "Q1": "No hazard tier profile information is available for this chemical. This indicates an unknown risk profile, suggesting a precautionary approach is warranted.",
+  "Q2": "This chemical does not appear on any lists of concern or low hazard. Given the absence of hazard tier data and toxicity records, this likely reflects a lack of study rather than confirmed safety.",
+  "Q3": "This chemical is poorly characterized. It has a very limited scientific literature presence with only 20 references, no comprehensive EPA toxicity evaluations (IRIS or PPRTV), and no recorded toxicity values, indicating a significant lack of study into its potential hazards."
+}

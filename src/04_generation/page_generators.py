@@ -134,7 +134,7 @@ def _get_gemini_text(cas):
     import json
     fn = os.path.join(config.PROCESSED_CAS_DIR,cas,'gemini_answers.json')
     if os.path.exists(fn):
-        with open(fn,'r') as f:
+        with open(fn,'r',encoding='utf-8') as f:
             jstr = f.read()
         return json.loads(jstr)
     return {}
