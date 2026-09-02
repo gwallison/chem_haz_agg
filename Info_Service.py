@@ -5,12 +5,16 @@ Created on Mon Oct 27 11:46:21 2025
 @author: Gary
 """
 import sys
-sys.path.insert(0,'c:/MyDocs/integrated/') # adjust to your setup
-
 import pandas as pd
-import chem_profiles.config as config
 import re
 import os
+
+# Add the project root to the Python path to resolve the 'config' module
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+import config
 
 
 class Info_Service():
@@ -204,8 +208,7 @@ class Info_Service():
 
     def get_number_toxval_records(self,cas):
         # import json
-        ddir = r"C:\MyDocs\integrated\chem_profiles\data\01_raw\epa_haz_toxval_json"
-        fn = os.path.join(ddir,f'toxval_{cas}.json')
+        fn = os.path.join(config.EPA_HAZ_TOXVAL_JSON_DIR,f'toxval_{cas}.json')
         return self.count_json_records(fn)
         
         
