@@ -51,26 +51,6 @@ def getFingerprintImg(cas,size=140,alt=None):
         return f"""<center><img src="https://storage.googleapis.com/open-ff-browser/images/{cas}/haz_fingerprint.png" alt="{alttext}"  onerror="this.onerror=null; this.remove();" width={size}></center>"""
     return "<center>ChemInformatics not available</center>"
     
-def getHazChemImg(cas,size=140,alt=None):
-    # returns an html image link when possible
-    # check if we have it locally, but link to the cloud version
-    fp_path = os.path.join(r"C:\MyDocs\integrated\chem_profiles_old\code\tmp\tier_fig",
-                           f'{cas}.png')
-    # take comptox version if it exists
-    cas_ignore = ['7732-18-5','proprietary','conflictingID',
-                  'ambiguousID','sysAppMeta','cas_not_assigned']
-    if alt:
-        alttext = alt
-    else:
-        alttext = f'Open-FF compiled tier summary of {cas}'
-
-    if cas in cas_ignore:
-        return ' <center>---</center> '
-    print(fp_path)
-    if os.path.exists(fp_path):
-        return f"""<center><img src="https://storage.googleapis.com/open-ff-browser/images/ChemHazTier/{cas}.png" alt="{alttext}"  onerror="this.onerror=null; this.remove();" width={size}></center>"""
-    return "<center>Tier analysis not available</center>"
-    
 def getChemStructureInfo(cas):
     fn = r"G:\My Drive\webshare\scrape_data\SciFinder_chem_pages\scifinder_df.parquet"
     try:
@@ -199,13 +179,11 @@ def getPPRTV_info(cas):
 
 def get_Cmpd_of_Concern_info(cas):
 
-    # fn = r"C:/MyDocs/integrated/chem_profiles/data/02_intermediate/Compounds_of_Concern.csv"
-    # t = pd.read_csv(fn)
-    fn = r"C:/MyDocs/integrated/chem_profiles/data/02_intermediate/Compounds_of_Concern.parquet"
+    fn = os.path.join(config.INTERMED_DATA,'Compounds_of_Concern.parquet')
     t = pd.read_parquet(fn)
     t = t[t.CASRN==cas]
     try:
-        return  t['name'].tolist()[0]
+        return  t['Chemical Name'].tolist()[0]
     except:
         return ''
     

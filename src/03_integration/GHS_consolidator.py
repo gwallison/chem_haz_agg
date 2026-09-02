@@ -18,8 +18,6 @@ from config import ECHA_HARM_OUTPUT_PATH, ECHA_INDUS_OUTPUT_PATH
 from config import AUS_OUTPUT_PATH, JAPAN_OUTPUT_PATH
 from config import GHS_CONSOLIDATED_DATA_PATH
 
-outdir = r"C:\MyDocs\integrated\chem_profiles\code\data"
-
 def create_consolidated_GHS():
     pchem = pd.read_parquet(PUBCHEM_OUTPUT_PATH)
     pchem['source'] = 'PubChem'

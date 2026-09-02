@@ -252,7 +252,6 @@ def get_chem_page_header(cas,ing_name,g_dict,
     separator = '\n--- \n'
     
     chem_img = common.getMoleculeImg(cas,size=200)
-    # haz_img = common.getHazChemImg(cas,size=400)
     scifi, repodic = common.getChemStructureInfo(cas)
     
     s = ''    
