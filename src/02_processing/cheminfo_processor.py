@@ -4,6 +4,12 @@ import pandas as pd
 import warnings
 import numpy as np # Added for the new function
 
+# Windows consoles default to cp1252, which can't encode the emoji used in
+# status prints below; force UTF-8 so those prints don't crash the run.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+
 # Add the project root to the Python path to resolve the 'config' module
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 if project_root not in sys.path:
@@ -80,12 +86,27 @@ def get_summary_from_xls(filepath: str) -> pd.DataFrame:
             'HH: Skin Sensitization','HH: Skin Irritation','HH: Eye Irritation',
             'Ecotoxicity: Acute Aquatic Toxicity','Ecotoxicity: Chronic Aquatic Toxicity',
             'Fate: Persistence','Fate: Bioaccumulation','Fate: Exposure']
-    
+    # Older exports (e.g. Aug 2-3 2026) don't have the InChIKey column.
+    cols_legacy = [c for c in cols if c != 'InChIKey']
+
     with warnings.catch_warnings(record=True):
         warnings.simplefilter("always")
-        df = pd.read_excel(filepath, skiprows=5, engine='openpyxl')
-    
-    df.columns = cols
+        # header=None + skiprows=5: the real header is a merged, multi-row
+        # block spanning rows 0-4, which pandas can't parse as column names.
+        # Using the default header=0 here would consume the first data row
+        # as the header instead, silently dropping that record.
+        df = pd.read_excel(filepath, skiprows=5, header=None, engine='openpyxl')
+
+    if df.shape[1] == len(cols):
+        df.columns = cols
+    elif df.shape[1] == len(cols_legacy):
+        df.columns = cols_legacy
+        df['InChIKey'] = np.nan
+    else:
+        raise ValueError(
+            f"Unexpected column count {df.shape[1]} (expected {len(cols_legacy)} or {len(cols)})"
+        )
+
     # MODIFIED: Clean up column names by removing prefixes and spaces
     df = df.drop(columns='SMILES')
     df.columns = [col.replace('HH: ', '').replace('Ecotoxicity: ', '').replace('Fate: ', '').replace(' ', '_')
